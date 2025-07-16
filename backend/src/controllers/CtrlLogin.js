@@ -33,14 +33,15 @@ loginController.login = async (req, res) =>{
 
         if(!userFound){
             console.log("No se encontró el usuario");
-            return res.json({message: "User not found"});
+            res.status(404).json({message: "User not found"})
         }
 
         if(userType !== "admin"){
 
             const isMatch = await bcrypt.compare(password, userFound.password)
             if(!isMatch){
-                return res.json({message: "Contraseña incorrecta"})
+                return res.status(401).json({message: "Contraseña incorrecta"})
+              
             }
             
            }
@@ -59,7 +60,7 @@ loginController.login = async (req, res) =>{
                     res.cookie("authToken", token);
 res.json({
   message: "login successful",
-  role: userType // 👈 Esto es lo que necesitas en el frontend
+  role: userType 
 });
 
             }
@@ -67,6 +68,8 @@ res.json({
 
     } catch (error) {
         res.json({message: "error"})
+        res.status(500).json({ message: 'Internal Server Error' });
+
     }
 }
 
