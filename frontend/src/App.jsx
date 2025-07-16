@@ -14,7 +14,8 @@ import VerifyCode from './pages/RecoveryPassword/VerifyCode';
 import NewPassword from './pages/RecoveryPassword/NewPasssword';
 import Ventas from './pages/Ventas/Ventas.jsx';
 import Usuarios from './pages/Users/UsersList.jsx';
-import UserForm from './pages/Users/UserForm'; // 👈 faltaba esta
+import UserForm from './pages/Users/UserForm'; 
+import Login from './pages/Login/Login.jsx'; 
 
 
 
@@ -25,12 +26,13 @@ function App() {
       <NavBar />
       <div className="main-content" style={{ paddingTop: '100px' }}>
         <Routes>
+        <Route path="/" element={<Login />} />
           <Route path="/productos1" element={<Products1 />} />
           <Route path="/addProduct" element={<AddProduct />} />
           <Route path="/sobre-nosotros" element={<h1>Sobre Nosotros</h1>} />
           <Route path="/ordenes" element={<Ordenes />} />
           <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/" element={<Homep />} />
+          <Route path="/home" element={<Homep />} />
           <Route path="/ordenes" element={<Ordenes />} />
           <Route path="/suscripciones" element={<Suscripciones />} />
           <Route path="/homep" element={<Homep />} />
