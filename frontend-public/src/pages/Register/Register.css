@@ -1,0 +1,133 @@
+.registro-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Lado izquierdo: imagen */
+.imgre {
+  flex: 1;
+  display: flex;
+  align-items: center;     /* centra verticalmente */
+  justify-content: center; /* centra horizontalmente */
+  padding: 40px;
+}
+
+.registro-img {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Lado derecho: formulario */
+.registro-card {
+  flex: 1;
+  display: flex;
+  align-items: center;       /* centra verticalmente */
+  justify-content: flex-start; /* alinea el contenido a la izquierda */
+  padding: 60px 80px;
+  background-color: #ffffff;
+}
+
+/* Contenedor del formulario */
+.registro-right {
+  width: 100%;
+  max-width: 450px;
+}
+
+/* Títulos */
+.registro-card h1 {
+  font-size: 36px;
+  color: #0b0b2c;
+  margin-bottom: 10px;
+}
+
+.registro-card h2 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+
+/* Estilo de formulario */
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Inputs */
+input,
+select {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background-color: transparent;
+  font-size: 16px;
+  outline: none;
+  color: #000;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+input:focus,
+select:focus {
+  border-bottom: 1px solid #0b0b2c;
+}
+
+/* Contraseña con ícono */
+.registro-password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #0b0b2c;
+}
+
+/* Botón */
+.btn-crear {
+  background-color: #0b0b2c;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-crear:hover {
+  background-color: #1a1a4d;
+}
+
+/* Login abajo */
+.registro-login {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+.registro-login a {
+  color: #0b0b2c;
+  font-weight: bold;
+  text-decoration: none;
+}

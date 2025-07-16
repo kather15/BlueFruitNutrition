@@ -1,0 +1,35 @@
+.gel-card {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 24px; /* más espacio interno */
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 280px; /* antes 220px */
+  transition: transform 0.2s;
+}
+
+.gel-card:hover {
+  transform: translateY(-5px);
+}
+
+.gel-image {
+  width: 140px; /* antes 100px */
+  height: auto;
+  margin-bottom: 16px; /* antes 12px */
+}
+
+.gel-button {
+  background-color: #0b1547;
+  color: white;
+  border: none;
+  padding: 10px 16px; /* más grande */
+  font-size: 1rem; /* más legible */
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.gel-button:hover {
+  background-color: #1c2a7a;
+}

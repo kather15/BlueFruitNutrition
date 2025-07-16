@@ -1,0 +1,31 @@
+.registro-verificacion {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* Título del bloque */
+.registro-verificacion h3 {
+  font-size: 18px;
+  color: #0b0b2c;
+  margin-bottom: 20px;
+}
+
+/* Error de validación */
+.error-msg {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+}
+
+/* Botón de cancelar (misma estética ligera) */
+.cancelar-btn {
+  margin-top: 15px;
+  background: none;
+  border: none;
+  color: #0b0b2c;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}

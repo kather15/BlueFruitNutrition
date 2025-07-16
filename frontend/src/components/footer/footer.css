@@ -1,0 +1,86 @@
+.footer {
+  width: 100vw;
+  background-color: #0C133F;
+  color: #ffffff;
+  padding: 40px;
+  font-family: 'Outfit', sans-serif;
+  box-sizing: border-box;
+}
+
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 30px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.logo-section {
+  max-width: 280px;
+}
+
+.footer-logo {
+  height: 100px; /* Logo más grande implementado */
+  margin-bottom: 15px;
+}
+
+.subscribe-title {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.subscribe-text {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.subscribe-input {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.subscribe-input input {
+  padding: 10px;
+  flex: 1;
+  border: none;
+  outline: none;
+}
+
+.subscribe-input button {
+  padding: 0 15px;
+  background-color: #ffffff;
+  color: #0C133F;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.footer-section h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.footer-section p {
+  font-size: 14px;
+  margin: 6px 0;
+}
+
+.footer-bottom {
+  text-align: center;
+  border-top: 1px solid #1a1f54;
+  padding-top: 20px;
+  font-size: 13px;
+  color: #ccc;
+  max-width: 1200px;
+  margin: 0 auto;
+}

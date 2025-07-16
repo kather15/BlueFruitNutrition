@@ -1,0 +1,509 @@
+/* HOME - VERSION LIMPIA SIN CONFLICTOS */
+
+
+
+.blue-fruit-home {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* BANNER */
+.blue-fruit-banner-container {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.blue-fruit-banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+/* SEPARADOR */
+.blue-fruit-separador {
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 1rem 2rem 0 2rem;
+  color: #001a4d;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* TITULO */
+.blue-fruit-home h1 {
+  text-align: center;
+  color: #001a4d;
+  font-size: 2rem;
+  margin: 20px 0;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+/* PRODUCTOS SCROLL - MEDIDAS ORIGINALES */
+.blue-fruit-productos-scroll {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 1rem 2rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.blue-fruit-productos-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.blue-fruit-product {
+  width: 200px;
+  min-width: 200px;
+  text-align: center;
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.blue-fruit-product:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.blue-fruit-image-container {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.blue-fruit-image-container img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.blue-fruit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fffefe;
+  font-weight: bold;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.blue-fruit-product:hover .blue-fruit-overlay {
+  opacity: 1;
+}
+
+.blue-fruit-product p {
+  margin: 0;
+  padding: 10px 0 0 0;
+  font-weight: normal;
+  color: #333;
+}
+
+/* BOTON VER TODOS */
+.blue-fruit-boton-ver-todos-container {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 0 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.blue-fruit-boton-ver-todos {
+  padding: 12px 24px;
+  background-color: #001a4d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.blue-fruit-boton-ver-todos:hover {
+  background-color: #003366;
+}
+
+/* LINEA SEPARADORA */
+.blue-fruit-linea-separadora {
+  width: 80%;
+  max-width: 800px;
+  margin: 30px auto;
+  border: none;
+  border-top: 2px solid #ddd;
+  display: block;
+}
+
+/* HISTORIA */
+.blue-fruit-historia {
+  padding: 4rem 2rem;
+  background-color: #f8f9fa;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.blue-fruit-historia h2 {
+  color: #001a4d;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.blue-fruit-historia-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.blue-fruit-historia-text {
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+  text-align: left;
+}
+
+.blue-fruit-historia-text p {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.blue-fruit-historia-text ul {
+  margin-top: 1rem;
+  list-style: disc;
+  padding-left: 1.5rem;
+  color: #555;
+}
+
+.blue-fruit-historia-text li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.blue-fruit-historia-content img {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* ICONOS */
+.blue-fruit-iconos {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  padding: 4rem 2rem;
+  background: white;
+  text-align: center;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.blue-fruit-icono {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  padding: 2rem;
+}
+
+.blue-fruit-icono img {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+.blue-fruit-icono h2 {
+  color: #001a4d;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.blue-fruit-icono p {
+  color: #666;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* EQUIPO */
+.blue-fruit-equipo {
+  padding: 4rem 2rem;
+  background-color: #f8f9fa;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.blue-fruit-equipo h2 {
+  color: #001a4d;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.blue-fruit-miembros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.blue-fruit-miembro {
+  text-align: center;
+  padding: 1rem;
+  min-width: 150px;
+}
+
+.blue-fruit-miembro img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+.blue-fruit-miembro h4 {
+  color: #001a4d;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.blue-fruit-miembro p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* CONTACTO */
+.blue-fruit-contact-section {
+  padding: 4rem 2rem;
+  background-color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.blue-fruit-contact-section h2 {
+  text-align: center;
+  color: #001a4d;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.blue-fruit-contact-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.blue-fruit-contact-info {
+  background-color: #f8f9fa;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 350px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 300px;
+}
+
+.blue-fruit-contact-info h3 {
+  color: #001a4d;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.blue-fruit-contact-info p {
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.blue-fruit-contact-info hr {
+  margin: 1.5rem 0;
+  border: 0;
+  height: 1px;
+  background: #dee2e6;
+}
+
+.blue-fruit-contact-form {
+  background-color: #f8f9fa;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 300px;
+}
+
+.blue-fruit-contact-form input,
+.blue-fruit-contact-form textarea {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 1rem;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.blue-fruit-contact-form input:focus,
+.blue-fruit-contact-form textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.blue-fruit-contact-form button {
+  background-color: #001a4d;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  float: right;
+  transition: background-color 0.3s;
+}
+
+.blue-fruit-contact-form button:hover {
+  background-color: #003366;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .blue-fruit-historia-content {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .blue-fruit-historia-text {
+    text-align: center;
+  }
+  
+  .blue-fruit-iconos {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .blue-fruit-icono {
+    min-width: auto;
+    max-width: 100%;
+  }
+  
+  .blue-fruit-miembros {
+    gap: 1.5rem;
+  }
+  
+  .blue-fruit-contact-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .blue-fruit-contact-info,
+  .blue-fruit-contact-form {
+    max-width: 100%;
+  }
+  
+  .blue-fruit-separador,
+  .blue-fruit-home h1 {
+    padding: 1rem 20px;
+  }
+  
+  .blue-fruit-produtos-scroll {
+    padding: 1rem 20px;
+  }
+  
+  .blue-fruit-historia,
+  .blue-fruit-equipo,
+  .blue-fruit-contact-section {
+    padding: 3rem 20px;
+  }
+  
+  .blue-fruit-iconos {
+    padding: 3rem 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .blue-fruit-product {
+    min-width: 160px;
+    width: 160px;
+    padding: 10px;
+  }
+  
+  .blue-fruit-image-container img {
+    height: 120px;
+    object-fit: cover;
+  }
+  
+  .blue-fruit-historia h2,
+  .blue-fruit-equipo h2,
+  .blue-fruit-contact-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .blue-fruit-home h1 {
+    font-size: 1.5rem;
+  }
+  
+  .blue-fruit-historia,
+  .blue-fruit-equipo,
+  .blue-fruit-contact-section,
+  .blue-fruit-iconos {
+    padding: 2rem 15px;
+  }
+}

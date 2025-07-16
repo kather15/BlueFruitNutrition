@@ -1,0 +1,94 @@
+.sabor-page {
+  padding: 32px;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.sabor-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.sabor-item:hover {
+  transform: translateY(-8px);
+}
+
+.sabor-desc {
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 12px auto 32px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.sabor-opciones {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.sabor-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.sabor-item:hover {
+  transform: translateY(-8px);
+}
+
+.sabor-img-wrapper {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sabor-img {
+  width: 160px; /* más grande */
+  height: 160px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.sabor-nombre {
+  font-weight: bold;
+  margin-top: 12px;
+  font-size: 1.1rem;
+  color: #222;
+  text-align: center;
+}
+
+.sabor-subtext {
+  font-size: 1rem;
+  margin: 20px auto 32px;
+  max-width: 600px;
+  color: #555;
+}
+
+.geles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 36px;
+  justify-items: center;
+  padding: 0 20px;
+}
+
+/* Animación sutil al hacer hover */
+.hover-scale {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}

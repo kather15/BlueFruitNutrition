@@ -1,0 +1,133 @@
+/* src/pages/Ventas.css */
+.ventas-container {
+  padding: 40px;
+  background-color: #fff;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.ventas-container h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #000;
+  font-weight: bold;
+}
+
+/* Estadísticas resumidas */
+.ventas-estadisticas {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.estadistica-card {
+  background-color: #f8f9fa;
+  border: 2px solid #0a1446;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 150px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.estadistica-card:hover {
+  transform: translateY(-5px);
+}
+
+.estadistica-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  color: #0a1446;
+  font-weight: 600;
+}
+
+.estadistica-card p {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #28a745;
+}
+
+/* Tabla de ventas */
+.ventas-tabla {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 80%;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ventas-tabla th {
+  background-color: #0a1446;
+  color: white;
+  padding: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ventas-tabla td {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  color: #000;
+  font-weight: 500;
+}
+
+.ventas-tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.ventas-tabla tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.ventas-tabla tr:hover {
+  background-color: #e3f2fd;
+}
+
+/* Estado finalizado */
+.estado-finalizado {
+  background-color: #28a745;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ventas-container {
+    padding: 20px;
+  }
+  
+  .ventas-estadisticas {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .estadistica-card {
+    min-width: 200px;
+  }
+  
+  .ventas-tabla {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  
+  .ventas-tabla th,
+  .ventas-tabla td {
+    padding: 10px 8px;
+  }
+  
+  .ventas-container h2 {
+    font-size: 1.5rem;
+  }
+}

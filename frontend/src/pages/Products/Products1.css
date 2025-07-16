@@ -1,0 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap');
+
+:root {
+  --primary: #0f0f1c;
+  --accent: #ffffff;
+  --button: #0f0f1c;
+  --button-text: #ffffff;
+  --border: #ccc;
+  --radius: 10px;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #fafafa;
+  margin: 0;
+  padding: 0;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.products-container {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.products-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: var(--primary);
+}
+
+/* GRID DE PRODUCTOS */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
+  max-width: 1000px;  /* aumenta ancho para 4 columnas */
+  margin: 0 auto;
+}
+
+/* CARD DE PRODUCTO */
+.product-card {
+  background: var(--accent);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-image-container {
+  margin-bottom: 1rem;
+}
+
+.product-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin: 0 auto;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.product-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  min-height: 2.4rem; /* para alinear altura aunque nombre varíe */
+}
+
+/* NUEVOS ESTILOS PARA DESCRIPCIÓN, SABOR Y PRECIO */
+.product-description {
+  font-size: 14px;
+  color: #333;
+  margin: 6px 0;
+  line-height: 1.4;
+  max-height: 3.6em; /* aprox 2 líneas */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.product-flavor,
+.product-price {
+  font-size: 14px;
+  color: #555;
+  margin: 4px 0;
+}
+
+.product-price {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* BOTONES */
+.product-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 15px;
+}
+
+.edit-btn,
+.delete-btn,
+.add-product-btn {
+  background-color: var(--button);
+  color: var(--button-text);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+  user-select: none;
+}
+
+.delete-btn {
+  background-color: #002244;
+}
+
+.edit-btn:hover {
+  background-color: #1c1c2a;
+}
+
+.delete-btn:hover {
+  background-color: #223355;
+}
+
+.add-product-btn {
+  margin-bottom: 30px;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+}
+
+/* MODAL */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--accent);
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  box-sizing: border-box;
+  color: var(--primary);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.modal-content form input,
+.modal-content form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  color: var(--primary);
+  box-sizing: border-box;
+}
+
+.modal-content .row-fields {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.modal-content .row-fields input {
+  flex: 1 1 45%;
+  min-width: 120px;
+}
+
+.modal-content .image-preview {
+  width: 100%;
+  max-height: 200px;
+  background: #f0f0f0;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px dashed var(--border);
+  margin-bottom: 1rem;
+}
+
+.modal-content .image-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.modal-content input[type="file"] {
+  margin-bottom: 1rem;
+}
+
+.modal-content .form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-content .clear-btn,
+.modal-content .submit-btn {
+  background-color: var(--primary);
+  color: var(--button-text);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  width: 48%;
+  user-select: none;
+}
+
+.modal-content .clear-btn:hover,
+.modal-content .submit-btn:hover {
+  background-color: #1c1c2a;
+}

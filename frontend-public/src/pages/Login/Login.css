@@ -1,0 +1,193 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* LADO IZQUIERDO - IMAGEN */
+.left-side {
+  flex: 1;
+  position: relative;
+  background: #f8f9fa;
+}
+
+.image-container {
+  width: 70%;
+  height: 70%;
+  padding: 10px;
+  position: relative;
+  border-radius: 12px;
+  margin: 20px;
+  margin-right: 10px;
+  overflow: hidden;
+
+}
+
+.promo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* LADO DERECHO - FORMULARIO */
+.right-side {
+  flex: 1;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.form-subtitle {
+  font-size: 16px;
+  color: #718096;
+  margin-bottom: 32px;
+  line-height: 1.4;
+}
+
+.login-form {
+  width: 100%;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.login-input {
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #2d3748;
+  background: white;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.login-input::placeholder {
+  color: #a0aec0;
+  font-size: 16px;
+}
+
+.login-btn {
+  width: 100%;
+  height: 50px;
+  background: #2d3748;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-bottom: 20px;
+}
+
+.login-btn:hover {
+  background: #1a202c;
+}
+
+.login-btn:active {
+  transform: translateY(1px);
+}
+
+.forgot-password-container {
+  text-align: center;
+}
+
+.forgot-password-link {
+  color: #4299e1;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease-in-out;
+}
+
+.forgot-password-link:hover {
+  color: #2b6cb0;
+  text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .left-side {
+    height: 40vh;
+    min-height: 250px;
+  }
+  
+  .image-container {
+    margin: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .right-side {
+    padding: 30px 20px;
+    min-height: 60vh;
+  }
+  
+  .form-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-side {
+    height: 35vh;
+    min-height: 200px;
+  }
+  
+  .image-container {
+    margin: 10px;
+    margin-bottom: 5px;
+    border-width: 6px;
+  }
+  
+  .right-side {
+    padding: 20px 15px;
+  }
+  
+  .form-title {
+    font-size: 22px;
+  }
+  
+  .form-subtitle {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,51 @@
+/* src/pages/Suscripciones.css */
+.suscripciones-container {
+  padding: 40px;
+  background-color: #fff;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.suscripciones-container h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  font-weight: bold;
+  color: #000;
+}
+
+.suscripciones-tabla {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 85%;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.suscripciones-tabla th {
+  background-color: #0a1446;
+  color: white;
+  padding: 15px;
+  font-weight: 600;
+}
+
+.suscripciones-tabla td {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  color: #000;
+}
+
+.suscripciones-tabla tr:last-child td {
+  border-bottom: none;
+}
+.btn-editar {
+  padding: 5px 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-editar:hover {
+  background-color: #2980b9;
+}

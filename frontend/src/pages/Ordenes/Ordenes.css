@@ -1,0 +1,39 @@
+/* src/pages/Ordenes.css */
+.ordenes-container {
+  padding: 40px;
+  background-color: #fff;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.ordenes-container h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #000;
+  font-weight: bold;
+}
+
+.ordenes-tabla {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 80%;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ordenes-tabla th {
+  background-color: #0a1446;
+  color: white;
+  padding: 15px;
+  font-weight: 600;
+}
+
+.ordenes-tabla td {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  color: #000;
+}
+
+.ordenes-tabla tr:last-child td {
+  border-bottom: none;
+}

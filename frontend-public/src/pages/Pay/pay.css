@@ -1,0 +1,359 @@
+.credit-card-container {
+  font-family: sans-serif;
+  max-width: 900px;
+  margin: 40px auto 40px 60px; /* más margen a la izquierda para alejarlo del nav */
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  
+  
+  display: flex;
+  flex-direction: row; 
+  justify-content: flex-start; 
+ 
+
+}
+
+.card-input-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 40px;
+}
+
+.credit-card-mockup {
+  width: 380px; /* Ancho de la tarjeta */
+  height: 240px; /* Alto de la tarjeta */
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 25px; /* Relleno general para la tarjeta */
+  box-sizing: border-box;
+  position: relative;
+  border: 1px solid #e0e0e0;
+}
+
+.credit-card-mockup.front {
+  display: flex; /* Usar flexbox para el frente */
+  flex-direction: column; /* Organizar elementos en columna */
+  justify-content: space-between; /* Espaciar el contenido (chip arriba, info abajo) */
+  align-items: flex-start; /* Alinear elementos a la izquierda por defecto */
+  padding: 25px 30px; /* Ajuste de padding para que se vea más exacto con la imagen */
+}
+
+.chip {
+  width: 50px;
+  height: 40px;
+  background-color: #b0b0b0;
+  border-radius: 8px;
+  /* margin-bottom se manejará por flexbox */
+  position: relative;
+  overflow: hidden;
+  margin-top: 5px; /* Pequeño ajuste para la posición vertical del chip */
+}
+
+.chip::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #909090;
+    transform: translateY(-50%);
+}
+
+.chip::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background-color: #909090;
+    transform: translateX(-50%);
+}
+
+
+.card-number {
+  font-family: monospace;
+  font-size: 30px;
+  letter-spacing: 2px;
+  /* margin-bottom se manejará por flexbox */
+  color: #333;
+  width: 100%; /* Asegura que ocupe todo el ancho para centrar texto */
+  text-align: center; /* Centrar el número de tarjeta */
+  margin-top: auto; /* Empuja el número hacia el centro/inferior si hay espacio */
+  margin-bottom: 25px; /* Espacio debajo del número */
+}
+
+.card-holder-info,
+.expiration-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #666;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  /* margin-top: auto; se manejará con el contenedor de info */
+}
+
+.card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 2px;
+}
+
+.card-value {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Contenedor para la información del titular y vencimiento para organizar mejor */
+.card-info-bottom {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* Ocupa el ancho completo */
+  margin-top: auto; /* Empuja este grupo hacia la parte inferior de la tarjeta */
+}
+
+.card-holder-info {
+  flex-basis: 60%; /* Dar más espacio al titular */
+}
+
+.expiration-info {
+  flex-basis: 35%; /* Espacio para la fecha de vencimiento */
+  text-align: right; 
+}
+
+
+/* --- FIN de ajustes para la tarjeta frontal --- */
+
+
+
+.credit-card-mockup.back {
+  padding: 0;
+  overflow: hidden;
+  display: block;
+}
+
+.magnetic-stripe {
+  width: 100%;
+  height: 50px;
+  background-color: #333;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.card-holder-back-info {
+  background-color: #f0f0f0;
+  padding: 8px 25px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  margin: 0 25px 20px 25px;
+  text-align: left;
+}
+
+.card-label-back {
+    font-size: 10px;
+    color: #666;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.card-value-back {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.security-code-label {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+  margin-right: 25px;
+  margin-bottom: 5px;
+}
+
+.security-code-display {
+  background-color: #f0f0f0;
+  width: 70%;
+  height: 30px;
+  margin-left: auto;
+  margin-right: 25px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 10px;
+  font-family: monospace;
+  font-size: 18px;
+  color: #333;
+}
+
+
+.input-fields-group {
+  flex: 1;
+  padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.input-field label {
+  display: block;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+}
+
+.input-field input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.flex-group {
+  display: flex;
+  gap: 20px;
+}
+
+.half-width {
+  flex: 1;
+}
+
+/* Buttons */
+.next-step-button,
+.finish-purchase-button {
+  background-color: #212140;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-end;
+  margin-top: auto;
+}
+
+.next-step-button:hover,
+.finish-purchase-button:hover {
+  background-color: #3a3a60;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 40px 0;
+}
+
+.security-code-group {
+  justify-content: space-between;
+}
+
+.security-code-group .input-field {
+    margin-bottom: 0;
+}
+
+.security-code-group .finish-purchase-button {
+    margin-top: 20px;
+}
+
+.input-field.full-width input {
+    width: 60%;
+}
+
+.top-section .input-fields-group {
+    padding-top: 25px;
+}
+
+.top-section .input-fields-group .input-field:first-child label {
+    margin-bottom: 12px;
+}
+
+.card-flip-wrapper {
+  position: relative;
+  width: 380px;
+  height: 240px;
+  perspective: 1000px;
+}
+.card-flip-wrapper .credit-card-mockup {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  transition: transform 0.8s ease-in-out;
+}
+
+.card-flip-wrapper .front {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+.card-flip-wrapper .back {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+.card-flip-wrapper.flip .front {
+  transform: rotateY(-180deg);
+  z-index: 1;
+}
+
+.card-flip-wrapper.flip .back {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #0C133F;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  text-align: left;
+  padding: 0;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+/* Wrapper externo para centrar el contenido en viewport (menos espacio nav) */
+.page-wrapper {
+  display: flex;
+  justify-content: center; /* centro horizontal */
+  align-items: center;     /* centro vertical */
+  min-height: calc(100vh - 60px); /* altura total menos nav (ajusta 60px si tu nav es otro alto) */
+  padding-top: 60px; /* espacio para nav fijo */
+  background-color: #f0f0f0; /* opcional para diferenciar */
+}

@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap');
+
+body {
+  font-family: 'Outfit', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #0C133F;
+}
+
+/* Página */
+.beneficios-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+/* Contenido principal */
+.beneficios-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+/* Contenedor */
+.beneficios-container {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card */
+.beneficios-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 2rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  overflow: visible; 
+  max-width: 900px;
+  width: 100%;
+  border: 4px solid #0C133F;
+  padding: 2rem;
+  box-sizing: border-box;
+  text-align: left;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Imagen flotante */
+.product-image {
+  position: absolute;
+  top: -30px;      
+  left: 650px;
+  width: 360px;
+  transform: rotate(-20deg);
+  z-index: 10;
+}
+
+.product-image img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.5rem;
+
+}
+
+/* Contenido interno */
+.beneficios-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Título */
+.beneficios-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #0C133F;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+/* Lista */
+.beneficios-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #333c5f;
+}
+
+.beneficio-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  animation: fadeInLeft 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.beneficio-item:nth-child(1) { animation-delay: 0.1s; }
+.beneficio-item:nth-child(2) { animation-delay: 0.2s; }
+.beneficio-item:nth-child(3) { animation-delay: 0.3s; }
+.beneficio-item:nth-child(4) { animation-delay: 0.4s; }
+.beneficio-item:nth-child(5) { animation-delay: 0.5s; }
+.beneficio-item:nth-child(6) { animation-delay: 0.6s; }
+
+.beneficio-bullet {
+  color: #00b4ff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.beneficio-text {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.beneficio-text strong {
+  color: #0C133F;
+  font-weight: 600;
+}
+
+/* Precio */
+.product-price {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #0C133F;
+  text-align: right;
+  margin-right: 2.5cm; 
+}
+
+/* Botón comprar */
+.comprar-button {
+  background: #0C133F;
+  color: white;
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin: 2rem auto 0 auto;
+}
+
+.comprar-button:hover {
+  background: #064da8;
+  color: #0C133F;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.comprar-button:active {
+  transform: translateY(0);
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .beneficios-title {
+    font-size: 2rem;
+  }
+
+  .product-image {
+    width: 150px;
+    top: -30px;
+    right: -20px;
+  }
+
+  .product-price {
+    font-size: 2rem;
+  }
+
+  .comprar-button {
+    font-size: 1rem;
+    padding: 0.875rem 2rem;
+  }
+}
