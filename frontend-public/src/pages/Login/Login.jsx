@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import "./Login.css";
-import triathlonImage from "../../assets/imgregister.png"; // Asegúrate de que la ruta sea correcta
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -50,7 +49,7 @@ const handleLogin = async (e) => {
       <div className="left-side">
         <div className="image-container">
           <img 
-            src={triathlonImage} 
+            src={"/imgregister.png"} 
             alt="Triathlon promotional" 
             className="promo-image"
           />

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import toast from "react-hot-toast";
 import VerifyCodeModal from "../../components/VerifyCode/VerifyCodeModal"
-import img from '../../assets/imgregister.png'
 import './Register.css'
 import login from "../Login/Login";
 
@@ -49,7 +48,7 @@ function Registro() {
   return (
     <div className="registro-container">
   <div className="imgre">
-    <img src={img} alt="Blue Fruit Nutrition" className="registro-img" />
+    <img src={"/imgregister.png"} alt="Blue Fruit Nutrition" className="registro-img" />
   </div>
 
   <div className="registro-card">
