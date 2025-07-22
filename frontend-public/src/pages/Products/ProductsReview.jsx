@@ -73,7 +73,7 @@ const ProductsReview = () => {
   };
 
   const handleBackToProducts = () => {
-    navigate('/productos'); // CORREGIDO: Ruta correcta
+    navigate('/product'); 
   };
 
   const renderStars = (rating) => {

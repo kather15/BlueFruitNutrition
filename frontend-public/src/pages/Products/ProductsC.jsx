@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import './ProductsC.css';
 
 const ProductsC = () => {
@@ -10,7 +9,7 @@ const ProductsC = () => {
     {
       id: 1,
       name: 'Carbo Upp',
-      image: '/EnerKik.png'
+      image: '/CarboUpp.png'
     },
     {
       id: 2,
@@ -29,6 +28,7 @@ const ProductsC = () => {
     navigate(`/producto/${productId}`);
   };
 
+  
   return (
     <div className="products-screen-wrapper">
       
