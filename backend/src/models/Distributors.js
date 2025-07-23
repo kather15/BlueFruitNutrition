@@ -1,5 +1,5 @@
 /*fields:
-    companyName, email, password, address, phone, status, taxId
+    companyName, email, password, address, phone, status, NIT
 */
 
 import { Schema, model } from "mongoose";
@@ -40,13 +40,7 @@ const DistributorsSchema = new Schema({
                 "el numero de teléfono tiene que ser válido"] //validar número de teléfono
     },
 
-    status: {
-        type: Number,
-        require: false,
-        maxlenght: 5
-    },
-
-    taxId: {
+    NIT: {
         type: String,
         required: true,
         unique: true,
@@ -71,4 +65,4 @@ const DistributorsSchema = new Schema({
         strict: false
     })
 
-export default model("Distributos", DistributorsSchema);
+export default model("Distributors", DistributorsSchema);
