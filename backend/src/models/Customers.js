@@ -28,21 +28,22 @@ const customersSchema = new Schema({
     password:{
         type: String,
         require: true,
-        minlenght: 8 
+        minlenght: 6
     },
 
     phone:{
         type: String,
-        require: true,
-        unique: true,
+        require: false,
+        unique: false,
         match: [/^[0-9]{8}$/, 
                 "el numero de teléfono tiene que ser válido"] //validar número de teléfono
     },
 
     weight:{
-        type: Number,
+        type: Number, //peso en kg
         require: false,
-        maxlenght: 5
+        min: 10, //Mínimo 10kg
+        max: 300 //Máximo 300kg
     },
 
     dateBirth:{
@@ -51,9 +52,10 @@ const customersSchema = new Schema({
     },
 
     height:{
-        type: Number,
+        type: Number, //Altura en cm
         require: false,
-        maxlenght: 3
+        min: 100, //Mínimo 100cm
+        max: 300  //Máximo 300cm
     },
 
     address:{
@@ -62,7 +64,7 @@ const customersSchema = new Schema({
     },
 
     gender: {
-        type: Boolean, //true: hombre, false: mujer.
+        type: String, 
         require: true
     },
 

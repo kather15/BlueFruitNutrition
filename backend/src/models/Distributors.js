@@ -23,7 +23,7 @@ const DistributorsSchema = new Schema({
     password: {
         type: String,
         require: true,
-        minlenght: 8 
+        minlenght: 6
     },
 
     address: {

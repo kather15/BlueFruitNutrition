@@ -1,7 +1,9 @@
+//Dependencias--------------------------------------------------------------------------------
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+//Rutas----------------------------------------------------------------------------------------
 import productsRoutes from "./src/routes/products.js";
 import customersRouter from "./src/routes/customers.js";
 import distributorsRoutes from "./src/routes/distributors.js"
@@ -36,3 +38,5 @@ app.use('/api/subscriptions', subscriptionRoutes);
 
 
 export default app;
+
+//en package.json poner"   "type": "module",  

@@ -24,6 +24,13 @@ customersController.postCustomers = async (req, res) => {
         if(!name || !lastName || !email || !password || !dateBirth){
               return res.status(400).json({ message: 'Faltan campos obligatorios' });
         }
+        if(height > 300){
+            return res.status(400).json({ message: 'Ingrese una altura válida' });
+        }
+
+        if(weight > 300){
+            return res.status(400).json({ message: 'Ingrese un peso válido' });
+        }
 
         const newCustomer = new customersModel({ name, lastName, email, password, phone, weight, dateBirth, height, address, gender, idSports, isVerified })
         await newCustomer.save();
