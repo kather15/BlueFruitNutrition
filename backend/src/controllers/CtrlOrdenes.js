@@ -14,6 +14,12 @@ exports.getOrdenes = async (req, res) => {
 exports.crearOrden = async (req, res) => {
   try {
     const nuevaOrden = new Orden(req.body);
+
+       //validar ordenes
+       if(!numeroOrden || !fecha || !total || !items || !estado){
+      return res.status(400).json({ message: 'Faltan campos obligatorios' });
+    } 
+    
     const ordenGuardada = await nuevaOrden.save();
     res.status(201).json(ordenGuardada);
   } catch (error) {

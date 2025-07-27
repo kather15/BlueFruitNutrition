@@ -17,6 +17,13 @@ registerCustomersController.register = async (req, res) => {
     if(!name || !lastName || !email || !password || !dateBirth){
         res.status(400).json({message: "Ingrese campos obligatorios"})
     }
+    if(height > 300){
+        return res.status(400).json({ message: 'Ingrese una altura válida' });
+    }
+
+    if(weight > 300){
+        return res.status(400).json({ message: 'Ingrese un peso válido' });
+    }
     try {
         //verificamos si el cliente ya existe
         const existingCustomer = await customersModel.findOne({ email })

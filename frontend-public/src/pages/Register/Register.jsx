@@ -14,6 +14,13 @@ function Registro() {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
+  // Obtener fecha actual en formato yyyy-mm-dd
+  const hoy = new Date();
+  const yyyy = hoy.getFullYear();
+  const mm = String(hoy.getMonth() + 1).padStart(2, "0");
+  const dd = String(hoy.getDate()).padStart(2, "0");
+  const fechaMax = `${yyyy}-${mm}-${dd}`;
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -47,47 +54,54 @@ function Registro() {
 
   return (
     <div className="registro-container">
-  <div className="imgre">
-    <img src={"/imgregister.png"} alt="Blue Fruit Nutrition" className="registro-img" />
-  </div>
+      <div className="imgre">
+        <img src={"/imgregister.png"} alt="Blue Fruit Nutrition" className="registro-img" />
+      </div>
 
-  <div className="registro-card">
-    <div className="registro-right">
-      <h1>Crear cuenta</h1>
-      <h2>Ingresa tus datos para continuar</h2>
-      <form className="registro-form" onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" placeholder="Nombre" {...register("name", { required: true })} />
-        <input type="text" placeholder="Apellido" {...register("lastname", { required: true })} />
-        <input type="email" placeholder="Correo Electrónico" {...register("email", { required: true })} />
-        <input type="date" placeholder="Fecha de nacimiento" {...register("dateBirth", { required: true })} />
-        <div className="registro-password-container">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Contraseña"
-            {...register("password", { required: true })}
-          />
-          <button
-            type="button"
-            onClick={togglePasswordVisibility}
-            className="toggle-password-btn"
-          >
-            {showPassword ? <FiEyeOff /> : <FiEye />}
-          </button>
+      <div className="registro-card">
+        <div className="registro-right">
+          <h1>Crear cuenta</h1>
+          <h2>Ingresa tus datos para continuar</h2>
+          <form className="registro-form" onSubmit={handleSubmit(onSubmit)}>
+            <input type="text" placeholder="Nombre" {...register("name", { required: true })} />
+            <input type="text" placeholder="Apellido" {...register("lastName", { required: true })} />
+            <input type="email" placeholder="Correo Electrónico" {...register("email", { required: true })} />
+            
+            {/* Aquí se agregó max y validación */}
+            <input 
+              type="date" 
+              placeholder="Fecha de nacimiento" 
+              max={fechaMax}
+              {...register("dateBirth", { 
+                required: "La fecha de nacimiento es obligatoria",
+                validate: value => value <= fechaMax || "La fecha no puede ser mayor a hoy"
+              })} 
+            />
+            {errors.dateBirth && <p style={{ color: 'red' }}>{errors.dateBirth.message}</p>}
+
+            <div className="registro-password-container">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Contraseña"
+                {...register("password", { required: true })}
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="toggle-password-btn"
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </button>
+            </div>
+            <button type="submit" className="btn-crear" href="/login">Crear Cuenta</button>
+          </form>
+          <p className="registro-login">
+            ¿Ya tienes una cuenta? <a href="/login">Inicia Sesión</a>
+          </p>
+          <VerifyCodeModal isOpen={showModal} onClose={() => setShowModal(false)} />
         </div>
-        <button type="submit" className="btn-crear" href="/login">Crear Cuenta</button>
-      </form>
-      <p className="registro-login">
-        ¿Ya tienes una cuenta? <a href="/login">Inicia Sesión</a>
-      </p>
-              <VerifyCodeModal isOpen={showModal} onClose={() => setShowModal(false)} />
-
+      </div>
     </div>
-  </div>
-
-</div>
-
-   
-
   );
 }
 
