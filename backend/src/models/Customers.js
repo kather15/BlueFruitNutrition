@@ -18,7 +18,7 @@ const customersSchema = new Schema({
     email:{
         type: String,
         require: true,
-        unique: true,
+       // unique: true,
         match:[
             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,6}$/,
             "Por favor ingrese un correo electronico valido", //validar el correo
@@ -33,10 +33,11 @@ const customersSchema = new Schema({
 
     phone:{
         type: String,
-        require: false,
-        unique: false,
-        match: [/^[0-9]{8}$/, 
-                "el numero de teléfono tiene que ser válido"] //validar número de teléfono
+        //require: false,
+        //unique: false,
+        //match: [/^[0-9]{8}$/, 
+          //      "el numero de teléfono tiene que ser válido"] //validar número de teléfono
+              
     },
 
     weight:{

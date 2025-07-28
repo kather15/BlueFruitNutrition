@@ -15,7 +15,7 @@ registerCustomersController.register = async (req, res) => {
     const { name, lastName, email, password, phone, weight, dateBirth, height, address, gender, idSports, isVerified } = req.body;
 
     if(!name || !lastName || !email || !password || !dateBirth){
-        res.status(400).json({message: "Ingrese campos obligatorios"})
+       return  res.status(400).json({message: "Ingrese campos obligatorios"})
     }
     if(height > 300){
         return res.status(400).json({ message: 'Ingrese una altura válida' });
@@ -34,7 +34,8 @@ registerCustomersController.register = async (req, res) => {
         //encriptar la contraseña
         const passwordHash = await bcrypt.hash(password, 10)
                                             
-        const newCustomer = new customersModel({ name, lastName, email, password: passwordHash, phone, weight, dateBirth, height, address, gender, idSports, isVerified: isVerified || false });
+const newCustomer = new customersModel({ name, lastName, email, password: passwordHash, phone, weight, dateBirth, height, address, gender, idSports, isVerified });
+
 
         await newCustomer.save();
 
@@ -77,7 +78,7 @@ registerCustomersController.register = async (req, res) => {
         };
 
         //3- enviar el correo
-        transporter.sendMail(mailOptions, (error, info) => {
+      await  transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
 
                 return res.status(400).json({ message: "Error sending email" + error })
