@@ -10,7 +10,7 @@ export const config={
     },
 
     server: {
-        port: process.env.PORT //Puerto 4000
+        port: process.env.PORT //Puerto 
     },
 
     JWT: {

@@ -6,13 +6,16 @@ import "./VerifyCodeModal.css";
 const VerifyCodeModal = ({ isOpen, onClose }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-const onSubmit = async ({ verificationCode }) => {
+const onSubmit = async ({ requireCode }) => {
   try {
+
+    //console.log("Código enviado:", requireCode);
+
     const res = await fetch("http://localhost:4000/api/registerCustomers/verifyCodeEmail", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include", // 🚨 Enviar cookie con el token
-      body: JSON.stringify({ verificationCode }),  // Solo envía el código de verificación
+      body: JSON.stringify({ requireCode }),  // Solo envía el código de verificación
     });
 
     const data = await res.json();
@@ -38,12 +41,12 @@ const onSubmit = async ({ verificationCode }) => {
       <input
         type="text"
         placeholder="Código de verificación"
-        {...register("verificationCode", { required: true })}
+        {...register("requireCode", { required: true })}
       />
-      {errors.verificationCode && (
+      {errors.requireCode && (
         <p className="error-msg">El código es obligatorio</p>
       )}
-      <button type="submit" className="btn-crear">Verificar</button>
+      <button type="submit" className="btn-crear" href="/login">Verificar</button>
     </form>
     <button onClick={onClose} className="cancelar-btn">Cancelar</button>
   </div>

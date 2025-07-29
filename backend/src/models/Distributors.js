@@ -20,11 +20,18 @@ const DistributorsSchema = new Schema({
         ],
     },
 
-    password: {
-        type: String,
-        require: true,
-        minlenght: 6
+password: {
+  type: String,
+  required: true,
+  minlength: 6,
+  maxlength: 30,
+  validate: {
+    validator: function (value) {
+      return /[!@#$%^&*(),.?":{}|<>]/.test(value); //esta funcion hace que el correo necesite como minimo un caracter especial
     },
+    message: "La contraseña debe contener al menos un carácter especial."
+  }
+},
 
     address: {
         type: String,
