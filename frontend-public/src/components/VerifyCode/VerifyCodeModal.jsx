@@ -9,7 +9,7 @@ const VerifyCodeModal = ({ isOpen, onClose }) => {
 const onSubmit = async ({ requireCode }) => {
   try {
 
-    console.log("Código enviado:", requireCode);
+    //console.log("Código enviado:", requireCode);
 
     const res = await fetch("http://localhost:4000/api/registerCustomers/verifyCodeEmail", {
       method: "POST",
@@ -46,7 +46,7 @@ const onSubmit = async ({ requireCode }) => {
       {errors.requireCode && (
         <p className="error-msg">El código es obligatorio</p>
       )}
-      <button type="submit" className="btn-crear">Verificar</button>
+      <button type="submit" className="btn-crear" href="/login">Verificar</button>
     </form>
     <button onClick={onClose} className="cancelar-btn">Cancelar</button>
   </div>

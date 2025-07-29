@@ -18,25 +18,32 @@ const customersSchema = new Schema({
     email:{
         type: String,
         require: true,
-       // unique: true,
+        unique: true,
         match:[
             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,6}$/,
             "Por favor ingrese un correo electronico valido", //validar el correo
         ],
     },
 
-    password:{
-        type: String,
-        require: true,
-        minlenght: 6
+password: {
+  type: String,
+  required: true,
+  minlength: 6,
+  maxlength: 30,
+  validate: {
+    validator: function (value) {
+      return /[!@#$%^&*(),.?":{}|<>]/.test(value); //esta funcion hace que el correo necesite como minimo un caracter especial
     },
+    message: "La contraseña debe contener al menos un carácter especial."
+  }
+},
 
     phone:{
         type: String,
-        //require: false,
-        //unique: false,
-        //match: [/^[0-9]{8}$/, 
-          //      "el numero de teléfono tiene que ser válido"] //validar número de teléfono
+        require: false,
+        unique: false,
+        match: [/^[0-9]{8}$/, 
+               "el numero de teléfono tiene que ser válido"] //validar número de teléfono
               
     },
 

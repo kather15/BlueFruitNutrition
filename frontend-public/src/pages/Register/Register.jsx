@@ -66,8 +66,9 @@ function Registro() {
             <input type="text" placeholder="Nombre" {...register("name", { required: true })} />
             <input type="text" placeholder="Apellido" {...register("lastName", { required: true })} />
             <input type="email" placeholder="Correo Electrónico" {...register("email", { required: true })} />
-            
-            {/* Aquí se agregó max y validación */}
+            <input type="tel" placeholder="Número de teléfono" {...register("phone", { required: true })} />
+
+
             <input 
               type="date" 
               placeholder="Fecha de nacimiento" 
