@@ -21,6 +21,16 @@ function Registro() {
   const dd = String(hoy.getDate()).padStart(2, "0");
   const fechaMax = `${yyyy}-${mm}-${dd}`;
 
+  // Fecha mínima de nacimiento: El usuario debe ser mayor de edad, la fecha se va actualizando dia con dia
+const getMinBirthDate = () => {
+  const today = new Date();
+  today.setFullYear(today.getFullYear() - 18);
+  return today.toISOString().split('T')[0];
+};
+
+const minBirthDate = getMinBirthDate();
+
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -44,7 +54,6 @@ function Registro() {
         toast.error(result.message || "Error en el registro");
         return;
       }
-
       toast.success("Registro exitoso. Revisa tu correo 📩");
       setShowModal(true); // abrir modal de verificación
     } catch (error) {
@@ -70,14 +79,17 @@ function Registro() {
 
 
             <input 
-              type="date" 
-              placeholder="Fecha de nacimiento" 
-              max={fechaMax}
-              {...register("dateBirth", { 
-                required: "La fecha de nacimiento es obligatoria",
-                validate: value => value <= fechaMax || "La fecha no puede ser mayor a hoy"
-              })} 
-            />
+  type="date" 
+  placeholder="Fecha de nacimiento" 
+  max={minBirthDate}
+  {...register("dateBirth", { 
+    required: "La fecha de nacimiento es obligatoria",
+    validate: value =>
+      value <= minBirthDate || "Debes tener al menos 18 años"
+  })} 
+/>
+{errors.dateBirth && <p style={{ color: 'red' }}>{errors.dateBirth.message}</p>}
+
             {errors.dateBirth && <p style={{ color: 'red' }}>{errors.dateBirth.message}</p>}
 
             <div className="registro-password-container">
