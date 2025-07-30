@@ -29,7 +29,7 @@ password: {
   type: String,
   required: true,
   minlength: 6,
-  maxlength: 30,
+  maxlength: 100,
   validate: {
     validator: function (value) {
       return /[!@#$%^&*(),.?":{}|<>]/.test(value); //esta funcion hace que el correo necesite como minimo un caracter especial
@@ -54,11 +54,23 @@ password: {
         max: 300 //Máximo 300kg
     },
 
-    dateBirth:{
+    dateBirth: {
         type: Date,
-        require: true
+        required: true,
+        validate: {
+          validator: function(value) {
+            const today = new Date();
+            const minDate = new Date(
+              today.getFullYear() - 18,
+              today.getMonth(),
+              today.getDate()
+            );
+            return value <= minDate;
+          },
+          message: 'Debes tener al menos 18 años.'
+        }
+        
     },
-
     height:{
         type: Number, //Altura en cm
         require: false,
