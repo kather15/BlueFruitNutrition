@@ -11,7 +11,7 @@ import loginRoutes from "./src/routes/login.js"
 import logoutRoutes from "./src/routes/logout.js";
 import subscriptionRoutes from './src/routes/subscriptions.js';
 import shoppingCartRoutes from './src/routes/shoppingCart.js'
-
+import ordenes from './src/routes/ordenes.js'
 const app = express();
 
 app.use(
@@ -33,6 +33,7 @@ app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
 app.use("/api/shoppingCart", shoppingCartRoutes)
 app.use('/api/subscriptions', subscriptionRoutes);
+app.use("/api/ordenes", ordenes)
 
 
 export default app;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // 👈 Importa el hook
+import { useNavigate } from "react-router-dom";
 import "./Carrito.css";
 
 const productosIniciales = [
@@ -28,7 +28,7 @@ const productosIniciales = [
 
 const Carrito = () => {
   const [productos, setProductos] = useState(productosIniciales);
-  const navigate = useNavigate(); // 👈 Hook para redirigir
+  const navigate = useNavigate();
 
   const actualizarCantidad = (id, nuevaCantidad) => {
     const actualizados = productos.map((producto) =>
@@ -50,8 +50,34 @@ const Carrito = () => {
     .reduce((acc, p) => acc + p.precio * p.cantidad, 0)
     .toFixed(2);
 
-  const irAMetodoDePago = () => {
-    navigate("/Metodo"); // 👈 Redirige a la ruta
+  const irAMetodoDePago = async () => {
+    const orden = {
+      numeroOrden: `ORD-${Date.now()}`,
+      fecha: new Date().toLocaleDateString(),
+      total: parseFloat(total),
+      items: productos.reduce((acc, p) => acc + p.cantidad, 0),
+      estado: "En proceso",
+    };
+
+    try {
+      const response = await fetch("http://localhost:4000/api/ordenes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orden),
+      });
+
+      if (response.ok) {
+        alert("Orden enviada correctamente 🎉");
+        navigate("/Metodo"); // Puedes cambiar esta ruta según tu flujo
+      } else {
+        alert("Error al enviar la orden");
+      }
+    } catch (error) {
+      console.error("Error al enviar la orden:", error);
+      alert("Hubo un problema al conectar con el servidor.");
+    }
   };
 
   return (

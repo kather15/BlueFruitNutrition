@@ -1,18 +1,24 @@
 // src/pages/Ordenes.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './Ordenes.css';
 
-const ordenes = [
-  { id: 1, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'Terminado' },
-  { id: 2, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'En proceso' },
-  { id: 3, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'Terminado' },
-  { id: 4, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'En proceso' },
-  { id: 5, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'Terminado' },
-  { id: 6, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'En proceso' },
-  { id: 7, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'Terminado' },
-];
-
 const Ordenes = () => {
+  const [ordenes, setOrdenes] = useState([]);
+
+  useEffect(() => {
+    const fetchOrdenes = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/ordenes'); // Asegúrate que esta sea tu URL real
+        setOrdenes(res.data);
+      } catch (error) {
+        console.error('Error al cargar órdenes:', error);
+      }
+    };
+
+    fetchOrdenes();
+  }, []);
+
   return (
     <div className="ordenes-container">
       <h2>ORDENES</h2>
@@ -28,10 +34,10 @@ const Ordenes = () => {
         </thead>
         <tbody>
           {ordenes.map((orden, index) => (
-            <tr key={index}>
-              <td>#{orden.id}</td>
+            <tr key={orden._id || index}>
+              <td>#{index + 1}</td>
               <td>{orden.fecha}</td>
-              <td>{orden.total}</td>
+              <td>${orden.total.toFixed(2)}</td>
               <td>{orden.items}</td>
               <td>{orden.estado}</td>
             </tr>
