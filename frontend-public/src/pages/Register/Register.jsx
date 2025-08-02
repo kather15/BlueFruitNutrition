@@ -1,50 +1,41 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { FiEye, FiEyeOff } from "react-icons/fi";
 import toast from "react-hot-toast";
-import VerifyCodeModal from "../../components/VerifyCode/VerifyCodeModal"
-import './Register.css'
-import login from "../Login/Login";
+import FormularioRegistro from "../../components/Register/RegisterForm";
+import VerifyCodeModal from "../../components/VerifyCode/VerifyCodeModal";
+import './Register.css';
 
 function Registro() {
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [tipoUsuario, setTipoUsuario] = useState("customer");
   const navigate = useNavigate();
 
   const { register, handleSubmit, formState: { errors } } = useForm();
-
-  // Obtener fecha actual en formato yyyy-mm-dd
-  const hoy = new Date();
-  const yyyy = hoy.getFullYear();
-  const mm = String(hoy.getMonth() + 1).padStart(2, "0");
-  const dd = String(hoy.getDate()).padStart(2, "0");
-  const fechaMax = `${yyyy}-${mm}-${dd}`;
-
-  // Fecha mínima de nacimiento: El usuario debe ser mayor de edad, la fecha se va actualizando dia con dia
-const getMinBirthDate = () => {
-  const today = new Date();
-  today.setFullYear(today.getFullYear() - 18);
-  return today.toISOString().split('T')[0];
-};
-
-const minBirthDate = getMinBirthDate();
-
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleRegresar = () => {
-    navigate("/");
+  const getMinBirthDate = () => {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 18);
+    return today.toISOString().split("T")[0];
   };
+
+  const minBirthDate = getMinBirthDate();
 
   const onSubmit = async (data) => {
     try {
-      const res = await fetch("http://localhost:4000/api/registerCustomers", {
+      const endpoint = tipoUsuario === "customer"
+        ? "http://localhost:4000/api/registerCustomers"
+        : "http://localhost:4000/api/registerDistributors";
+
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // para guardar cookie con token
+        credentials: "include",
         body: JSON.stringify(data),
       });
 
@@ -54,8 +45,9 @@ const minBirthDate = getMinBirthDate();
         toast.error(result.message || "Error en el registro");
         return;
       }
+
       toast.success("Registro exitoso. Revisa tu correo 📩");
-      setShowModal(true); // abrir modal de verificación
+      setShowModal(true);
     } catch (error) {
       toast.error("Error de red o del servidor");
     }
@@ -64,53 +56,36 @@ const minBirthDate = getMinBirthDate();
   return (
     <div className="registro-container">
       <div className="imgre">
-        <img src={"/imgregister.png"} alt="Blue Fruit Nutrition" className="registro-img" />
+        <img src="/imgregister.png" alt="Blue Fruit Nutrition" className="registro-img" />
       </div>
 
       <div className="registro-card">
         <div className="registro-right">
           <h1>Crear cuenta</h1>
-          <h2>Ingresa tus datos para continuar</h2>
-          <form className="registro-form" onSubmit={handleSubmit(onSubmit)}>
-            <input type="text" placeholder="Nombre" {...register("name", { required: true })} />
-            <input type="text" placeholder="Apellido" {...register("lastName", { required: true })} />
-            <input type="email" placeholder="Correo Electrónico" {...register("email", { required: true })} />
-            <input type="tel" placeholder="Número de teléfono" {...register("phone", { required: true })} />
+          <h2>Registro como {tipoUsuario === "customer" ? "Cliente" : "Distribuidor"}</h2>
 
+          <button
+            onClick={() => setTipoUsuario(prev => prev === "customer" ? "distributor" : "customer")}
+            className="btn-switch"
+          >
+            Cambiar a {tipoUsuario === "customer" ? "Distribuidor" : "Cliente"}
+          </button>
 
-            <input 
-  type="date" 
-  placeholder="Fecha de nacimiento" 
-  max={minBirthDate}
-  {...register("dateBirth", { 
-    required: "La fecha de nacimiento es obligatoria",
-    validate: value =>
-      value <= minBirthDate || "Debes tener al menos 18 años"
-  })} 
-/>
-{errors.dateBirth && <p style={{ color: 'red' }}>{errors.dateBirth.message}</p>}
+          <FormularioRegistro
+            register={register}
+            handleSubmit={handleSubmit}
+            errors={errors}
+            showPassword={showPassword}
+            togglePasswordVisibility={togglePasswordVisibility}
+            onSubmit={onSubmit}
+            tipoUsuario={tipoUsuario}
+            minBirthDate={minBirthDate}
+          />
 
-            {errors.dateBirth && <p style={{ color: 'red' }}>{errors.dateBirth.message}</p>}
-
-            <div className="registro-password-container">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Contraseña"
-                {...register("password", { required: true })}
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="toggle-password-btn"
-              >
-                {showPassword ? <FiEyeOff /> : <FiEye />}
-              </button>
-            </div>
-            <button type="submit" className="btn-crear" href="/login">Crear Cuenta</button>
-          </form>
           <p className="registro-login">
             ¿Ya tienes una cuenta? <a href="/login">Inicia Sesión</a>
           </p>
+
           <VerifyCodeModal isOpen={showModal} onClose={() => setShowModal(false)} />
         </div>
       </div>

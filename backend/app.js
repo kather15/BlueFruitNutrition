@@ -8,6 +8,7 @@ import productsRoutes from "./src/routes/products.js";
 import customersRouter from "./src/routes/customers.js";
 import distributorsRoutes from "./src/routes/distributors.js"
 import registerCustomersRoutes from "./src/routes/registerCustomer.js"
+import registerDistributorsRoutes from "./src/routes/registerDistributor.js"
 import passwordRecoveryRoutes from "./src/routes/passwordRecovery.js";
 import loginRoutes from "./src/routes/login.js"
 import logoutRoutes from "./src/routes/logout.js";
@@ -29,7 +30,8 @@ app.use(cookieParser());
 app.use("/api/products", productsRoutes);
 app.use("/api/customers", customersRouter);
 app.use("/api/distributors", distributorsRoutes);
-app.use("/api/registerCustomers", registerCustomersRoutes)
+app.use("/api/registerCustomers", registerCustomersRoutes);
+app.use("/api/registerDistributors", registerDistributorsRoutes);
 app.use("/api/passwordRecovery", passwordRecoveryRoutes);
 app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
