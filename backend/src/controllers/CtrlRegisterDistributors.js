@@ -4,6 +4,7 @@ import nodemailer from "nodemailer";//enviar correo
 import crypto from "crypto";//codigo aleatorio
 
 import distributorModel from "../models/Distributors.js"
+import customersModel from "../models/Customers.js"; // Asegúrate de importar el modelo de clientes
 import { config } from "../config.js";
 
 //array de las funciones
@@ -11,19 +12,25 @@ const registerDistributorController = {};
 
 //para el registro***********************************************************************************************
 registerDistributorController.register = async (req, res) => {
-    //solicitar los datos
     const { companyName, email, password, address, phone, status, NIT, isVerified } = req.body;
 
-    //validar datos
     if(!companyName || !email || !password || !address || !phone || !NIT){
        return  res.status(400).json({message: "Ingrese campos obligatorios"})
     }
- 
+
     try {
-        //verificamos si el distribuidor ya existe
-        const existingDistributor = await distributorModel.findOne({ email })
+        // Verificar si el email ya existe como distribuidor
+        const existingDistributor = await distributorModel.findOne({ email });
         if (existingDistributor) {
-            return res.status(200).json({ message: "Distributor already exist" })
+            console.log("Intento de registro con email ya registrado como distribuidor:", email);
+            return res.status(200).json({ message: "Distributor already exist" });
+        }
+
+        // Verificar si el email ya existe como cliente
+        const existingCustomer = await customersModel.findOne({ email });
+        if (existingCustomer) {
+            console.log("Intento de registro con email ya registrado como cliente:", email);
+            return res.status(200).json({ message: "Ya existe un cliente registrado con este correo" });
         }
 
         //encriptar la contraseña
@@ -107,9 +114,12 @@ registerDistributorController.verificationCode = async (req, res) => {
         }
 
         //marcamos al distribuidor como verificado
-        const customer = await customersModel.findOne({ email });
-        customer.isVerified = true;
-        await customer.save();
+        const distributor = await distributorModel.findOne({ email });
+        if (!distributor) {
+            return res.status(404).json({ message: "Distribuidor no encontrado para verificación" });
+        }
+        distributor.isVerified = true;
+        await distributor.save();
 
         res.clearCookie("verificationToken");
         res.status(200).json({ message: "Email verified successfuly" });

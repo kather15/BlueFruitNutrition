@@ -7,7 +7,7 @@ const FormularioRegistro = ({
   errors,
   showPassword,
   togglePasswordVisibility,
-  onSubmit, 
+  onSubmit,
   tipoUsuario,
   minBirthDate,
 }) => {
@@ -18,18 +18,36 @@ const FormularioRegistro = ({
         <>
           <input type="text" placeholder="Nombre" {...register("name", { required: true })} />
           <input type="text" placeholder="Apellido" {...register("lastName", { required: true })} />
+          <input type="email" placeholder="Correo Electrónico" {...register("email", { required: true })} />
+                      {/* Contraseña */}
+          <div className="registro-password-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Contraseña"
+              {...register("password", { required: true })}
+            />
+            <button
+
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="toggle-password-btn"
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
+
+
           <input type="tel" placeholder="Número de teléfono" {...register("phone", { required: true })} />
-          <input 
-            type="date" 
-            placeholder="Fecha de nacimiento" 
+          <input
+            type="date"
+            placeholder="Fecha de nacimiento"
             max={minBirthDate}
-            {...register("dateBirth", { 
+            {...register("dateBirth", {
               required: "La fecha de nacimiento es obligatoria",
               validate: value => value <= minBirthDate || "Debes tener al menos 18 años"
-            })} 
+            })}
           />
           {errors.dateBirth && <p style={{ color: 'red' }}>{errors.dateBirth.message}</p>}
-          <input type="email" placeholder="Correo Electrónico" {...register("email", { required: true })} />
         </>
       )}
 
@@ -38,27 +56,31 @@ const FormularioRegistro = ({
         <>
           <input type="text" placeholder="Nombre de la Empresa" {...register("companyName", { required: true })} />
           <input type="email" placeholder="Correo Electrónico" {...register("email", { required: true })} />
+              {/* Contraseña */}
+          <div className="registro-password-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Contraseña"
+              {...register("password", { required: true })}
+            />
+            <button
+
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="toggle-password-btn"
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
           <input type="text" placeholder="Dirección" {...register("address", { required: true })} />
           <input type="tel" placeholder="Teléfono" {...register("phone", { required: true })} />
           <input type="text" placeholder="NIT o Registro Fiscal" {...register("NIT", { required: true })} />
+
         </>
       )}
 
-      {/* Contraseña para ambos */}
-      <div className="registro-password-container">
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Contraseña"
-          {...register("password", { required: true })}
-        />
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className="toggle-password-btn"
-        >
-          {showPassword ? <FiEyeOff /> : <FiEye />}
-        </button>
-      </div>
+  
+
 
       <button type="submit" className="btn-crear">Crear Cuenta</button>
     </form>

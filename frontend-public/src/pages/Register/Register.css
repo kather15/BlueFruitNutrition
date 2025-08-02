@@ -52,6 +52,15 @@
   margin-bottom: 30px;
 }
 
+/* Tipo de cuenta título */
+.tipo-cuenta-titulo {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 18px;
+  color: #0b0b2c;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
 
 /* Estilo de formulario */
 .registro-form {
@@ -130,4 +139,50 @@ select:focus {
   color: #0b0b2c;
   font-weight: bold;
   text-decoration: none;
+}
+
+/*botones para cambiar el formulario*/
+.btn-switch-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 0; /* Elimina el gap para que la línea esté pegada */
+}
+
+.btn-switch-group .btn-switch {
+  padding: 10px 32px;
+  font-size: 15px;
+  border: none;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-switch-group .btn-switch.active {
+  background: #f5f5f5;
+  color: #000000;
+}
+
+.btn-switch-group .separator {
+  width: 2px;
+  height: 32px;
+  background: #d1d1d1;
+  margin: 0 12px;
+  border-radius: 2px;
+}
+
+.btn-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre texto e imagen */
+}
+
+.tipo-usuario-texto {
+  text-align: center;
+  margin: 18px 0 10px 0;
+  font-size: 16px;
+  color: #333;
 }

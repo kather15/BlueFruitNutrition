@@ -19,6 +19,7 @@ import Login from '../../frontend-public/src/pages/Login/Login';
 import ProductsReview from "../src/pages/Products/ProductsReview";
 import Carrito from '../src/pages/Carrito/Carrito.jsx'
 import MetodoDePago from "../src/pages/MetodoDePago/CheckoutPage.jsx"
+import { Toaster } from "react-hot-toast";
 
 
 
@@ -27,7 +28,7 @@ function App() {
 
   return (
     <>
-    
+      <Toaster position="top-right" />
       <Nav />
         
       <Routes>

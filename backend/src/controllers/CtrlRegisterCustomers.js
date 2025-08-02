@@ -4,6 +4,7 @@ import nodemailer from "nodemailer";//enviar correo
 import crypto from "crypto";//codigo aleatorio
 
 import customersModel from "../models/Customers.js"
+import distributorModel from "../models/Distributors.js"; 
 import { config } from "../config.js";
 
 //array de las funciones
@@ -25,9 +26,17 @@ registerCustomersController.register = async (req, res) => {
         return res.status(400).json({ message: 'Ingrese un peso válido' });
     }
     try {
+        // Verificar si el email ya existe como distribuidor
+        const existingDistributor = await distributorModel.findOne({ email });
+        if (existingDistributor) {
+            console.log("Intento de registro con email ya registrado como distribuidor:", email);
+            return res.status(200).json({ message: "Ya existe un distribuidor registrado con este correo" });
+        }
+
         //verificamos si el cliente ya existe
         const existingCustomer = await customersModel.findOne({ email })
         if (existingCustomer) {
+            console.log("Intento de registro con email ya registrado como cliente:", email);
             return res.status(200).json({ message: "Customer already exist" })
         }
 
@@ -112,6 +121,9 @@ registerCustomersController.verificationCode = async (req, res) => {
 
         //marcamos al cliente como verificado
         const customer = await customersModel.findOne({ email });
+        if (!customer) {
+            return res.status(404).json({ message: "Cliente no encontrado para verificación" });
+        }
         customer.isVerified = true;
         await customer.save();
 
