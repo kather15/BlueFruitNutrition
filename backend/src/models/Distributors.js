@@ -24,7 +24,7 @@ password: {
   type: String,
   required: true,
   minlength: 6,
-  maxlength: 30,
+  maxlength: 100,
   validate: {
     validator: function (value) {
       return /[!@#$%^&*(),.?":{}|<>]/.test(value); //esta funcion hace que el correo necesite como minimo un caracter especial
