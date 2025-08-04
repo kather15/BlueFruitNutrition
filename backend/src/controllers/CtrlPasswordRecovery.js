@@ -31,7 +31,8 @@ passwordRecoveryController.requestCode = async (req, res) => {
 
     // Si no encuentra ni en clientes ni en distribuidores
     if (!userFound) {
-      return res.json({ message: "User not found" });
+      res.status(404).json({message: "User not found"})
+
     }
 
     // Generar un código aleatorio
@@ -57,8 +58,11 @@ passwordRecoveryController.requestCode = async (req, res) => {
       HTMLRecoveryEmail(code)
     );
 
-    res.json({ message: "Verification code send" });
-  } catch (error) {}
+    res.status(200).json({ message: "Verification code send" });
+  } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+        console.log("error: " + error);
+  }
 };
 
 
@@ -101,6 +105,8 @@ passwordRecoveryController.verfiedCode = async(req, res)=>{
 
     } catch (error) {
         console.log("error: "+ error)
+        res.status(500).json({ message: 'Internal Server Error' });
+
     }
 
 }

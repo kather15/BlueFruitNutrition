@@ -14,11 +14,14 @@ registerCustomersController.register = async (req, res) => {
     //solicitar los datos
     const { name, lastName, email, password, phone, weight, dateBirth, height, address, gender, idSports, isVerified } = req.body;
 
+    if(!name || !lastName || !email || !password || !dateBirth){
+        res.status(400).json({message: "Ingrese campos obligatorios"})
+    }
     try {
         //verificamos si el cliente ya existe
         const existingCustomer = await customersModel.findOne({ email })
         if (existingCustomer) {
-            return res.json({ message: "Customer already exist" })
+            return res.status(200).json({ message: "Customer already exist" })
         }
 
         //encriptar la contraseña
@@ -48,7 +51,7 @@ registerCustomersController.register = async (req, res) => {
 
 
 
-        //ENVIAR EL CORREO ELECTRONICO
+        //ENVIAR EL CORREO ELECTRONICO----------------------------------------------------------------
         //1- transporter => quien lo envia
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -69,14 +72,16 @@ registerCustomersController.register = async (req, res) => {
         //3- enviar el correo
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                return res.json({ message: "Error sending email" + error })
+
+                return res.status(400).json({ message: "Error sending email" + error })
             }
             console.log("Email sent" + info);
         })
+        res.status(201).json({ message: "Customer registered, Please verify your email with the code" })
 
-        res.json({ message: "Customer registered, Please verify your email with the code" })
     } catch (error) {
         console.log("error" + error)
+        res.status(500).json({message: "Internal server error"})
     }
 };
 
@@ -94,7 +99,7 @@ registerCustomersController.verificationCode = async (req, res) => {
 
         //comparar el codigo que envie por correo y esta guardado en las cookies
         if (requireCode !== storedCode) {
-            return res.json({ message: "Invalid code" });
+            return res.status(422).json({ message: "Invalid code" });
         }
 
         //marcamos al cliente como verificado
@@ -103,10 +108,12 @@ registerCustomersController.verificationCode = async (req, res) => {
         await customer.save();
 
         res.clearCookie("verificationToken");
-        res.json({ message: "Email verified successfuly" });
+        res.status(200).json({ message: "Email verified successfuly" });
 
     } catch (error) {
         console.log("error: " + error)
+        res.status(500).json({ message: 'Internal Server Error' });
+
     }
 
 }
