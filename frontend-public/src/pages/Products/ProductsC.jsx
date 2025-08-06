@@ -1,73 +1,70 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './ProductsC.css';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
+import './ProductsC.css'; 
 
 const ProductsC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+  // Crea una función para cambiar de página (ruta)
 
-  const products = [
-    {
-      id: 1,
-      name: 'Carbo Upp',
-      image: '/CarboUpp.png'
-    },
-    {
-      id: 2,
-      name: 'Ener Kik', 
-      image: '/EnerKik.png'
-    },
-    {
-      id: 3,
-      name: 'Reppo',
-      image: '/Reppo.png'
-    }
-  ];
+  const [products, setProducts] = useState([]); 
+  // Declara un estado local llamado 'products' inicializado como arreglo vacío,
+  // 'setProducts' es la función para actualizar ese estado
 
+  useEffect(() => {
+    // useEffect se ejecuta cuando el componente se monta (porque el segundo argumento es un arreglo vacío [])
+
+    fetch('http://localhost:4000/api/products') 
+
+      .then(response => response.json()) 
+      // Convierte la respuesta en formato JSON
+
+      .then(data => setProducts(data)) 
+      // Actualiza el estado 'products' con los datos recibidos del backend
+
+      .catch(error => console.error('Error fetching products:', error)); 
+      // En caso de error, lo muestra en la consola
+  }, []);
+
+  // Función que se llama cuando el usuario hace clic en un producto
   const handleProductClick = (productId) => {
-  
-    navigate(`/producto/${productId}`);
+    navigate(`/producto/:id${productId}`); 
+    // Cambia la ruta a la página de detalles del producto, usando el id del producto
   };
 
-  
   return (
     <div className="products-screen-wrapper">
-      
       <div className="products-screen">
         <div className="products-main-content">
           <div className="products-container">
             <h1 className="products-title">Nuestros Productos</h1>
-            
+
             <div className="products-grid">
               {products.map((product) => (
-                <div key={product.id} className="product-card-item">
+                // Recorre el arreglo 'products' y para cada producto renderiza un div
+
+                <div key={product._id} className="product-card-item">
                   <div className="product-image-wrapper">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="product-image"
-                      onError={(e) => {
-                        e.target.src = '/placeholder-product.png';
-                        console.log(`Error loading image: ${product.image}`);
-                      }}
-                    />
+                   
                   </div>
                   <h3 className="product-name">{product.name}</h3>
-                  <button 
+                  <button
                     className="product-view-btn"
-                    onClick={() => handleProductClick(product.id)}
+                    onClick={() => handleProductClick(product._id)} 
+                    
                   >
                     Ver Producto
                   </button>
                 </div>
               ))}
+              {products.length === 0 && <p>No hay productos disponibles.</p>}
+              {/* Si el arreglo 'products' está vacío, muestra un mensaje */}
             </div>
           </div>
         </div>
       </div>
-      
-   
     </div>
   );
 };
 
 export default ProductsC;
+
