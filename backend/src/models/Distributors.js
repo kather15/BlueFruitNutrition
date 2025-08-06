@@ -1,5 +1,5 @@
 /*fields:
-    companyName, email, password, address, phone, status, taxId
+    companyName, email, password, address, phone, status, NIT
 */
 
 import { Schema, model } from "mongoose";
@@ -20,11 +20,18 @@ const DistributorsSchema = new Schema({
         ],
     },
 
-    password: {
-        type: String,
-        require: true,
-        minlenght: 8 
+password: {
+  type: String,
+  required: true,
+  minlength: 6,
+  maxlength: 100,
+  validate: {
+    validator: function (value) {
+      return /[!@#$%^&*(),.?":{}|<>]/.test(value); //esta funcion hace que el correo necesite como minimo un caracter especial
     },
+    message: "La contraseña debe contener al menos un carácter especial."
+  }
+},
 
     address: {
         type: String,
@@ -40,13 +47,7 @@ const DistributorsSchema = new Schema({
                 "el numero de teléfono tiene que ser válido"] //validar número de teléfono
     },
 
-    status: {
-        type: Number,
-        require: false,
-        maxlenght: 5
-    },
-
-    taxId: {
+    NIT: {
         type: String,
         required: true,
         unique: true,
@@ -71,4 +72,4 @@ const DistributorsSchema = new Schema({
         strict: false
     })
 
-export default model("Distributos", DistributorsSchema);
+export default model("Distributors", DistributorsSchema);

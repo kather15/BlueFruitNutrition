@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Nav.css';
-import '../../../../frontend-public/src/pages/Home/Home'
 
 const Nav = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Aquí puedes agregar lógica para limpiar tokens, sesiones, etc.
-     window.location.href = "http://localhost:5173";
+    // Aquí puedes limpiar el token o sesión si lo usas
+    localStorage.removeItem('token'); // Ejemplo: limpiar token
+    navigate('/'); // Redirige al login sin recargar la página
   };
 
   return (
@@ -53,3 +53,4 @@ const Nav = () => {
 };
 
 export default Nav;
+

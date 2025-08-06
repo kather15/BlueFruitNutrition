@@ -3,50 +3,44 @@ import bcrypt from "bcryptjs"//encriptar
 import nodemailer from "nodemailer";//enviar correo
 import crypto from "crypto";//codigo aleatorio
 
-import customersModel from "../models/Customers.js"
-import distributorModel from "../models/Distributors.js"; 
+import distributorModel from "../models/Distributors.js"
+import customersModel from "../models/Customers.js"; // Asegúrate de importar el modelo de clientes
 import { config } from "../config.js";
 
 //array de las funciones
-const registerCustomersController = {};
+const registerDistributorController = {};
 
 //para el registro***********************************************************************************************
-registerCustomersController.register = async (req, res) => {
-    //solicitar los datos
-    const { name, lastName, email, password, phone, weight, dateBirth, height, address, gender, idSports, isVerified } = req.body;
+registerDistributorController.register = async (req, res) => {
+    const { companyName, email, password, address, phone, status, NIT, isVerified } = req.body;
 
-    if(!name || !lastName || !email || !password || !dateBirth){
+    if(!companyName || !email || !password || !address || !phone || !NIT){
        return  res.status(400).json({message: "Ingrese campos obligatorios"})
     }
-    if(height > 300){
-        return res.status(400).json({ message: 'Ingrese una altura válida' });
-    }
 
-    if(weight > 300){
-        return res.status(400).json({ message: 'Ingrese un peso válido' });
-    }
     try {
         // Verificar si el email ya existe como distribuidor
         const existingDistributor = await distributorModel.findOne({ email });
         if (existingDistributor) {
             console.log("Intento de registro con email ya registrado como distribuidor:", email);
-            return res.status(200).json({ message: "Ya existe un distribuidor registrado con este correo" });
+            return res.status(200).json({ message: "Distributor already exist" });
         }
 
-        //verificamos si el cliente ya existe
-        const existingCustomer = await customersModel.findOne({ email })
+        // Verificar si el email ya existe como cliente
+        const existingCustomer = await customersModel.findOne({ email });
         if (existingCustomer) {
             console.log("Intento de registro con email ya registrado como cliente:", email);
-            return res.status(200).json({ message: "Customer already exist" })
+            return res.status(200).json({ message: "Ya existe un cliente registrado con este correo" });
         }
 
         //encriptar la contraseña
         const passwordHash = await bcrypt.hash(password, 10)
-                                            
-const newCustomer = new customersModel({ name, lastName, email, password: passwordHash, phone, weight, dateBirth, height, address, gender, idSports, isVerified });
+
+        const newDistributor = new distributorModel({ companyName, email, password: passwordHash, address,
+                                                        phone, status, NIT, isVerified });
 
 
-        await newCustomer.save();
+        await newDistributor.save();
 
         //GENERAR UN CODIGO ALEATORIO PARA VERIFICAR
         const verificationCode = Math.floor(10000 + Math.random() * 90000).toString();
@@ -94,7 +88,7 @@ const newCustomer = new customersModel({ name, lastName, email, password: passwo
             }
             console.log("Email sent" + info);
         })
-        res.status(201).json({ message: "Customer registered, Please verify your email with the code" })
+        res.status(201).json({ message: "Distributor registered, Please verify your email with the code" })
 
     } catch (error) {
         console.log("error" + error)
@@ -103,7 +97,7 @@ const newCustomer = new customersModel({ name, lastName, email, password: passwo
 };
 
 //código de verificación************************************************************************************************************
-registerCustomersController.verificationCode = async (req, res) => {
+registerDistributorController.verificationCode = async (req, res) => {
 
     const { requireCode } = req.body
 
@@ -119,13 +113,13 @@ registerCustomersController.verificationCode = async (req, res) => {
             return res.status(422).json({ message: "Invalid code" });
         }
 
-        //marcamos al cliente como verificado
-        const customer = await customersModel.findOne({ email });
-        if (!customer) {
-            return res.status(404).json({ message: "Cliente no encontrado para verificación" });
+        //marcamos al distribuidor como verificado
+        const distributor = await distributorModel.findOne({ email });
+        if (!distributor) {
+            return res.status(404).json({ message: "Distribuidor no encontrado para verificación" });
         }
-        customer.isVerified = true;
-        await customer.save();
+        distributor.isVerified = true;
+        await distributor.save();
 
         res.clearCookie("verificationToken");
         res.status(200).json({ message: "Email verified successfuly" });
@@ -138,5 +132,5 @@ registerCustomersController.verificationCode = async (req, res) => {
 
 }
 
-export default registerCustomersController;
+export default registerDistributorController;
 

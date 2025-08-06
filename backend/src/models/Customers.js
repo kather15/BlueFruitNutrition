@@ -25,35 +25,57 @@ const customersSchema = new Schema({
         ],
     },
 
-    password:{
-        type: String,
-        require: true,
-        minlenght: 8 
+password: {
+  type: String,
+  required: true,
+  minlength: 6,
+  maxlength: 100,
+  validate: {
+    validator: function (value) {
+      return /[!@#$%^&*(),.?":{}|<>]/.test(value); //esta funcion hace que el correo necesite como minimo un caracter especial
     },
+    message: "La contraseña debe contener al menos un carácter especial."
+  }
+},
 
     phone:{
         type: String,
-        require: true,
-        unique: true,
+        require: false,
+        unique: false,
         match: [/^[0-9]{8}$/, 
-                "el numero de teléfono tiene que ser válido"] //validar número de teléfono
+               "el numero de teléfono tiene que ser válido"] //validar número de teléfono
+              
     },
 
     weight:{
-        type: Number,
+        type: Number, //peso en kg
         require: false,
-        maxlenght: 5
+        min: 10, //Mínimo 10kg
+        max: 300 //Máximo 300kg
     },
 
-    dateBirth:{
+    dateBirth: {
         type: Date,
-        require: true
+        required: true,
+        validate: {
+          validator: function(value) {
+            const today = new Date();
+            const minDate = new Date(
+              today.getFullYear() - 18,
+              today.getMonth(),
+              today.getDate()
+            );
+            return value <= minDate;
+          },
+          message: 'Debes tener al menos 18 años.'
+        }
+        
     },
-
     height:{
-        type: Number,
+        type: Number, //Altura en cm
         require: false,
-        maxlenght: 3
+        min: 100, //Mínimo 100cm
+        max: 300  //Máximo 300cm
     },
 
     address:{
@@ -62,7 +84,7 @@ const customersSchema = new Schema({
     },
 
     gender: {
-        type: Boolean, //true: hombre, false: mujer.
+        type: String, 
         require: true
     },
 

@@ -2,6 +2,7 @@ const productsController = {};
 import productsModel from "../models/Products.js"
 import "../models/NutritionalValues.js"; // Importa el modelo para que se registre
 
+//Dependencias de Cloudinary
 import { config } from "../config.js"
 import { v2 as cloudinary } from "cloudinary"
 
@@ -15,8 +16,14 @@ cloudinary.config({
 
 //SELECT*************************************************
 productsController.getProducts = async (req, res) => {
+    try {
     const products = await productsModel.find().populate("idNutritionalValues")
-    res.json(products)
+    res.status(200).json(products) 
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+        console.log("error: " + error)
+    }
+
 }
 
 //INSERT*************************************************
@@ -43,21 +50,30 @@ productsController.postProducts = async (req, res) => {
     }
          catch (error) {
         console.log("error: "+ error);
+        res.status(500).json({ message: 'Internal Server Error' });
+
     }
 }
 
 
 //DELETE*************************************************
 productsController.deleteProducts = async (req, res) => {
-   await productsModel.findByIdAndDelete(req.params.id)
+    try {
+           await productsModel.findByIdAndDelete(req.params.id)
 
-    res.json({ message: "Product deleted" })
+    res.status(200).json({ message: "Product deleted" })
+    } catch (error) {
+        console.log("error: "+ error);
+        res.status(500).json({ message: 'Internal Server Error' }); 
+    }
+
 }
 
 
 //UPDATE*************************************************
 productsController.putProducts = async (req, res) => {
-    const { name, description, flavor, price, idNutritionalValues } = req.body;
+    try {
+            const { name, description, flavor, price, idNutritionalValues } = req.body;
     let imageURL = "";
 
     //subir la imagen
@@ -69,8 +85,13 @@ productsController.putProducts = async (req, res) => {
       imageURL = result.secure_url;
     }
     const updateProducts = await productsModel.findByIdAndUpdate(req.params.id, { name, description, flavor, price, image: imageURL, idNutritionalValues }, { new: true })
-
+    res.status(200).json({ message: "Product updated"})
     res.json({ message: "Products updated successfully" })
+    } catch (error) {
+        console.log("error: "+ error);
+        res.status(500).json({ message: 'Internal Server Error' }); 
+    }
+
 };
 
 export default productsController;
