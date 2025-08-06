@@ -11,16 +11,16 @@ const reviewSchema = new Schema({
     required: true  // La calificación es obligatoria
   },
   idClient: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Client',  // Hace referencia al modelo 'Client'
-    required: true 
-  },
-  idProduct: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Product',  // Hace referencia al modelo 'Product'
-    required: true 
-  }
-}, { timestamps: true }); // Agrega automáticamente createdAt y updatedAt
+  type: mongoose.Schema.Types.ObjectId, 
+  ref: 'Customer',  
+  required: true 
+},
+idProduct: { 
+  type: mongoose.Schema.Types.ObjectId, 
+  ref: 'Products',  
+  required: true 
+}
+}, { timestamps: true }); //
 
 
 export default model("reviews", reviewSchema);

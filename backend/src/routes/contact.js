@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const { handleContactForm } = require('../controllers/CtrlContact.js');
+import express from 'express';
+import { handleContactForm } from '../controllers/CtrlContact.js';
 
-// Ruta POST /api/contact que llama al controlador para procesar el formulario
+const router = express.Router();
+
+// Ruta POST para el formulario de contacto
 router.post('/contact', handleContactForm);
 
-module.exports = router;
+export default router;

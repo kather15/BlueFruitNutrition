@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Home.css';
 import { Link } from 'react-router-dom'
 import { useForm } from "react-hook-form"
+import Contacto from '../../components/Contact/Contact';
 
 
 const productos = [
@@ -139,69 +140,13 @@ const Home = () => {
       <hr className="blue-fruit-linea-separadora" />
 
       {/* Sección Nuestro de contactos */}
-      <main>
-      <section className="blue-fruit-contact-section">
-        <div className="blue-fruit-contact-wrapper">
-          <div className="blue-fruit-contact-info">
-            <h2>Contáctanos</h2>
-            <h3>Llámanos</h3>
-            <p>Estamos disponibles 24 horas al día, 7 días a la semana.</p>
-            <p>Celular: +503 6859 7103</p>
+       <main>
+      {/* Otras secciones del home */}
+      
+      {/* Sección de contacto */}
+      <Contacto />
 
-            <hr />
-
-            <h3>Escríbenos</h3>
-            <p>Llena nuestro formulario y nos pondremos en contacto contigo en 24 horas.</p>
-            <p>Email: info@blueletrunutrition.com</p>
-          </div>
-
-          <div className="blue-fruit-contact-form">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <input
-                type="text"
-                placeholder="Tu Nombre*"
-                {...register("nombre", { required: "Este campo es obligatorio" })}
-              />
-              {errors.nombre && <span>{errors.nombre.message}</span>}
-
-              <input
-                type="email"
-                placeholder="Tu Email*"
-                {...register("email", {
-                  required: "Este campo es obligatorio",
-                  pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: "Email inválido",
-                  },
-                })}
-              />
-              {errors.email && <span>{errors.email.message}</span>}
-
-              <input
-                type="tel"
-                placeholder="Tu Celular*"
-                {...register("celular", {
-                  required: "Este campo es obligatorio",
-                  pattern: {
-                    value: /^[0-9+\s()-]{7,15}$/,
-                    message: "Número de teléfono inválido",
-                  },
-                })}
-              />
-              {errors.celular && <span>{errors.celular.message}</span>}
-
-              <textarea
-                placeholder="Tu mensaje"
-                rows="5"
-                {...register("mensaje", { required: "Este campo es obligatorio" })}
-              ></textarea>
-              {errors.mensaje && <span>{errors.mensaje.message}</span>}
-
-              <button type="submit">Enviar Mensaje</button>
-            </form>
-          </div>
-        </div>
-      </section>
+      {/* Más contenido si hay */}
     </main>
     </div>
   );

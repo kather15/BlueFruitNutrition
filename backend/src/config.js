@@ -25,8 +25,10 @@ export const config={
     
     email: {
         email_user: process.env.EMAIL_USER,     //Correo y contraseña de desarrollador para mandar emails de recuperación de contraseña o verificación
-        email_pass: process.env.EMAIL_PASS
+        email_pass: process.env.EMAIL_PASS,
+        to: process.env.EMAIL_USER //Para el fromulario de contactos, manda los datos llenados en el formulario a el propio gmail
     },
+
 
     cloudinary: {
         cloudinary_name: process.env.CLOUDINARY_NAME,           //Subir imagenes a cloudinary
