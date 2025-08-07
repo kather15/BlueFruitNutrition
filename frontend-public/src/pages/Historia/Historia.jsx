@@ -1,10 +1,5 @@
 import React from 'react';
 import './Historia.css';
-import atleta from './frontend-public/image 5.png';
-import deportista1 from './frontend-public/public/image 52.png';
-import deportista2 from './frontend-public/public/image 53.png';
-import deportista3 from './frontend-public/public/image 54.png';
-import deportista4 from './frontend-public/public/image 55.png';
 
 const SobreNosotros = () => {
   return (

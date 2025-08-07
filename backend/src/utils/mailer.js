@@ -22,7 +22,7 @@ transporter.verify(function(error, success) {
 });
 
 const sendContactEmail = async ({ nombre, email, celular, mensaje }) => {
-  console.log('📤 Enviando email a Gmail...');
+  console.log(' Enviando email a Gmail...');
   
   const mailOptions = {
     from: config.email.email_user,// Aca va el gmail es el mismo que envia la recuperacion de contraseña
@@ -49,7 +49,7 @@ const sendContactEmail = async ({ nombre, email, celular, mensaje }) => {
           <td style="padding: 10px 0; color: #333;">${nombre}</td>
         </tr>
         <tr>
-          <td style="padding: 10px 0; font-weight: bold; color: #001a4d;">📧 Email:</td>
+          <td style="padding: 10px 0; font-weight: bold; color: #001a4d;"> Email:</td>
           <td style="padding: 10px 0;"><a href="mailto:${email}" style="color: #0056b3; text-decoration: none;">${email}</a></td>
         </tr>
         <tr>
@@ -72,7 +72,7 @@ const sendContactEmail = async ({ nombre, email, celular, mensaje }) => {
     <div style="text-align: center; margin: 30px 0;">
       <a href="mailto:${email}?subject=Re: Tu consulta en BlueFruit Nutrition" 
          style="background: #0056b3; color: white; padding: 12px 25px; text-decoration: none; border-radius: 30px; font-weight: bold; display: inline-block;">
-         📧 Responder Email
+         Responder Email
       </a>
     </div>
   </div>
@@ -80,7 +80,7 @@ const sendContactEmail = async ({ nombre, email, celular, mensaje }) => {
   <!-- Footer -->
   <div style="background: #f8f9fa; padding: 15px; text-align: center; border-top: 1px solid #ddd;">
     <p style="margin: 0; color: #666; font-size: 12px;">
-      📅 Enviado el ${new Date().toLocaleString('es-ES')} desde el formulario de contacto de BlueFruit Nutrition
+      Enviado el ${new Date().toLocaleString('es-ES')} desde el formulario de contacto de BlueFruit Nutrition
     </p>
   </div>
 </div>
