@@ -1,63 +1,174 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom'; 
 import { Toaster } from 'react-hot-toast';
 
-import NavBar from './components/Nav/Nav';
-import Footer from './components/Footer/Footer';
+// Context
+import { AuthProvider } from './context/useAuth';
 
-// Páginas principales
-import AddProduct from './pages/AddProducts/AddProduct';
+// Components
+import Nav from './components/Nav/Nav';
+import Footer from './components/footer/footer';
+import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
+
+// Pages - Login (público)
+import Login from './pages/Login/Login';
+
+// Pages - Admin (todas protegidas)
+import HomeP from './pages/Home/homep';
 import Products1 from './pages/Products/Products1';
-import Suscripciones from './pages/Suscripcionees/Suscripcionees';
 import Ordenes from './pages/Ordenes/Ordenes';
-import Homep from './pages/Home/Homep';
+import Ventas from './pages/Ventas/Ventas';
+import Suscripciones from './pages/Suscripcionees/Suscripcionees';
+import UsersList from './pages/Users/UsersList';
+import UserForm from './pages/Users/UserForm';
+
+// Pages de recuperación
 import RequestCode from './pages/RecoveryPassword/RequestCode';
 import VerifyCode from './pages/RecoveryPassword/VerifyCode';
 import NewPassword from './pages/RecoveryPassword/NewPasssword';
-import Ventas from './pages/Ventas/Ventas.jsx';
-import Usuarios from './pages/Users/UsersList.jsx';
-import UserForm from './pages/Users/UserForm'; 
-import Login from './pages/Login/Login.jsx'; 
 
 function App() {
   return (
-    <Router>
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-        toastOptions={{
-          style: {
-            background: '#0C133F',
-            color: '#fff',
-            fontSize: '16px',
-            zIndex: 99999,
-          },
-        }}
-        containerStyle={{
-          marginTop: '100px', 
-        }}
-      />
-
-      <NavBar />
-      <div className="main-content" style={{ paddingTop: '100px' }}>
+    <AuthProvider>
+      <div className="App">
+        <Toaster 
+          position="top-center" 
+          reverseOrder={false}
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#0C133F',
+              color: '#fff',
+              fontSize: '14px',
+              fontWeight: '500'
+            },
+            success: {
+              iconTheme: {
+                primary: '#22c55e',
+                secondary: '#fff',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
+        
         <Routes>
+          {/* RUTAS PÚBLICAS */}
           <Route path="/" element={<Login />} />
-          <Route path="/productos1" element={<Products1 />} />
-          <Route path="/addProduct" element={<AddProduct />} />
-          <Route path="/sobre-nosotros" element={<h1>Sobre Nosotros</h1>} />
-          <Route path="/ordenes" element={<Ordenes />} />
-          <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/home" element={<Homep />} />
-          <Route path="/homep" element={<Homep />} />
+          <Route path="/login" element={<Login />} />
+          
+          {/* Recuperación de contraseña */}
           <Route path="/enviar-codigo" element={<RequestCode />} />
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
-          <Route path="/ventas" element={<Ventas />} />
-          <Route path="/usuarios" element={<Usuarios />} />
-          <Route path="/users/edit/:type/:id" element={<UserForm />} />
+
+          {/* RUTAS ADMIN (PROTEGIDAS) */}
+          <Route path="/home" element={
+            <ProtectedRoute>
+              <Nav />
+              <HomeP />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/homep" element={
+            <ProtectedRoute>
+              <Nav />
+              <HomeP />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/productos1" element={
+            <ProtectedRoute>
+              <Nav />
+              <Products1 />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/ordenes" element={
+            <ProtectedRoute>
+              <Nav />
+              <Ordenes />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/ventas" element={
+            <ProtectedRoute>
+              <Nav />
+              <Ventas />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/suscripciones" element={
+            <ProtectedRoute>
+              <Nav />
+              <Suscripciones />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/usuarios" element={
+            <ProtectedRoute>
+              <Nav />
+              <UsersList />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/users/edit/:type/:id" element={
+            <ProtectedRoute>
+              <Nav />
+              <UserForm />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          {/* Ruta 404 protegida */}
+          <Route path="*" element={
+            <ProtectedRoute>
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '4rem 2rem',
+                fontSize: '1.2rem',
+                backgroundColor: '#f5f8fa',
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <div style={{
+                  background: 'white',
+                  padding: '3rem 4rem',
+                  borderRadius: '15px',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                  maxWidth: '500px'
+                }}>
+                  <h2 style={{ 
+                    color: '#0C133F', 
+                    marginBottom: '1rem',
+                    fontSize: '1.8rem'
+                  }}>
+                    📄 Página no encontrada
+                  </h2>
+                  <p style={{ color: '#6b7280', fontSize: '1.1rem' }}>
+                    La página de administración que buscas no existe.
+                  </p>
+                </div>
+              </div>
+            </ProtectedRoute>
+          } />
         </Routes>
       </div>
-      <Footer />
-    </Router>
+    </AuthProvider>
   );
 }
 

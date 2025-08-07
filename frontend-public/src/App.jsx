@@ -1,64 +1,82 @@
-import { useState } from 'react';
-import './App.css';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Nav from "./components/Nav/Nav";
-import Footer from "./components/Footer/Footer";
-import Home from "./pages/Home/Home";
-import Pay from "./pages/Pay/pay";
-import Contact from "./components/Contact/Contact.jsx"; 
-import ProductC from "./pages/Products/ProductsC";
-import Register from './pages/Register/Register'
-import RequestCode from '../../frontend-public/src/pages/RecoveryPassword/RequestCode'
-import VerifyCode from '../../frontend-public/src/pages/RecoveryPassword/VerifyCode';
-import NewPassword from '../../frontend-public/src/pages/RecoveryPassword/NewPasssword';
-import Personalizar from '../../frontend-public/src/pages/Personalizar/SeleccionarGel';
-import Sabores from '../../frontend-public/src/pages/Personalizar/Sabores/SaborPage';
-import Suscripciones from '../../frontend-public/src/pages/Suscripciones/Suscripciones';
-import ProductDetail from '../../frontend-public/src/pages/Personalizar/productGallery/Product';
-import Login from '../../frontend-public/src/pages/Login/Login'; 
-import ProductsReview from "../src/pages/Products/ProductsReview";
-import Carrito from '../src/pages/Carrito/Carrito.jsx'
-import MetodoDePago from "../src/pages/MetodoDePago/CheckoutPage.jsx"
-import { Toaster } from "react-hot-toast";
+import { Toaster } from 'react-hot-toast';
 
+// Context
+import { AuthProvider } from './context/useAuth';
 
+// Components
+import Nav from './components/Nav/Nav';
+import Footer from './components/Footer/Footer';
+import ProtectedRoute from './components/PrivateRoute/PrivateRoute';
+
+// Pages - Públicas
+import Home from './pages/Home/Home';
+import ProductsC from './pages/Products/ProductsC';
+import ProductsReview from './pages/Products/ProductsReview';
+import Historia from './pages/Historia/Historia';
+import Contact from './components/Contact/Contact';
+
+// Pages - Autenticación
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
+import RequestCode from './pages/RecoveryPassword/RequestCode';
+import VerifyCode from './pages/RecoveryPassword/VerifyCode';
+import NewPassword from './pages/RecoveryPassword/NewPasssword';
+
+// Pages - Privadas
+import Carrito from './pages/Carrito/Carrito';
+import Pay from './pages/Pay/pay';
+import SeleccionarGel from './pages/Personalizar/SeleccionarGel';
+import SaborPage from './pages/Personalizar/Sabores/SaborPage';
+import ProductDetail from './pages/Personalizar/productGallery/Product';
+import Suscripciones from './pages/Suscripciones/Suscripciones';
 
 function App() {
-
-
   return (
-    <>
-      <Toaster position="top-right" />
-      <Nav />
+    <AuthProvider>
+      <div className="App">
+        <Toaster 
+          position="top-center" 
+          reverseOrder={false}
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+          }}
+        />
         
-      <Routes>
-        <Route path="/" element={<Home />} />
-       <Route path="/pay" element={<Pay />} />
-          <Route path="/registro" element={<Register />}/>
-          <Route path="/enviar-codigo" element={<RequestCode/>}/>
-          <Route path="/personalizar" element={<Personalizar/>}/>
-          <Route path="/verificar-codigo" element={<VerifyCode/>}/>
-          <Route path="/nueva-contraseña" element={<NewPassword/>}/>
-          <Route path="/sabores" element={<Sabores/>}/>
-          <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/login" element={<Login />}/>
-          <Route path="/detail" element={<ProductDetail />} />
-          <Route path="/carrito" element={<Carrito/>} />
-          <Route path="/Metodo" element={<MetodoDePago/>} />
+        <Nav />
+        
+        <Routes>
+          {/* RUTAS PÚBLICAS */}
+          <Route path="/" element={<Home />} />
+          <Route path="/product" element={<ProductsC />} />
+          <Route path="/producto/:id" element={<ProductsReview />} />
+          <Route path="/sobre-nosotros" element={<Historia />} />
+          <Route path="/contact" element={<Contact />} />
 
+          {/* RUTAS DE AUTENTICACIÓN */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Register />} />
+          <Route path="/enviar-codigo" element={<RequestCode />} />
+          <Route path="/verificar-codigo" element={<VerifyCode />} />
+          <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-
-            <Route path="/product" element={<ProductC />} />
-            <Route path="/producto/:id" element={<ProductsReview />} />
-          {/* Puedes agregar más rutas aquí según sea necesario */}
-
-      
-        <Route path="/contact" element={<Contact/>} />
-      
-      </Routes>
-
-      <Footer />
-    </>
+          {/* RUTAS PRIVADAS */}
+          <Route path="/carrito" element={<ProtectedRoute><Carrito /></ProtectedRoute>} />
+          <Route path="/pay" element={<ProtectedRoute><Pay /></ProtectedRoute>} />
+          <Route path="/gel" element={<ProtectedRoute><SeleccionarGel /></ProtectedRoute>} />
+          <Route path="/sabores" element={<ProtectedRoute><SaborPage /></ProtectedRoute>} />
+          <Route path="/detail" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
+          <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
+        </Routes>
+        
+        <Footer />
+      </div>
+    </AuthProvider>
   );
 }
 
