@@ -1,0 +1,51 @@
+.error404-public-container {
+  background-color: #F5F5F5;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #0c133F;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.error404-public-title {
+  font-family: 'Poppins Black', 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 8rem;
+  margin: 0;
+}
+
+.error404-public-subtitle {
+  font-family: 'Poppins Medium', 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 2rem;
+  margin-top: 1rem;
+  color: rgba(12, 19, 63, 0.83); /* 83% opacidad */
+}
+
+.error404-public-text {
+  font-family: 'Poppins Regular', 'Poppins', sans-serif;
+  font-weight: 400;
+  margin-top: 0.5rem;
+  color: rgba(12, 19, 63, 0.83);
+}
+
+.error404-public-button {
+  margin-top: 2rem;
+  font-family: 'Inter Medium', 'Inter', sans-serif;
+  font-weight: 500;
+  color: #FFFFFF;
+  background-color: #0c133F;
+  padding: 0.8rem 2rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.error404-public-button:hover {
+  background-color: #0a0f34;
+}

@@ -48,12 +48,21 @@ function App() {
           <Route path="/suscripciones" element={<Suscripciones />} />
           <Route path="/home" element={<Homep />} />
           <Route path="/homep" element={<Homep />} />
+
           <Route path="/enviar-codigo" element={<RequestCode />} />
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
           <Route path="/ventas" element={<Ventas />} />
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/users/edit/:type/:id" element={<UserForm />} />
+                    <Route path="/enviar-codigo" element={<RequestCode/>}/>
+                    <Route path="/verificar-codigo" element={<VerifyCode/>}/>
+                    <Route path="/nueva-contraseña" element={<NewPassword/>}/>
+                    <Route path="/ventas" element={<Ventas />} />
+                    <Route path="/usuarios" element={<Usuarios />} />
+                    <Route path="/users/edit/:type/:id" element={<UserForm />} /> {/* ✅ esta línea es clave */}s
+          {/* Puedes agregar más rutas aquí */}
+         <Route path="*" element={<NotFoundPublic />} />
         </Routes>
       </div>
       <Footer />
