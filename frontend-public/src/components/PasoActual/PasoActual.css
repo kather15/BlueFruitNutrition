@@ -1,274 +1,43 @@
-/* PasoActual.css - Estilos para el componente stepper */
-
-/* Contenedor principal del stepper */
 .stepper-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 2rem 0;
-  padding: 0 1rem;
-  width: 100%;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 2rem;
 }
 
-/* Cada paso individual */
 .step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
-  position: relative;
 }
 
-/* Línea conectora entre pasos */
-.step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 25px;
-  left: 60%;
-  width: 80%;
-  height: 2px;
-  background-color: #e0e0e0;
-  transition: background-color 0.3s ease;
-  z-index: 0;
-}
-
-/* Línea conectora para pasos completados */
-.step.completed:not(:last-child)::after {
-  background-color: #4CAF50;
-}
-
-/* Círculo del paso */
 .circle {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background-color: #e0e0e0;
-  border: 2px solid #e0e0e0;
+  background: lightgray;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 1;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
-/* Círculo activo */
 .circle.active {
-  background-color: #2196F3;
-  border-color: #2196F3;
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+  background: #007bff;
+  color: white;
 }
 
-/* Círculo completado */
 .circle.completed {
-  background-color: #4CAF50;
-  border-color: #4CAF50;
-}
-
-/* Número del paso */
-.step-number {
-  color: #666;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-/* Número del paso activo */
-.circle.active .step-number {
+  background: #28a745;
   color: white;
 }
 
-/* Checkmark para pasos completados */
-.checkmark {
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-/* Etiqueta del paso */
 .label {
+  font-size: 0.9rem;
   text-align: center;
-  font-size: 14px;
-  color: #666;
-  max-width: 100px;
-  line-height: 1.2;
-  transition: color 0.3s ease;
 }
 
-/* Etiqueta del paso activo */
-.step.active .label {
-  color: #2196F3;
-  font-weight: 600;
-}
-
-/* Etiqueta del paso completado */
-.step.completed .label {
-  color: #4CAF50;
-  font-weight: 500;
-}
-
-/* Estilos para el componente de demostración */
-.app-container {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #333;
-}
-
-.current-step-info {
-  text-align: center;
-  margin: 2rem 0;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border-left: 4px solid #2196F3;
-}
-
-.step-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.step-description {
-  color: #666;
-  margin: 0;
-}
-
-/* Controles de navegación */
-.controls {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-/* Botones */
-.btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  min-width: 100px;
-}
-
-/* Botón primario */
-.btn-primary {
-  background-color: #2196F3;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #1976D2;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
-}
-
-/* Botón secundario */
-.btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #ddd;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background-color: #e0e0e0;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Botón deshabilitado */
-.btn:disabled {
-  background-color: #ccc;
-  color: #888;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Responsividad */
-@media (max-width: 768px) {
-  .stepper-container {
-    padding: 0 0.5rem;
-  }
-  
-  .circle {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .step-number {
-    font-size: 14px;
-  }
-  
-  .checkmark {
-    font-size: 16px;
-  }
-  
-  .label {
-    font-size: 12px;
-    max-width: 80px;
-  }
-  
-  .step:not(:last-child)::after {
-    top: 20px;
-  }
-  
-  .controls {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .btn {
-    width: 100%;
-    max-width: 200px;
-  }
-}
-
-@media (max-width: 480px) {
-  .app-container {
-    padding: 1rem;
-  }
-  
-  .title {
-    font-size: 1.25rem;
-  }
-  
-  .circle {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .step-number {
-    font-size: 12px;
-  }
-  
-  .checkmark {
-    font-size: 14px;
-  }
-  
-  .label {
-    font-size: 11px;
-    max-width: 70px;
-  }
-  
-  .step:not(:last-child)::after {
-    top: 18px;
-  }
+.checkmark {
+  font-size: 1.1rem;
 }

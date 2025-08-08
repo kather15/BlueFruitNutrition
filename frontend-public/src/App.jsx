@@ -11,10 +11,7 @@ import Register from './pages/Register/Register'
 import RequestCode from '../../frontend-public/src/pages/RecoveryPassword/RequestCode'
 import VerifyCode from '../../frontend-public/src/pages/RecoveryPassword/VerifyCode';
 import NewPassword from '../../frontend-public/src/pages/RecoveryPassword/NewPasssword';
-import Personalizar from '../../frontend-public/src/pages/Personalizar/SeleccionarGel';
-import Sabores from '../../frontend-public/src/pages/Personalizar/Sabores/SaborPage';
 import Suscripciones from '../../frontend-public/src/pages/Suscripciones/Suscripciones';
-import ProductDetail from '../../frontend-public/src/pages/Personalizar/productGallery/Product';
 import Login from '../../frontend-public/src/pages/Login/Login'; 
 import ProductsReview from "../src/pages/Products/ProductsReview";
 import Carrito from '../src/pages/Carrito/Carrito.jsx'
@@ -35,13 +32,10 @@ function App() {
        <Route path="/pay" element={<Pay />} />
           <Route path="/registro" element={<Register />}/>
           <Route path="/enviar-codigo" element={<RequestCode/>}/>
-          <Route path="/personalizar" element={<Personalizar/>}/>
           <Route path="/verificar-codigo" element={<VerifyCode/>}/>
           <Route path="/nueva-contraseña" element={<NewPassword/>}/>
-          <Route path="/sabores" element={<Sabores/>}/>
           <Route path="/suscripciones" element={<Suscripciones />} />
           <Route path="/login" element={<Login />}/>
-          <Route path="/detail" element={<ProductDetail />} />
           <Route path="/carrito" element={<Carrito/>} />
           <Route path="/Metodo" element={<MetodoDePago/>} />
 

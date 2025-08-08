@@ -30,7 +30,7 @@ const handleLogin = async (e) => {
 
       if (res.data.role === "admin") {
         // 🔁 Redirección completa a la app del admin (en otro puerto)
-        window.location.href = "/home";
+        window.location.href = "/homep";
       } else {
         // 🧭 Para usuarios normales, redirige dentro de la misma app
         navigate("/");
