@@ -12,7 +12,7 @@ import ProtectedRoute from './components/PrivateRoute/PrivateRoute';
 
 // Pages - Públicas
 import Home from './pages/Home/Home';
-import ProductsC from './pages/Products/ProductsC';
+import ProductsMenu from './pages/Products/ProductsMenu';
 import ProductsReview from './pages/Products/ProductsReview';
 import Historia from './pages/Historia/Historia';
 import Contact from './components/Contact/Contact';
@@ -53,7 +53,7 @@ function App() {
         <Routes>
           {/* RUTAS PÚBLICAS */}
           <Route path="/" element={<Home />} />
-          <Route path="/product" element={<ProductsC />} />
+          <Route path="/product" element={<ProductsMenu />} />
           <Route path="/producto/:id" element={<ProductsReview />} />
           <Route path="/sobre-nosotros" element={<Historia />} />
           <Route path="/contact" element={<Contact />} />

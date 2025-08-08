@@ -92,6 +92,26 @@ productsController.putProducts = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' }); 
     }
 
+    // Obtener un solo producto por su ID se necesita para la reseñas
+productsController.getProductById = async (req, res) => {
+    try {
+        // Busca el producto por su ID (req.params.id) en la base de datos y también obtiene los datos relacionados con "idNutritionalValues"
+        const product = await productsModel.findById(req.params.id).populate("idNutritionalValues");
+        
+        if (!product) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+
+        console.log("error: " + error);
+        
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
 };
 
 export default productsController;

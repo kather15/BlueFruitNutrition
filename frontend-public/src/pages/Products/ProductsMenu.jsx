@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import './ProductsC.css'; 
+import './ProductsMenu.css'; 
 
 const ProductsC = () => {
   const navigate = useNavigate(); 
@@ -25,11 +25,11 @@ const ProductsC = () => {
       // En caso de error, lo muestra en la consola
   }, []);
 
-  // Función que se llama cuando el usuario hace clic en un producto
-  const handleProductClick = (productId) => {
-    navigate(`/producto/:id${productId}`); 
-    // Cambia la ruta a la página de detalles del producto, usando el id del producto
-  };
+    const handleProductClick = (productId) => {
+    //Navegación para otra pantalla
+    navigate(`/producto/${productId}`); 
+    };
+
 
   return (
     <div className="products-screen-wrapper">

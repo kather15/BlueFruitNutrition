@@ -9,6 +9,7 @@ const upload = multer({dest: "public/"})
 
 router.route("/")
 .get(productsController.getProducts)
+.get("/:id", productsController.getProductById) // Esta es la ruta que manda a llamar el ID por productos para las reviews
 .post(upload.single("image"), productsController.postProducts) //upload.single("image"), para guardar las nuevas imagenes
 
 

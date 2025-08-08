@@ -4,19 +4,31 @@ import { Star } from 'lucide-react';
 import './ProductsReview.css';
 
 const ProductsReview = () => {
-  const { id } = useParams(); // ID del producto desde la URL
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [quantity, setQuantity] = useState(1);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
 
   const [newReview, setNewReview] = useState({
-    name: '',
     rating: 5,
     comment: '',
   });
+
+  //  Verificar autenticación al cargar el componente
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('userData');
+    
+    if (token && userData) {
+      setIsAuthenticated(true);
+      setUser(JSON.parse(userData));
+    }
+  }, []);
 
   // Cargar producto
   useEffect(() => {
@@ -41,40 +53,95 @@ const ProductsReview = () => {
     setQuantity(prev => Math.max(1, prev + change));
   };
 
-  const handleSubmitReview = (e) => {
+  const handleSubmitReview = async (e) => {
     e.preventDefault();
 
-    if (!newReview.name.trim() || !newReview.comment.trim()) {
-      alert('Por favor completa todos los campos.');
+    if (!isAuthenticated) {
+      alert('Debes iniciar sesión para dejar una reseña.');
+      navigate('/login'); // Redirigir al login
       return;
     }
 
+    if (!newReview.comment.trim()) {
+      alert('Por favor escribe un comentario.');
+      return;
+    }
+
+    const token = localStorage.getItem('authToken');
+    
     const reviewToSend = {
       comment: newReview.comment,
       rating: newReview.rating,
-      idClient: newReview.name, // Este campo idealmente sería un ID real si tienes autenticación
       idProduct: id
+      //  No enviamos idClient, viene del token en el backend
     };
 
-    fetch(`http://localhost:4000/api/reviews`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(reviewToSend)
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Error al guardar reseña');
-        return res.json();
-      })
-      .then(() => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/reviews`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` //  Incluir token
+        },
+        body: JSON.stringify(reviewToSend)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
         alert('¡Reseña agregada exitosamente!');
-        setNewReview({ name: '', rating: 5, comment: '' });
+        setNewReview({ rating: 5, comment: '' });
         setShowReviewForm(false);
         // Recargar reseñas
-        return fetch(`http://localhost:4000/api/reviews?idProduct=${id}`);
-      })
+        loadReviews();
+      } else {
+        if (data.requiresAuth) {
+          alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userData');
+          setIsAuthenticated(false);
+          navigate('/login');
+        } else {
+          alert(data.message || 'Error al guardar reseña');
+        }
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Error al enviar la reseña');
+    }
+  };
+
+  const loadReviews = () => {
+    fetch(`http://localhost:4000/api/reviews?idProduct=${id}`)
       .then(res => res.json())
       .then(data => setReviews(data))
-      .catch(err => alert(err.message));
+      .catch(err => console.error('Error al obtener reseñas:', err));
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('¿Estás seguro de eliminar esta reseña?')) return;
+
+    const token = localStorage.getItem('authToken');
+    
+    try {
+      const response = await fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert('Reseña eliminada correctamente');
+        loadReviews();
+      } else {
+        const data = await response.json();
+        alert(data.message || 'Error al eliminar reseña');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Error al eliminar la reseña');
+    }
   };
 
   const handleAddToCart = () => {
@@ -107,7 +174,9 @@ const ProductsReview = () => {
         <div className="product-detail-screen">
           <div className="product-not-found">
             <h2>Producto no encontrado</h2>
-            <button onClick={handleBackToProducts} className="back-to-products-btn">Volver a Productos</button>
+            <button onClick={handleBackToProducts} className="back-to-products-btn">
+              Volver a Productos
+            </button>
           </div>
         </div>
       </div>
@@ -119,7 +188,9 @@ const ProductsReview = () => {
       <div className="product-detail-screen">
         <div className="product-detail-main">
           <div className="product-detail-container">
-            <button className="back-button" onClick={handleBackToProducts}>← Volver a Productos</button>
+            <button className="back-button" onClick={handleBackToProducts}>
+              ← Volver a Productos
+            </button>
 
             <div className="product-detail-layout">
               <div className="product-image-section">
@@ -151,8 +222,12 @@ const ProductsReview = () => {
                 </div>
 
                 <div className="action-buttons">
-                  <button className="add-to-cart-btn" onClick={handleAddToCart}>Agregar Al Carrito</button>
-                  <button className="customize-btn" onClick={handleCustomizeProduct}>Personalizar Producto</button>
+                  <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                    Agregar Al Carrito
+                  </button>
+                  <button className="customize-btn" onClick={handleCustomizeProduct}>
+                    Personalizar Producto
+                  </button>
                 </div>
 
                 <div className="product-description">
@@ -167,30 +242,40 @@ const ProductsReview = () => {
             <div className="reviews-container">
               <div className="reviews-header">
                 <h2>Reseñas</h2>
-                <button className="add-review-btn" onClick={() => setShowReviewForm(!showReviewForm)}>
-                  {showReviewForm ? 'Cancelar' : 'Agregar Reseña'}
-                </button>
+                {/*  Solo mostrar botón si está autenticado */}
+                {isAuthenticated ? (
+                  <button 
+                    className="add-review-btn" 
+                    onClick={() => setShowReviewForm(!showReviewForm)}
+                  >
+                    {showReviewForm ? 'Cancelar' : 'Agregar Reseña'}
+                  </button>
+                ) : (
+                  <button 
+                    className="login-to-review-btn" 
+                    onClick={() => navigate('/login')}
+                  >
+                    Inicia sesión para reseñar
+                  </button>
+                )}
               </div>
 
-              {showReviewForm && (
+              {showReviewForm && isAuthenticated && (
                 <div className="review-form-container">
                   <form onSubmit={handleSubmitReview} className="review-form">
                     <div className="form-group">
-                      <label>Tu nombre:</label>
-                      <input
-                        type="text"
-                        value={newReview.name}
-                        onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
-                        placeholder="Ingresa tu nombre"
-                        required
-                      />
+                      <label>Escribiendo como: <strong>{user?.name}</strong></label>
                     </div>
 
                     <div className="form-group">
                       <label>Calificación:</label>
                       <div className="rating-input">
-                        {renderInteractiveStars(newReview.rating, (rating) => setNewReview({ ...newReview, rating }))}
-                        <span className="rating-text">({newReview.rating} estrella{newReview.rating !== 1 ? 's' : ''})</span>
+                        {renderInteractiveStars(newReview.rating, (rating) => 
+                          setNewReview({ ...newReview, rating })
+                        )}
+                        <span className="rating-text">
+                          ({newReview.rating} estrella{newReview.rating !== 1 ? 's' : ''})
+                        </span>
                       </div>
                     </div>
 
@@ -206,8 +291,16 @@ const ProductsReview = () => {
                     </div>
 
                     <div className="form-buttons">
-                      <button type="submit" className="submit-review-btn">Enviar Reseña</button>
-                      <button type="button" className="cancel-review-btn" onClick={() => setShowReviewForm(false)}>Cancelar</button>
+                      <button type="submit" className="submit-review-btn">
+                        Enviar Reseña
+                      </button>
+                      <button 
+                        type="button" 
+                        className="cancel-review-btn" 
+                        onClick={() => setShowReviewForm(false)}
+                      >
+                        Cancelar
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -223,10 +316,27 @@ const ProductsReview = () => {
                             {review.idClient?.name?.charAt(0).toUpperCase() || '?'}
                           </div>
                           <div className="reviewer-details">
-                            <div className="reviewer-name">{review.idClient?.name || 'Anónimo'}</div>
+                            <div className="reviewer-name">
+                              {review.idClient?.name || 'Usuario'}
+                            </div>
+                            <div className="review-date">
+                              {new Date(review.createdAt).toLocaleDateString()}
+                            </div>
                           </div>
                         </div>
-                        <div className="review-rating">{renderStars(review.rating)}</div>
+                        <div className="review-actions">
+                          <div className="review-rating">{renderStars(review.rating)}</div>
+                          {/*  Solo mostrar botón eliminar si es el autor */}
+                          {isAuthenticated && user?.id === review.idClient?._id && (
+                            <button 
+                              className="delete-review-btn"
+                              onClick={() => handleDeleteReview(review._id)}
+                              title="Eliminar reseña"
+                            >
+                              🗑️
+                            </button>
+                          )}
+                        </div>
                       </div>
                       <div className="review-comment">{review.comment}</div>
                     </div>

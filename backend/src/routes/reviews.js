@@ -1,18 +1,16 @@
-import express from "express";
+import { Router } from "express";
 import reviewController from "../controllers/CtrlReview.js";
+import { authenticateToken } from "../middlewares/auth.js";
 
-const router = express.Router();
+const router = Router();
 
-// Obtener todas las reseñas
+// Obtener reseñas (no requiere autenticación)
 router.get("/", reviewController.getReviews);
-
-// Insertar una nueva reseña
-router.post("/", reviewController.insertReview);
-
-// Eliminar reseña por ID
-router.delete("/:id", reviewController.deleteReview);
-
-// Actualizar reseña por ID
-router.put("/:id", reviewController.updateReview);
+//  Crear reseña (requiere autenticación)
+router.post("/", authenticateToken, reviewController.insertReview);
+//  Actualizar reseña (requiere autenticación)
+router.put("/:id", authenticateToken, reviewController.updateReview);
+//  Eliminar reseña (requiere autenticación)
+router.delete("/:id", authenticateToken, reviewController.deleteReview);
 
 export default router;
