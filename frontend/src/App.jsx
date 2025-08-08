@@ -41,6 +41,7 @@ function App() {
                     <Route path="/usuarios" element={<Usuarios />} />
                     <Route path="/users/edit/:type/:id" element={<UserForm />} /> {/* ✅ esta línea es clave */}s
           {/* Puedes agregar más rutas aquí */}
+         <Route path="*" element={<NotFoundPublic />} />
         </Routes>
       </div>
       <Footer />
