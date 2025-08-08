@@ -9,7 +9,7 @@ const Ordenes = () => {
   useEffect(() => {
     const fetchOrdenes = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/ordenes'); // Asegúrate que esta sea tu URL real
+        const res = await axios.get('http://localhost:4000/api/ordenes'); // Asegúrate que esta sea tu URL real
         setOrdenes(res.data);
       } catch (error) {
         console.error('Error al cargar órdenes:', error);

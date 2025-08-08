@@ -8,21 +8,21 @@ const productosIniciales = [
     nombre: "Sabor Azul",
     precio: 2.5,
     cantidad: 1,
-    imagen: "/img/gel1.png",
+    imagen: "/CarboUpp.png",
   },
   {
     id: 2,
     nombre: "Sabor Rojo",
     precio: 2.5,
     cantidad: 2,
-    imagen: "/img/gel2.png",
+    imagen: "/EnerKik.png",
   },
   {
     id: 3,
     nombre: "Sabor Amarillo",
     precio: 2.5,
     cantidad: 3,
-    imagen: "/img/gel3.png",
+    imagen: "/EnerBalance.png",
   },
 ];
 
@@ -51,34 +51,39 @@ const Carrito = () => {
     .toFixed(2);
 
   const irAMetodoDePago = async () => {
-    const orden = {
-      numeroOrden: `ORD-${Date.now()}`,
-      fecha: new Date().toLocaleDateString(),
-      total: parseFloat(total),
-      items: productos.reduce((acc, p) => acc + p.cantidad, 0),
-      estado: "En proceso",
-    };
-
-    try {
-      const response = await fetch("http://localhost:4000/api/ordenes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orden),
-      });
-
-      if (response.ok) {
-        alert("Orden enviada correctamente 🎉");
-        navigate("/Metodo"); // Puedes cambiar esta ruta según tu flujo
-      } else {
-        alert("Error al enviar la orden");
-      }
-    } catch (error) {
-      console.error("Error al enviar la orden:", error);
-      alert("Hubo un problema al conectar con el servidor.");
-    }
+  const orden = {
+    numeroOrden: `ORD-${Date.now()}`,
+    fecha: new Date().toLocaleDateString(),
+    total: parseFloat(total),
+    items: productos.reduce((acc, p) => acc + p.cantidad, 0),
+    estado: "En proceso",
+    productos: productos.map(p => ({
+      nombre: p.nombre,
+      precio: p.precio,
+      cantidad: p.cantidad
+    }))
   };
+
+  try {
+    const response = await fetch("http://localhost:4000/api/ordenes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orden),
+    });
+
+    if (response.ok) {
+      alert("Orden enviada correctamente 🎉");
+      navigate("/Metodo"); // o donde quieras ir después
+    } else {
+      alert("Error al enviar la orden");
+    }
+  } catch (error) {
+    console.error("Error al enviar la orden:", error);
+    alert("Hubo un problema al conectar con el servidor.");
+  }
+};
 
   return (
     <div className="carrito-container">

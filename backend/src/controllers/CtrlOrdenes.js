@@ -1,9 +1,10 @@
-const Orden = require('../models/Orden');
+import Orden from '../models/Ordenes.js';
 
 // Obtener todas las órdenes
-exports.getOrdenes = async (req, res) => {
+const getOrdenes = async (req, res) => {
   try {
     const ordenes = await Orden.find();
+     console.log(ordenes);
     res.json(ordenes);
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al obtener órdenes' });
@@ -11,18 +12,35 @@ exports.getOrdenes = async (req, res) => {
 };
 
 // Crear nueva orden
-exports.crearOrden = async (req, res) => {
+const crearOrden = async (req, res) => {
   try {
-    const nuevaOrden = new Orden(req.body);
+    if (!req.body.productos || req.body.productos.length === 0) {
+      return res.status(400).json({ mensaje: 'La orden debe tener al menos un producto.' });
+    }
+
+    const numeroOrden = Date.now().toString(); // O cualquier generador de ID
+    const fecha = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const total = req.body.productos.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
+    const items = req.body.productos.length;
+
+    const nuevaOrden = new Orden({
+      numeroOrden,
+      fecha,
+      total,
+      items,
+      estado: 'En proceso'
+    });
+
     const ordenGuardada = await nuevaOrden.save();
     res.status(201).json(ordenGuardada);
   } catch (error) {
+    console.error(error);
     res.status(400).json({ mensaje: 'Error al crear la orden' });
   }
 };
 
 // Obtener orden por ID
-exports.getOrdenPorId = async (req, res) => {
+const getOrdenPorId = async (req, res) => {
   try {
     const orden = await Orden.findById(req.params.id);
     if (!orden) return res.status(404).json({ mensaje: 'Orden no encontrada' });
@@ -33,11 +51,19 @@ exports.getOrdenPorId = async (req, res) => {
 };
 
 // Eliminar orden
-exports.eliminarOrden = async (req, res) => {
+const eliminarOrden = async (req, res) => {
   try {
     await Orden.findByIdAndDelete(req.params.id);
     res.json({ mensaje: 'Orden eliminada' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al eliminar orden' });
   }
+};
+
+// Exportar todo como un objeto
+export default {
+  getOrdenes,
+  crearOrden,
+  getOrdenPorId,
+  eliminarOrden
 };

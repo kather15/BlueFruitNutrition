@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import ordenController from '../controllers/CtrlOrdenes.js';
+
 const router = express.Router();
-const ordenController = require('../controllers/ordenController');
 
 router.get('/', ordenController.getOrdenes);
 router.post('/', ordenController.crearOrden);
@@ -8,3 +9,4 @@ router.get('/:id', ordenController.getOrdenPorId);
 router.delete('/:id', ordenController.eliminarOrden);
 
 export default router;
+

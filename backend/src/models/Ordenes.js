@@ -1,10 +1,30 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const ordenSchema = new mongoose.Schema({
-  numeroOrden: { type: String, required: true },
-  fecha: { type: String, required: true },
-  total: { type: Number, required: true },
-  items: { type: Number, required: true },
+  numeroOrden:{ 
+    type: String, 
+    required: true 
+  },
+  fecha:{ 
+    type: String, 
+    required: true 
+  },
+  total:{ 
+    type: Number,
+     required: true
+     },
+  items:{ 
+    type: Number, 
+    required: true 
+  },
+  productos: [
+    {
+      id: { type: String, required: true },
+      nombre: { type: String, required: true },
+      precio: { type: Number, required: true },
+      cantidad: { type: Number, required: true }
+    }
+  ],
   estado: {
     type: String,
     enum: ['Terminado', 'En proceso'],
@@ -12,4 +32,5 @@ const ordenSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Orden', ordenSchema);
+export default mongoose.model('Orden', ordenSchema);
+
