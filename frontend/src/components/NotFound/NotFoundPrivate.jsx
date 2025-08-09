@@ -1,20 +1,19 @@
 import React from "react";
-import "./Error404Private.css";
+import "./NotFoundPrivate.css";
 
 const Error404Private = () => {
   return (
     <div className="error404-private-container">
-      <h1 className="error404-private-title">404</h1>
-      <h2 className="error404-private-subtitle">Página no encontrada</h2>
+      <h2 className="error404-private-title">404</h2>
+      <h1 className="error404-private-subtitle">Página no encontrada</h1>
       <p className="error404-private-text">
         La página que intentas acceder no está disponible. Por favor, verifica tu URL o regresa al panel.
       </p>
+  <img src="/MoraConfundidaPriv.png" alt="Mora confundida" className="error404-public-image" />
+
       <div className="error404-private-buttons">
-        <a href="/dashboard" className="btn-primary">
-          Ir al Dashboard
-        </a>
-        <a href="/logout" className="btn-secondary">
-          Cerrar sesión
+        <a href="/homep" className="btn-primary">
+          Ir a Inicio
         </a>
       </div>
     </div>

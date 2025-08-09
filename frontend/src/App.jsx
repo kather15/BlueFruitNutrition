@@ -15,6 +15,8 @@ import NewPassword from './pages/RecoveryPassword/NewPasssword';
 import Ventas from './pages/Ventas/Ventas.jsx';
 import Usuarios from './pages/Users/UsersList.jsx';
 import Login from './pages/Login/Login.jsx'; 
+import Error404Private from './components/NotFound/NotFoundPrivate.jsx'; // ⬅ IMPORTACIÓN
+
 
 // Componente envolvente para manejar Nav y Footer
 function AppContent() {
@@ -60,6 +62,10 @@ function AppContent() {
           <Route path="/nueva-contraseña" element={<NewPassword />} />
           <Route path="/ventas" element={<Ventas />} />
           <Route path="/usuarios" element={<Usuarios />} />
+
+           {/* Ruta comodín para páginas no encontradas */}
+          <Route path="*" element={<Error404Private />} />
+
         </Routes>
       </div>
 
