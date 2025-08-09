@@ -14,7 +14,7 @@ import ProtectedRoute from './components/PrivateRoute/PrivateRoute';
 import Home from './pages/Home/Home';
 import ProductsC from './pages/Products/ProductsC';
 import ProductsReview from './pages/Products/ProductsReview';
-import Historia from './pages/Historia/Historia';
+import SobreNosotros from './pages/SobreNosotros/SobreNosotros';
 import Contact from './components/Contact/Contact';
 
 // Pages - Autenticación
@@ -55,7 +55,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/product" element={<ProductsC />} />
           <Route path="/producto/:id" element={<ProductsReview />} />
-          <Route path="/sobre-nosotros" element={<Historia />} />
+          <Route path="/sobre-nosotros" element={<SobreNosotros />} />
           <Route path="/contact" element={<Contact />} />
 
           {/* RUTAS DE AUTENTICACIÓN */}

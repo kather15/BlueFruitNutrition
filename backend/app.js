@@ -13,15 +13,12 @@ import passwordRecoveryRoutes from "./src/routes/passwordRecovery.js";
 import loginRoutes from "./src/routes/login.js"
 import logoutRoutes from "./src/routes/logout.js";
 import subscriptionRoutes from './src/routes/subscriptions.js';
-<<<<<<< HEAD
+
 import shoppingCartRoutes from './src/routes/shoppingCart.js'
 import ordenes from './src/routes/ordenes.js'
-=======
-import shoppingCartRoutes from './src/routes/shoppingCart.js';
 import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
 
->>>>>>> 4c2c7204ceda47e2351fcb3b4b03875da2b8dc01
 const app = express();
 
 app.use(
@@ -44,12 +41,10 @@ app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
 app.use("/api/shoppingCart", shoppingCartRoutes)
 app.use('/api/subscriptions', subscriptionRoutes);
-<<<<<<< HEAD
 app.use("/api/ordenes", ordenes)
-=======
+
 app.use("/api/reviews", ReviewRouters)
 app.use('/api', ContactRoutes);
->>>>>>> 4c2c7204ceda47e2351fcb3b4b03875da2b8dc01
 
 
 export default app;
