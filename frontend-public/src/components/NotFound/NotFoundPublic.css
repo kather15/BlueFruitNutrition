@@ -10,12 +10,22 @@
   text-align: center;
   padding: 0 20px;
 }
+.error404-public-image {
+  width: 300px;  
+  margin-bottom: 5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 .error404-public-title {
   font-family: 'Poppins Black', 'Poppins', sans-serif;
-  font-weight: 900;
+  font-weight: 800;
   font-size: 8rem;
   margin: 0;
+  margin-bottom: 0px;
+  
 }
 
 .error404-public-subtitle {

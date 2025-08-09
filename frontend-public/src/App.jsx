@@ -9,6 +9,8 @@ import { AuthProvider } from './context/useAuth';
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
 import ProtectedRoute from './components/PrivateRoute/PrivateRoute';
+import Error404Public from './components/NotFound/NotFoundPublic';
+
 
 // Pages - Públicas
 import Home from './pages/Home/Home';
@@ -72,9 +74,14 @@ function App() {
           <Route path="/sabores" element={<ProtectedRoute><SaborPage /></ProtectedRoute>} />
           <Route path="/detail" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
           <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
+        
+ {/* RUTA CATCH-ALL PARA 404 */}
+    <Route path="*" element={<Error404Public />} />
+
         </Routes>
         
         <Footer />
+        
       </div>
     </AuthProvider>
   );
