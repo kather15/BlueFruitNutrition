@@ -8,7 +8,7 @@ import { AuthProvider } from './context/useAuth';
 // Components
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
-import ProtectedRoute from './components/PrivateRoute/PrivateRoute';
+//import ProtectedRoute from './components/PrivateRoute/PrivateRoute';
 import Error404Public from './components/NotFound/NotFoundPublic';
 
 // Pages - Públicas
@@ -75,12 +75,13 @@ function App() {
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-          {/* RUTAS PRIVADAS */}
-          <Route path="/carrito" element={<ProtectedRoute><Carrito /></ProtectedRoute>} />
-          <Route path="/pay" element={<ProtectedRoute><Pay /></ProtectedRoute>} />
-          <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
-          <Route path="/Metodo" element={<ProtectedRoute><MetodoDePago /></ProtectedRoute>} />
-          <Route path="/personalizar" element={<ProtectedRoute><Personalizar /></ProtectedRoute>} />
+          {/* Rutas públicas (antes privadas) */}
+          <Route path="/carrito" element={<Carrito />} />
+          <Route path="/pay" element={<Pay />} />
+          <Route path="/suscripciones" element={<Suscripciones />} />
+          <Route path="/Metodo" element={<MetodoDePago />} />
+          <Route path="/personalizar" element={<Personalizar />} />
+
 
           {/* RUTA CATCH-ALL PARA 404 */}
           <Route path="*" element={<Error404Public />} />
