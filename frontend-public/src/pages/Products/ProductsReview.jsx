@@ -148,7 +148,7 @@ const ProductsReview = () => {
     alert(`Agregado al carrito: ${quantity} x ${product.name} - $${(product.price * quantity).toFixed(2)}`);
   };
 
-  const handleCustomizeProduct = () => navigate('/sabores/');
+  const handleCustomizeProduct = () => navigate('/SeleccionarGel');
   const handleBackToProducts = () => navigate('/product');
 
   const renderStars = (rating) => (
@@ -189,7 +189,7 @@ const ProductsReview = () => {
         <div className="product-detail-main">
           <div className="product-detail-container">
             <button className="back-button" onClick={handleBackToProducts}>
-              ← Volver a Productos
+              Volver a Productos
             </button>
 
             <div className="product-detail-layout">
