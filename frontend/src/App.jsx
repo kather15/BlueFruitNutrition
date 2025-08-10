@@ -78,7 +78,6 @@ function AppContent() {
           <Route path="/product/:id" element={<ProductsReviews />} />
 
 
-
           {/* 404 admin */}
           <Route path="*" element={<Error404Private />} />
         </Routes>

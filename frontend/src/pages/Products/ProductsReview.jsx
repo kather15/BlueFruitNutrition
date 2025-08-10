@@ -70,12 +70,13 @@ const ProductReviews = () => {
     }
   };
 
+  //No se usa por que es el mismo codigo de la parte pulica solo modifica que puede borar las reviews entonces esto no se manda a llamar 
   const handleAddToCart = () => {
     alert(`Agregado al carrito: ${quantity} x ${product.name} - $${(product.price * quantity).toFixed(2)}`);
   };
 
   const handleCustomizeProduct = () => navigate('/SeleccionarGel');
-  const handleBackToProducts = () => navigate('/admin/products'); // ✅ Redirigir al panel admin
+  const handleBackToProducts = () => navigate('/productos1'); //  Redirigir al panel admin
 
   const renderStars = (rating) => (
     [...Array(5)].map((_, i) => (
@@ -104,7 +105,7 @@ const ProductReviews = () => {
         <div className="product-detail-main">
           <div className="product-detail-container">
             <button className="back-button" onClick={handleBackToProducts}>
-              ← Volver a Productos
+               Volver a Productos
             </button>
 
             <div className="product-detail-layout">
@@ -137,10 +138,10 @@ const ProductReviews = () => {
                 </div>
 
                 <div className="action-buttons">
-                  <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                  <button className="add-to-cart-btn" >
                     Agregar Al Carrito
                   </button>
-                  <button className="customize-btn" onClick={handleCustomizeProduct}>
+                  <button className="customize-btn">
                     Personalizar Producto
                   </button>
                 </div>

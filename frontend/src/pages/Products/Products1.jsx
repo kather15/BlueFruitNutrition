@@ -22,7 +22,7 @@ function ProductCard({ product, onView, onEdit, onDelete }) {
       <div className="product-buttons">
         <button 
           className="view-btn"
-          onClick={() => onView(product)}
+          onClick={() => onView(product)} 
         >
           Ver producto
         </button>
@@ -43,7 +43,7 @@ function ProductCard({ product, onView, onEdit, onDelete }) {
   );
 }
 
-function ProductManager() {
+function Product() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -53,6 +53,7 @@ function ProductManager() {
     fetchProducts();
   }, []);
 
+  // Sin token, pública (DE MOMENTO)
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -68,28 +69,32 @@ function ProductManager() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("¿Estás seguro de eliminar este producto?")) {
-      try {
-        const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-        if (response.ok) {
-          await fetchProducts();
-          alert("Producto eliminado correctamente");
-        } else {
-          alert("Error al eliminar el producto");
-        }
-      } catch (err) {
-        console.error("Error al eliminar:", err);
+    if (!window.confirm("¿Estás seguro de eliminar este producto?")) return;
+
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE"
+        //  No enviamos token
+      });
+
+      if (response.ok) {
+        await fetchProducts();
+        alert("Producto eliminado correctamente");
+      } else {
         alert("Error al eliminar el producto");
       }
+    } catch (err) {
+      console.error("Error al eliminar:", err);
+      alert("Error al eliminar el producto");
     }
   };
 
-  const handleEdit = (product) => {
-    navigate(`/edit-product/${product._id}`);
-  };
+const handleEdit = (product) => {
+  navigate(`/homep/${product._id}`);
+};
 
   const handleView = (product) => {
-    navigate(`/productsReviews`);
+    navigate(`/product/${product._id}`); 
   };
 
   return (
@@ -130,4 +135,4 @@ function ProductManager() {
   );
 }
 
-export default ProductManager;
+export default Product;
