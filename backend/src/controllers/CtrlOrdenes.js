@@ -1,49 +1,69 @@
-const Orden = require('../models/Orden');
+import Orden from "../models/Ordenes.js";
 
-// Obtener todas las órdenes
-exports.getOrdenes = async (req, res) => {
-  try {
-    const ordenes = await Orden.find();
-    res.json(ordenes);
-  } catch (error) {
-    res.status(500).json({ mensaje: 'Error al obtener órdenes' });
-  }
+const ordenesController = {};
+
+// SELECT*******************************************************************
+ordenesController.getOrdenes = async (req, res) => {
+    try {
+        const ordenes = await Orden.find();
+        res.status(200).json(ordenes);
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al obtener órdenes' });
+        console.log("error: " + error);
+    }
 };
 
-// Crear nueva orden
-exports.crearOrden = async (req, res) => {
-  try {
-    const nuevaOrden = new Orden(req.body);
+// INSERT*******************************************************************
+ordenesController.crearOrden = async (req, res) => {
+    try {
+        const { numeroOrden, fecha, total, items, estado } = req.body;
 
-       //validar ordenes
-       if(!numeroOrden || !fecha || !total || !items || !estado){
-      return res.status(400).json({ message: 'Faltan campos obligatorios' });
-    } 
-    
-    const ordenGuardada = await nuevaOrden.save();
-    res.status(201).json(ordenGuardada);
-  } catch (error) {
-    res.status(400).json({ mensaje: 'Error al crear la orden' });
-  }
+        // Validar campos obligatorios
+        if (!numeroOrden || !fecha || !total || !items || !estado) {
+            return res.status(400).json({ message: 'Faltan campos obligatorios' });
+        }
+
+        const nuevaOrden = new Orden(req.body);
+        const ordenGuardada = await nuevaOrden.save();
+        res.status(201).json(ordenGuardada);
+    } catch (error) {
+        res.status(400).json({ mensaje: 'Error al crear la orden' });
+        console.log("error: " + error);
+    }
 };
 
-// Obtener orden por ID
-exports.getOrdenPorId = async (req, res) => {
-  try {
-    const orden = await Orden.findById(req.params.id);
-    if (!orden) return res.status(404).json({ mensaje: 'Orden no encontrada' });
-    res.json(orden);
-  } catch (error) {
-    res.status(500).json({ mensaje: 'Error al obtener la orden' });
-  }
+// SELECT POR ID************************************************************
+ordenesController.getOrdenPorId = async (req, res) => {
+    try {
+        const orden = await Orden.findById(req.params.id);
+        if (!orden) return res.status(404).json({ mensaje: 'Orden no encontrada' });
+        res.status(200).json(orden);
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al obtener la orden' });
+        console.log("error: " + error);
+    }
 };
 
-// Eliminar orden
-exports.eliminarOrden = async (req, res) => {
-  try {
-    await Orden.findByIdAndDelete(req.params.id);
-    res.json({ mensaje: 'Orden eliminada' });
-  } catch (error) {
-    res.status(500).json({ mensaje: 'Error al eliminar orden' });
-  }
+// DELETE*******************************************************************
+ordenesController.eliminarOrden = async (req, res) => {
+    try {
+        await Orden.findByIdAndDelete(req.params.id);
+        res.status(200).json({ mensaje: 'Orden eliminada' });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al eliminar orden' });
+        console.log("error: " + error);
+    }
 };
+
+// CONTADOR*****************************************************************
+ordenesController.contarOrdenesEnProceso = async (req, res) => {
+    try {
+        const totalEnProceso = await Orden.countDocuments({ estado: 'En proceso' });
+        res.status(200).json({ totalEnProceso });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al contar órdenes en proceso' });
+        console.log("error: " + error);
+    }
+};
+
+export default ordenesController;
