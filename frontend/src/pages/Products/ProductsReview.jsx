@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, X } from 'lucide-react';
-import './ProductsReview.css'; // ✅ Usar el mismo CSS que la pantalla pública
+import './ProductsReview.css'; 
 
-const AdminProductReviews = () => {
+const ProductReviews = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -39,14 +39,14 @@ const AdminProductReviews = () => {
     setQuantity(prev => Math.max(1, prev + change));
   };
 
-  // ✅ Función para eliminar reseña (versión administrativa simplificada)
+  //  Función para eliminar reseña 
   const handleDeleteReview = async (reviewId) => {
     if (!window.confirm('¿Estás seguro de eliminar esta reseña?')) return;
 
     try {
       setDeletingReview(reviewId);
       
-      // ✅ Llamada directa sin token de autenticación
+      // Llamada directa sin token de autenticación
       const response = await fetch(`http://localhost:4000/api/admin/reviews/${reviewId}`, {
         method: 'DELETE',
         headers: {
@@ -152,16 +152,16 @@ const AdminProductReviews = () => {
             </div>
           </div>
 
-          {/* ✅ Sección de reseñas - IGUAL pero sin formulario y con botón X */}
+          {/*  Sección de reseñas  */}
           <div className="reviews-section">
             <div className="reviews-container">
               <div className="reviews-header">
                 <h2>Reseñas - Vista Administrativa</h2>
-                {/* ✅ Sin botón de agregar reseña */}
+                {/* Sin botón de agregar reseña */}
                 <span className="admin-badge">Panel Administrativo</span>
               </div>
 
-              {/* ✅ Sin formulario de agregar reseña */}
+              {/* Sin formulario de agregar reseña */}
 
               <div className="reviews-grid">
                 {reviews.length > 0 ? (
@@ -183,7 +183,7 @@ const AdminProductReviews = () => {
                         </div>
                         <div className="review-actions">
                           <div className="review-rating">{renderStars(review.rating)}</div>
-                          {/* ✅ Botón X para eliminar - SIEMPRE visible para admin */}
+                          {/* Botón X para eliminar - SIEMPRE visible para admin */}
                           <button 
                             className="delete-review-btn admin-delete-btn"
                             onClick={() => handleDeleteReview(review._id)}
@@ -213,4 +213,4 @@ const AdminProductReviews = () => {
   );
 };
 
-export default AdminProductReviews;
+export default ProductReviews;
