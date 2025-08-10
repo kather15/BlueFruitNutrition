@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
-import { Link } from 'react-router-dom'
-import { useForm } from "react-hook-form"
+import { Link } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 import Contacto from '../../components/Contact/Contact';
-
-
-const productos = [
-  { nombre: 'Carbo Upp', imagen: '/CarboUpp.png' },
-  { nombre: 'Ener Kik', imagen: '/EnerKik.png' },
-  { nombre: 'Reppo', imagen: '/Reppo.png' },
-  { nombre: 'Ener Balance', imagen: '/EnerBalance.png' },
-];
-
- 
 
 const Home = () => {
   const [productoActivo, setProductoActivo] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Productos fijos (puedes luego cambiarlos por fetch si quieres)
+  const productos = [
+    { nombre: 'Carbo Upp', imagen: '/CarboUpp.png' },
+    { nombre: 'Ener Kik', imagen: '/EnerKik.png' },
+    { nombre: 'Reppo', imagen: '/Reppo.png' },
+    { nombre: 'Ener Balance', imagen: '/EnerBalance.png' },
+  ];
+
+  // Detectar si es móvil
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize(); // Ejecutar al cargar
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const {
     register,
@@ -27,23 +36,26 @@ const Home = () => {
   const onSubmit = (data) => {
     console.log("Formulario enviado:", data);
     alert("¡Mensaje enviado con éxito!");
-    reset(); // Limpia el formulario
+    reset();
   };
 
   return (
     <div className="blue-fruit-home">
-      {/* Imagen principal */}
-      <div className="blue-fruit-banner-container">
-        <img src="/PantallaPrincipal.png" alt="Banner Blue Fruit" className="blue-fruit-banner-image" />
-      </div>
-
-      {/* Separador debajo de la imagen */}
-      <div className="blue-fruit-separador">Nuestros Productos</div>
+      {/* Banner solo si NO es móvil */}
+      {!isMobile && (
+        <div className="blue-fruit-banner-container">
+          <img 
+            src="/Portada-home-feel-the-energy-blue-fruit.jpg" 
+            alt="Banner Blue Fruit" 
+            className="blue-fruit-banner-image" 
+          />
+        </div>
+      )}
 
       <h1>Explora Nuestros Productos</h1>
 
       <div className="blue-fruit-productos-scroll">
-        {productos.map((producto, index) => (
+        {(productos ?? []).map((producto, index) => (
           <div className="blue-fruit-product" key={index}>
             <div
               className="blue-fruit-image-container"
@@ -60,15 +72,15 @@ const Home = () => {
         ))}
       </div>
 
-     <div className="blue-fruit-boton-ver-todos-container">
-  <Link to="/product" className="blue-fruit-boton-ver-todos">
-    Ver todos los Productos
-  </Link>
-</div>
-      {/* Línea separadora debajo del botón */}
+      <div className="blue-fruit-boton-ver-todos-container">
+        <Link to="/product" className="blue-fruit-boton-ver-todos">
+          Ver todos los Productos
+        </Link>
+      </div>
+
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Sección Historia */}
+      {/* Historia */}
       <section className="blue-fruit-historia">
         <h2>Nuestra Historia</h2>
         <div className="blue-fruit-historia-content">
@@ -87,22 +99,20 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Sección Iconos */}
+      {/* Iconos */}
       <section className="blue-fruit-iconos">
         <div className="blue-fruit-icono">
-          <img src="/Group 8.png" alt="Icono Energía Sostenible" />
+          <img src="/Group 8.png" alt="Energía Sostenible" />
           <h2>Energía Sostenible</h2>
           <p>Libera energía de forma gradual para un rendimiento constante.</p>
         </div>
-        
         <div className="blue-fruit-icono">
-          <img src="/Group 9.png" alt="Icono Mejor Rendimiento" />
+          <img src="/Group 9.png" alt="Mejor Rendimiento" />
           <h2>Mejor Rendimiento</h2>
           <p>Maximiza la eficiencia y capacidad física.</p>
         </div>
-        
         <div className="blue-fruit-icono">
-          <img src="/Group 10.png" alt="Icono Salud Óptima" />
+          <img src="/Group 10.png" alt="Salud Óptima" />
           <h2>Salud Óptima</h2>
           <p>No produce caries, seguro para todas las edades.</p>
         </div>
@@ -110,7 +120,7 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Sección Nuestro Equipo */}
+      {/* Equipo */}
       <section className="blue-fruit-equipo">
         <h2>Nuestro Equipo</h2>
         <div className="blue-fruit-miembros">
@@ -139,15 +149,10 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Sección Nuestro de contactos */}
-       <main>
-      {/* Otras secciones del home */}
-      
-      {/* Sección de contacto */}
-      <Contacto />
-
-      {/* Más contenido si hay */}
-    </main>
+      {/* Contacto */}
+      <main>
+        <Contacto />
+      </main>
     </div>
   );
 };
