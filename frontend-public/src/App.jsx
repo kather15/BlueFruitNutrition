@@ -27,9 +27,6 @@ import NewPassword from './pages/RecoveryPassword/NewPasssword';
 // Pages - Privadas
 import Carrito from './pages/Carrito/Carrito';
 import Pay from './pages/Pay/pay';
-import SeleccionarGel from './pages/Personalizar/SeleccionarGel';
-import SaborPage from './pages/Personalizar/Sabores/SaborPage';
-import ProductDetail from './pages/Personalizar/productGallery/Product';
 import Suscripciones from './pages/Suscripciones/Suscripciones';
 import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
 import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
@@ -80,9 +77,6 @@ function App() {
         {/* RUTAS PRIVADAS */}
         <Route path="/carrito" element={<ProtectedRoute><Carrito /></ProtectedRoute>} />
         <Route path="/pay" element={<ProtectedRoute><Pay /></ProtectedRoute>} />
-        <Route path="/gel" element={<ProtectedRoute><SeleccionarGel /></ProtectedRoute>} />
-        <Route path="/sabores" element={<ProtectedRoute><SaborPage /></ProtectedRoute>} />
-        <Route path="/detail" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
         <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
         <Route path="/Metodo" element={<ProtectedRoute><MetodoDePago /></ProtectedRoute>} />
         <Route path="/personalizar" element={<ProtectedRoute><Personalizar /></ProtectedRoute>} />
