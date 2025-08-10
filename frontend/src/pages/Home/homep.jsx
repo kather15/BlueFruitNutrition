@@ -6,7 +6,8 @@ import toast from 'react-hot-toast';
 const API_PRODUCTS = 'http://localhost:4000/api/products';
 const API_CUSTOMERS = 'http://localhost:4000/api/customers';
 const API_DISTRIBUTORS = 'http://localhost:4000/api/distributors';
-const API_ORDENES_EN_PROCESO = 'http://localhost:4000/api/ordenes/en-proceso/total';
+// URL para obtener total de órdenes en proceso
+const API_ORDENES_EN_PROCESO = 'http://localhost:4000/api/ordenes/enProceso/total';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('products');
@@ -16,9 +17,10 @@ const AdminPanel = () => {
   const [form, setForm] = useState({ name: '', flavor: '', price: '', stock: '' });
   const [clientSearch, setClientSearch] = useState('');
   const [clientRoleFilter, setClientRoleFilter] = useState('all');
+  // Estado para cantidad de órdenes en proceso
   const [ordersInProcess, setOrdersInProcess] = useState(0);
 
-  // Función para obtener productos
+  // Obtener productos
   const fetchProducts = async () => {
     try {
       const res = await fetch(API_PRODUCTS);
@@ -31,7 +33,7 @@ const AdminPanel = () => {
     }
   };
 
-  // Función para obtener clientes y distribuidores
+  // Obtener clientes y distribuidores
   const fetchClientsAndDistributors = async () => {
     try {
       const [resCustomers, resDistributors] = await Promise.all([
@@ -61,29 +63,110 @@ const AdminPanel = () => {
     }
   };
 
-  //Ordenes activas
+  // Obtener total órdenes en proceso
   const fetchOrdersInProcess = async () => {
     try {
       const res = await fetch(API_ORDENES_EN_PROCESO);
       if (!res.ok) throw new Error('Error al obtener órdenes en proceso');
       const data = await res.json();
- 
       setOrdersInProcess(data.totalEnProceso ?? 0);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-
+  // Se ejecuta una vez al montar el componente
   useEffect(() => {
-    fetchProducts(); //ver los productos activos
-    fetchClientsAndDistributors(); //ver los usuarios activos
-    fetchOrdersInProcess(); //ver las órdenes en proceso
+    fetchProducts();
+    fetchClientsAndDistributors();
+    fetchOrdersInProcess();
   }, []);
 
+  // Maneja cambios en los inputs del formulario
+  const handleChange = e => {
+    const { name, value } = e.target;
+    if ((name === 'price' || name === 'stock') && value !== '') {
+      if (!/^\d*\.?\d*$/.test(value)) return; // Solo números y punto decimal
+    }
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
 
+  // Función para enviar el formulario de edición de producto
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.flavor.trim() || form.price === '' || form.stock === '') {
+      toast.error('Completa todos los campos correctamente');
+      return;
+    }
 
-  // Filtrado de clientes con useMemo
+    const priceNum = parseFloat(form.price);
+    const stockNum = parseInt(form.stock);
+
+    if (isNaN(priceNum) || priceNum <= 0 || isNaN(stockNum) || stockNum < 0) {
+      toast.error('Precio y stock deben ser números válidos');
+      return;
+    }
+
+    try {
+      if (editingProduct) {
+        const res = await fetch(`${API_PRODUCTS}/${editingProduct.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: form.name.trim(),
+            flavor: form.flavor.trim(),
+            price: priceNum,
+            stock: stockNum,
+          }),
+        });
+        if (!res.ok) throw new Error('Error al actualizar producto');
+        await fetchProducts();
+        toast.success('Producto actualizado correctamente');
+        setEditingProduct(null);
+        setForm({ name: '', flavor: '', price: '', stock: '' });
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // Eliminar producto
+  const handleDelete = async id => {
+    try {
+      const res = await fetch(`${API_PRODUCTS}/${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Error al eliminar producto');
+      await fetchProducts();
+      toast.success('Producto eliminado');
+      if (editingProduct?.id === id) {
+        setEditingProduct(null);
+        setForm({ name: '', flavor: '', price: '', stock: '' });
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // Iniciar edición de producto
+  const startEdit = product => {
+    if (!product) return;
+    setEditingProduct(product);
+    setForm({
+      name: product.name || '',
+      flavor: product.flavor || '',
+      price: product.price != null ? product.price.toString() : '',
+      stock: product.stock != null ? product.stock.toString() : '',
+    });
+  };
+
+  // Cancelar edición
+  const cancelEdit = () => {
+    setEditingProduct(null);
+    setForm({ name: '', flavor: '', price: '', stock: '' });
+  };
+
+  // Filtrar clientes y distribuidores
   const filteredClients = useMemo(() => {
     const term = clientSearch.toLowerCase();
     return clients
@@ -206,7 +289,6 @@ const AdminPanel = () => {
                 <h2>{totalProducts}</h2>
                 <p>Productos</p>
               </div>
-
               <div className="stat-card">
                 <h2>{ordersInProcess}</h2>
                 <p>Ordenes en proceso</p>
