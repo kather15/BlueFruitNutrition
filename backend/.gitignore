@@ -2,4 +2,4 @@
 
 *.env
 
-/backend/public
+/public/

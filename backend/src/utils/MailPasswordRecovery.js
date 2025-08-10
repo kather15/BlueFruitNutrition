@@ -1,19 +1,20 @@
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer" //Dependencia para enviar correos
 import { config } from "../config.js"
 
 
-//1-
+//1- Transporter = ¿Quién lo envia?
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: config.email.email_user,
+    //Config
+    user: config.email.email_user, 
     pass: config.email.email_pass,
   },
 });
 
-//2-
+//2- ¿Quien lo recibe?
 const sendMail = async (to, subject, text, html) => {
   try {
     const info = await transporter.sendMail({
@@ -30,7 +31,7 @@ const sendMail = async (to, subject, text, html) => {
 };
 
 
-//3-
+//3- Envio de correo
 const HTMLRecoveryEmail = (code) => {
   return `
         <!DOCTYPE html>

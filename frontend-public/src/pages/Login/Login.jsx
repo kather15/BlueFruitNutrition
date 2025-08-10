@@ -1,56 +1,65 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import "./Login.css";
-import triathlonImage from "../../assets/imgregister.png"; // Asegúrate de que la ruta sea correcta
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-const handleLogin = async (e) => {
-  e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  if (email.trim() === "" || password.trim() === "") {
-    toast.error("Por favor completa todos los campos");
-    return;
-  }
-
-  try {
-    const res = await axios.post(
-      "http://localhost:4000/api/login",
-      { email, password },
-      { withCredentials: true }
-    );
-
-    if (res.data.message === "login successful") {
-      toast.success("Inicio de sesión exitoso");
-
-      if (res.data.role === "admin") {
-        // 🔁 Redirección completa a la app del admin (en otro puerto)
-        window.location.href = "http://localhost:5174";
-      } else {
-        // 🧭 Para usuarios normales, redirige dentro de la misma app
-        navigate("/");
-      }
-    } else {
-      toast.error(res.data.message || "Error al iniciar sesión");
+    //validar campos
+    if (email.trim() === "" || password.trim() === "") {
+      toast.error("Por favor completa todos los campos");
+      return;
     }
-  } catch (error) {
-    toast.error("Error en el servidor");
-  }
-};
 
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/login",
+        { email, password },
+        { withCredentials: true }
+      );
+
+      if (res.data.message === "login successful") {
+        toast.success("Inicio de sesión exitoso");
+
+        // Espera 1 segundo para que el usuario vea el toast
+        setTimeout(() => {
+          if (res.data.role === "admin") {
+            window.location.href = "http://localhost:5174";
+          } else {
+            navigate("/");
+          }
+        }, 1000);
+      } else {
+        toast.error(res.data.message || "Error al iniciar sesión");
+      }
+    } catch (error) {
+      //Muestra un mensaje diciendo los intentos de inicio de sesión
+      if (error.response && error.response.status === 429) {
+        toast.error(error.response.data.message || "Has agotado tus intentos. Intenta más tarde.");
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Error en el servidor");
+      }
+    }
+  };
 
   return (
     <div className="login-container">
+      <Toaster position="top-center" reverseOrder={false} />
+
       {/* Lado izquierdo - Imagen */}
       <div className="left-side">
         <div className="image-container">
           <img 
-            src={triathlonImage} 
+            src={"/imgregister.png"} 
             alt="Triathlon promotional" 
             className="promo-image"
           />
