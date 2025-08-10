@@ -1,14 +1,13 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { FiUser } from 'react-icons/fi';  
 import './Nav.css';
 
 const Nav = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook para navegación programática
 
-  const handleLogout = () => {
-    // Aquí puedes limpiar el token o sesión si lo usas
-    localStorage.removeItem('token'); // Ejemplo: limpiar token
-    navigate('/'); // Redirige al login sin recargar la página
+  const handleProfileClick = () => {
+    navigate('/perfil'); // Navega a la ruta perfil
   };
 
   return (
@@ -29,22 +28,13 @@ const Nav = () => {
         </div>
 
         <div className="blue-fruit-navbar-right">
-          <div className="blue-fruit-search-container">
-            <input
-              type="text"
-              placeholder="¿Qué estás buscando?"
-              className="blue-fruit-search-input"
-            />
-            <button className="blue-fruit-search-btn">
-              <img src="/Vector.png" alt="Buscar" />
-            </button>
-          </div>
-          <button 
-            className="blue-fruit-logout-btn" 
-            onClick={handleLogout}
-            title="Cerrar sesión"
+          <button
+            className="blue-fruit-profile-btn"
+            title="Perfil"
+            aria-label="Perfil"
+            onClick={handleProfileClick}  // Evento click navega
           >
-            Logout
+            <FiUser className="blue-fruit-profile-icon" />
           </button>
         </div>
       </div>
@@ -53,4 +43,3 @@ const Nav = () => {
 };
 
 export default Nav;
-
