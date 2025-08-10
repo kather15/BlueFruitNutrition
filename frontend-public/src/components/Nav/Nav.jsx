@@ -43,6 +43,7 @@ const Nav = () => {
             <li><Link to="/sobre-nosotros">Sobre Nosotros</Link></li>
             <li><Link to="/product">Productos</Link></li>
             <li><Link to="/carrito">Carrito</Link></li>
+            <li><Link to="/personalizar">Personalizar</Link></li>
           </ul>
         </div>
 

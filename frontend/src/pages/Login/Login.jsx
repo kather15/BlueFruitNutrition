@@ -10,48 +10,45 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-const handleLogin = async (e) => {
-  e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  if (email.trim() === "" || password.trim() === "") {
-    toast.error("Por favor completa todos los campos");
-    return;
-  }
-
-  try {
-    const res = await axios.post(
-      "http://localhost:4000/api/login",
-      { email, password },
-      { withCredentials: true }
-    );
-
-    if (res.data.message === "login successful") {
-      toast.success("Inicio de sesión exitoso");
-
-      if (res.data.role === "admin") {
-        // 🔁 Redirección completa a la app del admin (en otro puerto)
-        window.location.href = "/homep";
-      } else {
-        // 🧭 Para usuarios normales, redirige dentro de la misma app
-        navigate("/");
-      }
-    } else {
-      toast.error(res.data.message || "Error al iniciar sesión");
+    if (email.trim() === "" || password.trim() === "") {
+      toast.error("Por favor completa todos los campos");
+      return;
     }
-  } catch (error) {
-    toast.error("Error en el servidor");
-  }
-};
 
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/login",
+        { email, password },
+        { withCredentials: true }
+      );
+
+      if (res.data.message === "login successful") {
+        toast.success("Inicio de sesión exitoso");
+
+        if (res.data.role === "admin") {
+          window.location.href = "/homep";
+        } else {
+          navigate("/");
+        }
+      } else {
+        toast.error(res.data.message || "Error al iniciar sesión");
+      }
+    } catch (error) {
+      toast.error("Error en el servidor");
+    }
+  };
 
   return (
-    <div className="login-container">
+    <div className="login-page">
       {/* Lado izquierdo - Imagen */}
       <div className="left-side">
         <div className="image-container">
           <img 
             src={triathlonImage} 
-            alt="Triathlon promotional" 
+            alt="Promoción BlueFruit" 
             className="promo-image"
           />
         </div>
@@ -91,7 +88,9 @@ const handleLogin = async (e) => {
             </button>
             
             <div className="forgot-password-container">
-              <a href="/enviar-codigo" className="forgot-password-link">¿Olvidaste tu contraseña?</a>
+              <a href="/enviar-codigo" className="forgot-password-link">
+                ¿Olvidaste tu contraseña?
+              </a>
             </div>
           </form>
         </div>

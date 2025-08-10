@@ -1,0 +1,121 @@
+.perfil-admin-wrapper {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+}
+
+.perfil-admin-wrapper h2 {
+  color: #0C133F;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.perfil-admin-form label {
+  font-weight: 600;
+  margin-top: 15px;
+  display: block;
+  color: #0C133F;
+}
+
+.perfil-admin-form p {
+  margin: 6px 0 12px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.perfil-admin-form input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1.5px solid #ccc;
+  margin-top: 5px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.perfil-admin-form input:focus {
+  border-color: #0C133F;
+  outline: none;
+}
+
+.button-group {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap; /* Para que se adapten en móviles */
+}
+
+.btn-edit,
+.btn-save,
+.btn-cancel {
+  background-color: #0C133F;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 120px;
+  text-align: center;
+}
+
+.btn-edit:hover,
+.btn-save:hover {
+  background-color: #09102c;
+}
+
+.btn-cancel {
+  background-color: #cc3333;
+}
+
+.btn-cancel:hover {
+  background-color: #990000;
+}
+
+.perfil-admin-form .error-message {
+  color: #cc3333;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+  .perfil-admin-wrapper {
+    margin: 20px 15px;
+    padding: 20px 15px;
+  }
+
+  .perfil-admin-wrapper h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .perfil-admin-form p,
+  .perfil-admin-form input {
+    font-size: 14px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn-edit,
+  .btn-save,
+  .btn-cancel {
+    width: 100%;
+    min-width: unset;
+    padding: 12px 0;
+    font-size: 16px;
+  }
+}

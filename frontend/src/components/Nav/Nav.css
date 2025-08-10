@@ -4,6 +4,9 @@
   padding: 12px 0;
   width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .blue-fruit-navbar-container {
@@ -13,12 +16,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  flex-wrap: wrap;
 }
 
 .blue-fruit-navbar-left {
   display: flex;
   align-items: center;
   gap: 40px;
+  flex-wrap: wrap;
 }
 
 .blue-fruit-logo img {
@@ -32,6 +37,7 @@
   margin: 0;
   padding: 0;
   gap: 30px;
+  flex-wrap: wrap;
 }
 
 .blue-fruit-nav-menu li a {
@@ -41,6 +47,7 @@
   font-weight: 500;
   transition: color 0.3s ease;
   padding: 8px 0;
+  white-space: nowrap;
 }
 
 .blue-fruit-nav-menu li a:hover {
@@ -50,91 +57,71 @@
 .blue-fruit-navbar-right {
   display: flex;
   align-items: center;
+  margin-top: 0;
 }
 
-.blue-fruit-search-container {
-  display: flex;
-  align-items: center;
-  background-color: #ffffff;
-  border-radius: 25px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.blue-fruit-search-input {
-  border: none;
-  outline: none;
-  padding: 10px 20px;
-  font-size: 14px;
-  width: 250px;
+/* Botón perfil con icono */
+.blue-fruit-profile-btn {
   background: transparent;
-}
-
-.blue-fruit-search-input::placeholder {
-  color: #999;
-}
-
-.blue-fruit-search-btn {
-  background: none;
   border: none;
-  padding: 10px 15px;
   cursor: pointer;
+  padding: 6px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  margin-left: 15px;
 }
 
-.blue-fruit-search-btn img {
-  width: 18px;
-  height: 18px;
+.blue-fruit-profile-icon {
+  font-size: 36px;
+  color: white; /* color azul bonito */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.blue-fruit-profile-icon:hover {
+  color: #91d1ff; /* azul más claro al pasar mouse */
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .blue-fruit-navbar-container {
     flex-direction: column;
-    gap: 20px;
-    padding: 0 15px;
+    align-items: center;
+    padding: 10px 15px;
+    gap: 15px;
   }
-  
+
   .blue-fruit-navbar-left {
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
+    width: 100%;
+    align-items: center;
   }
-  
+
+  .blue-fruit-logo img {
+    height: 40px;
+  }
+
   .blue-fruit-nav-menu {
-    gap: 20px;
+    gap: 15px;
+    justify-content: center;
     flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .blue-fruit-nav-menu li a {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .blue-fruit-navbar-right {
+    margin-top: 0;
+    width: 100%;
+    display: flex;
     justify-content: center;
   }
-  
-  .blue-fruit-search-input {
-    width: 200px;
-  }
-}
 
-.blue-fruit-logout-btn {
-  margin-left: 20px;
-  background-color: #d32f2f;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-family: 'Outfit', sans-serif;
-  transition: background-color 0.3s ease;
-}
-
-.blue-fruit-logout-btn:hover {
-  background-color: #b22a28;
-}
-
-/* En móvil ajustar margen si es necesario */
-@media (max-width: 768px) {
-  .blue-fruit-logout-btn {
+  .blue-fruit-profile-btn {
     margin-left: 0;
-    margin-top: 10px;
-    width: 100%;
   }
 }

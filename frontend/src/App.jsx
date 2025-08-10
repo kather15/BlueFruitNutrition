@@ -1,6 +1,5 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-
 import NavBar from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
 
@@ -17,10 +16,19 @@ import Ventas from './pages/Ventas/Ventas.jsx';
 import Usuarios from './pages/Users/UsersList.jsx';
 import UserForm from './pages/Users/UserForm'; 
 import Login from './pages/Login/Login.jsx'; 
+import PerfilAdmin from './pages/AdminPorfile/PerfilAdmin';
 
-function App() {
+// Componente envolvente para manejar Nav y Footer
+function AppContent() {
+  const location = useLocation();
+
+  // Rutas donde NO quieres que aparezcan el NavBar y el Footer
+  const hideLayoutRoutes = ['/', '/enviar-codigo', '/verificar-codigo', '/nueva-contraseña'];
+
+  const shouldHideLayout = hideLayoutRoutes.includes(location.pathname);
+
   return (
-    <Router>
+    <>
       <Toaster
         position="top-right"
         reverseOrder={false}
@@ -37,8 +45,10 @@ function App() {
         }}
       />
 
-      <NavBar />
-      <div className="main-content" style={{ paddingTop: '100px' }}>
+      {/* Mostrar NavBar solo si no está en las rutas ocultas */}
+      {!shouldHideLayout && <NavBar />}
+
+      <div className="main-content" style={{ paddingTop: !shouldHideLayout ? '100px' : '0' }}>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/productos1" element={<Products1 />} />
@@ -54,9 +64,20 @@ function App() {
           <Route path="/ventas" element={<Ventas />} />
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/users/edit/:type/:id" element={<UserForm />} />
+          <Route path="/perfil" element={<PerfilAdmin />} />
         </Routes>
       </div>
-      <Footer />
+
+      {/* Mostrar Footer solo si no está en las rutas ocultas */}
+      {!shouldHideLayout && <Footer />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }

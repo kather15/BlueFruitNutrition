@@ -186,41 +186,13 @@ const AdminPanel = () => {
             )}
 
             <form className="product-form" onSubmit={handleSubmit}>
-              <input
-                name="name"
-                placeholder="Nombre"
-                value={form.name}
-                onChange={handleChange}
-                disabled={!editingProduct}
-              />
-              <input
-                name="flavor"
-                placeholder="Sabor"
-                value={form.flavor}
-                onChange={handleChange}
-                disabled={!editingProduct}
-              />
-              <input
-                name="price"
-                placeholder="Precio"
-                value={form.price}
-                onChange={handleChange}
-                disabled={!editingProduct}
-              />
-              <input
-                name="stock"
-                placeholder="Stock"
-                value={form.stock}
-                onChange={handleChange}
-                disabled={!editingProduct}
-              />
+              <input name="name" placeholder="Nombre" value={form.name} onChange={handleChange} disabled={!editingProduct} />
+              <input name="flavor" placeholder="Sabor" value={form.flavor} onChange={handleChange} disabled={!editingProduct} />
+              <input name="price" placeholder="Precio" value={form.price} onChange={handleChange} disabled={!editingProduct} />
+              <input name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} disabled={!editingProduct} />
               <div className="form-actions">
                 {editingProduct && <button type="submit">Actualizar</button>}
-                {editingProduct && (
-                  <button type="button" className="cancel-btn" onClick={cancelEdit}>
-                    Cancelar
-                  </button>
-                )}
+                {editingProduct && <button type="button" className="cancel-btn" onClick={cancelEdit}>Cancelar</button>}
               </div>
             </form>
 
@@ -235,12 +207,8 @@ const AdminPanel = () => {
                       Precio: ${product.price.toFixed(2)} - Stock: {product.stock}
                     </div>
                     <div className="actions">
-                      <button onClick={() => startEdit(product)} className="edit-btn">
-                        <Edit size={18} />
-                      </button>
-                      <button onClick={() => handleDelete(product.id)} className="delete-btn">
-                        <Trash2 size={18} />
-                      </button>
+                      <button onClick={() => startEdit(product)} className="edit-btn"><Edit size={18} /></button>
+                      <button onClick={() => handleDelete(product.id)} className="delete-btn"><Trash2 size={18} /></button>
                     </div>
                   </div>
                 ))
@@ -264,18 +232,8 @@ const AdminPanel = () => {
           <>
             <h1>Clientes y Distribuidores</h1>
             <div className="filters-container">
-              <input
-                type="search"
-                placeholder="Buscar por nombre o email"
-                value={clientSearch}
-                onChange={e => setClientSearch(e.target.value)}
-                className="client-search"
-              />
-              <select
-                value={clientRoleFilter}
-                onChange={e => setClientRoleFilter(e.target.value)}
-                className="role-filter"
-              >
+              <input type="search" placeholder="Buscar por nombre o email" value={clientSearch} onChange={e => setClientSearch(e.target.value)} className="client-search" />
+              <select value={clientRoleFilter} onChange={e => setClientRoleFilter(e.target.value)} className="role-filter">
                 <option value="all">Todos</option>
                 <option value="customer">Clientes</option>
                 <option value="distributor">Distribuidores</option>
@@ -288,14 +246,14 @@ const AdminPanel = () => {
               ) : (
                 filteredClients.map(client => (
                   <div key={client.id} className="client-card">
-                    <div>
-                      <strong>{client.name}</strong>{' '}
-                      <small style={{ fontWeight: 'normal', color: '#555' }}>
-                        ({client.role === 'customer' ? 'Cliente' : 'Distribuidor'})
-                      </small><br />
-                      <small>{client.email}</small>
+                    <div className="client-info">
+                      <div className="client-name-role">
+                        <strong>{client.name}</strong>{' '}
+                        <small>({client.role === 'customer' ? 'Cliente' : 'Distribuidor'})</small>
+                      </div>
+                      <div className="client-email">{client.email}</div>
                     </div>
-                    <div>
+                    <div className="client-stats">
                       <p>Compras: {client.purchases ?? '-'}</p>
                       <p>Gastado: ${client.spent?.toFixed(2) ?? '-'}</p>
                     </div>
