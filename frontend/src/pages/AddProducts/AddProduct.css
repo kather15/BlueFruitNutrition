@@ -1,138 +1,251 @@
-.add-product-form {
-  width: 90%;
-  max-width: 900px;
-  margin: auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #ccc;
+/* Contenedor principal del formulario centrado vertical y horizontalmente */
+.add-product-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centrado vertical */
+  align-items: center;     /* centrado horizontal */
+  min-height: 100vh; /* ocupa toda la altura visible */
+  padding: 40px 20px; /* espacio interior */
+  background-color: #ffffff;
+  box-sizing: border-box; /* incluye padding y border en el tamaño */
 }
 
-.image-upload {
+/* Título principal */
+.add-product-wrapper > h2 {
+  color: #0C133F;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+  width: 100%;
+  max-width: 900px; /* limita el ancho máximo */
+}
+
+/* Formulario con fondo blanco, sombra y diseño flex */
+.add-product-form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row; /* columnas lado a lado */
+  gap: 40px; /* espacio entre columnas */
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: flex-start; /* alinea los contenidos arriba */
+}
+
+/* Columna izquierda: vista previa e input file */
+.left-column {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 1rem;
+  flex: 1; /* ocupa 1 parte del espacio total */
 }
 
+/* Vista previa de la imagen */
+.image-preview {
+  width: 220px;
+  height: 220px;
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #fafafa;
+  margin-bottom: 8px;
+}
+
+/* Bordes rojos para error */
+.image-preview.error-border {
+  border-color: red;
+}
+
+/* Imagen dentro de la vista previa */
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Texto para vista previa vacía */
 .image-placeholder {
-  width: 150px;
-  height: 150px;
-  background-color: #eee;
+  color: #0C133F;
+  font-size: 14px;
+}
+
+/* Estilo para el label que abre selector de archivos */
+.file-label {
+  background-color: #0C133F;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  user-select: none; /* no permite seleccionar texto */
+  margin-bottom: 8px;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Hover en botón subir imagen */
+.file-label:hover {
+  background-color: #09102c;
+}
+
+/* Input file oculto */
+.file-input {
+  display: none;
+}
+
+/* Columna derecha: inputs y textarea */
+.right-column {
+  flex: 2; /* ocupa 2 partes del espacio */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0; /* evita overflow */
+}
+
+/* Etiquetas */
+.right-column label {
+  font-weight: 500;
+  color: #000;
+  font-size: 14px;
+}
+
+/* Inputs y textarea con estilos */
+.right-column input,
+.right-column textarea {
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  width: 100%;
+  resize: none;
+  color: #000;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+  min-width: 0;
+}
+
+/* Bordes rojos para inputs con error */
+.right-column input.error-border,
+.right-column textarea.error-border {
+  border-color: red;
+}
+
+/* Textarea altura mínima */
+.right-column textarea {
+  min-height: 80px;
+}
+
+/* Texto de error pequeño */
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Contenedor de botones centrado */
+.button-group {
   display: flex;
   justify-content: center;
-  align-items: center;
-  font-size: 4rem;
-  color: navy;
-  margin-bottom: 0.5rem;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
 }
 
-.preview-image {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border: 2px solid #ccc;
-  margin-bottom: 0.5rem;
-}
-
-.form-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.form-fields input,
-.form-fields textarea {
-  padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-}
-
-button {
-  background-color: navy;
+/* Estilo botones Limpiar y Añadir */
+.btn-clear,
+.btn-submit {
+  background-color: #0C133F;
   color: white;
-  padding: 0.8rem 1.5rem;
   border: none;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s;
+  min-width: 100px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: center;
 }
 
-button:hover {
-  background-color: #003366;
-}
-.add-product-form {
-  width: 90%;
-  max-width: 900px;
-  margin: auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #ccc;
+/* Hover botones */
+.btn-clear:hover,
+.btn-submit:hover {
+  background-color: #09102c;
 }
 
-.image-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1rem;
+/* Media queries para dispositivos medianos y pequeños */
+@media (max-width: 1024px) {
+  .add-product-form {
+    padding: 25px;
+    gap: 30px;
+  }
+  .image-preview {
+    width: 180px;
+    height: 180px;
+  }
 }
 
-.image-placeholder {
-  width: 150px;
-  height: 150px;
-  background-color: #eee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 4rem;
-  color: navy;
-  margin-bottom: 0.5rem;
+@media (max-width: 768px) {
+  /* Cambia formulario a columna */
+  .add-product-form {
+    flex-direction: column;
+    padding: 20px;
+    gap: 25px;
+    align-items: center;
+  }
+
+  /* Columnas ocupan todo el ancho */
+  .left-column,
+  .right-column {
+    width: 100%;
+    flex: none;
+  }
+
+  /* Imagen más pequeña y centrada */
+  .image-preview {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 16px auto;
+  }
+
+  /* Botones centrados */
+  .button-group {
+    justify-content: center;
+  }
 }
 
-.preview-image {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border: 2px solid #ccc;
-  margin-bottom: 0.5rem;
-}
+@media (max-width: 480px) {
+  .add-product-wrapper {
+    padding: 20px 12px;
+  }
 
-.form-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+  .add-product-wrapper > h2 {
+    font-size: 24px;
+  }
 
-.form-fields input,
-.form-fields textarea {
-  padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-}
+  .add-product-form {
+    padding: 15px;
+    gap: 20px;
+  }
 
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-}
+  .image-preview {
+    width: 160px;
+    height: 160px;
+  }
 
-button {
-  background-color: navy;
-  color: white;
-  padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #003366;
+  .btn-clear,
+  .btn-submit {
+    min-width: 90px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
 }

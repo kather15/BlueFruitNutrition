@@ -269,9 +269,10 @@ body {
   max-height: 65vh;
   overflow-y: auto;
   padding-right: 0.5rem;
+  user-select: none;
 }
 
-/* Scrollbar estilo personalizado para clientes */
+/* Scrollbar estilo para clients */
 .clients-list::-webkit-scrollbar {
   width: 8px;
 }
@@ -284,6 +285,7 @@ body {
   border-radius: 10px;
 }
 
+/* Cliente: contenedor principal */
 .client-card {
   background-color: rgba(12, 19, 63, 0.07);
   padding: 1rem 1.4rem;
@@ -295,53 +297,73 @@ body {
   user-select: none;
 }
 
+/* Hover */
 .client-card:hover {
   background-color: rgba(12, 19, 63, 0.12);
 }
 
-.client-card div {
-  margin-bottom: 0.3rem;
+/* Contenedor info (nombre+rol y email) */
+.client-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
   color: #0C133F;
+  min-width: 200px;
+  flex: 1 1 auto;
+}
+
+/* Nombre y rol en una línea */
+.client-name-role {
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.client-name-role small {
+  font-weight: 400;
+  color: #555;
+  margin-left: 0.4rem;
+  font-size: 0.9rem;
+}
+
+/* Email debajo */
+.client-email {
   font-weight: 600;
-  min-width: 150px;
+  font-size: 0.95rem;
+  color: #555;
+  word-break: break-word;
 }
 
-/* Buscador clientes */
-.client-search {
-  padding: 0.5rem 1rem;
-  font-size: 1.05rem;
-  border-radius: 8px;
-  border: 1.8px solid #cfd4e0;
-  margin-bottom: 1.8rem;
-  width: 100%;
-  max-width: 400px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* Estadísticas */
+.client-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  min-width: 130px;
+  font-weight: 600;
+  color: #0C133F;
 }
 
-.client-search:focus {
-  border-color: #0C133F;
-  box-shadow: 0 0 8px 2px rgba(12, 19, 63, 0.25);
-  outline: none;
-}
-
-/* Responsive design */
+/* Responsive para pantallas pequeñas */
 @media (max-width: 768px) {
+  .client-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .client-info {
+    min-width: 100%;
+  }
+  .client-stats {
+    align-items: flex-start;
+    min-width: 100%;
+    margin-top: 0.5rem;
+  }
   .product-form {
     flex-direction: column;
     align-items: stretch;
   }
-  
   .form-actions {
-    justify-content: center;
-  }
-  
-  .product-card {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-  }
-  
-  .actions {
-    justify-content: center;
+    justify-content: flex-start;
   }
 }

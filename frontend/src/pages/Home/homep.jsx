@@ -9,53 +9,47 @@ const API_DISTRIBUTORS = 'http://localhost:4000/api/distributors';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('products');
-
-  // Datos de productos
   const [products, setProducts] = useState([]);
-  // Datos combinados clientes + distribuidores
   const [clients, setClients] = useState([]);
-
-  // Estado para el producto que se está editando
   const [editingProduct, setEditingProduct] = useState(null);
-  // Formulario de producto
   const [form, setForm] = useState({ name: '', flavor: '', price: '', stock: '' });
-
-  // Estado para filtro de búsqueda clientes y filtro rol
   const [clientSearch, setClientSearch] = useState('');
-  const [clientRoleFilter, setClientRoleFilter] = useState('all'); // 'all', 'customer', 'distributor'
+  const [clientRoleFilter, setClientRoleFilter] = useState('all');
 
-  // Cargar productos desde backend y normalizar id
   const fetchProducts = async () => {
     try {
       const res = await fetch(API_PRODUCTS);
       if (!res.ok) throw new Error('Error al obtener productos');
       const data = await res.json();
-
-      const normalized = data.map(p => ({
-        ...p,
-        id: p.id ?? p._id, // normalizar id
-      }));
-
+      const normalized = data.map(p => ({ ...p, id: p.id ?? p._id }));
       setProducts(normalized);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  // Cargar clientes y distribuidores y normalizar id + rol
   const fetchClientsAndDistributors = async () => {
     try {
       const [resCustomers, resDistributors] = await Promise.all([
         fetch(API_CUSTOMERS),
         fetch(API_DISTRIBUTORS),
       ]);
-      if (!resCustomers.ok || !resDistributors.ok) throw new Error('Error al obtener clientes o distribuidores');
+      if (!resCustomers.ok || !resDistributors.ok)
+        throw new Error('Error al obtener clientes o distribuidores');
 
       const customers = await resCustomers.json();
       const distributors = await resDistributors.json();
 
-      const customersWithRole = customers.map(c => ({ ...c, role: 'customer', id: c.id ?? c._id }));
-      const distributorsWithRole = distributors.map(d => ({ ...d, role: 'distributor', id: d.id ?? d._id }));
+      const customersWithRole = customers.map(c => ({
+        ...c,
+        role: 'customer',
+        id: c.id ?? c._id,
+      }));
+      const distributorsWithRole = distributors.map(d => ({
+        ...d,
+        role: 'distributor',
+        id: d.id ?? d._id,
+      }));
 
       setClients([...customersWithRole, ...distributorsWithRole]);
     } catch (error) {
@@ -63,25 +57,21 @@ const AdminPanel = () => {
     }
   };
 
-  // Carga inicial de datos
   useEffect(() => {
     fetchProducts();
     fetchClientsAndDistributors();
   }, []);
 
-  // Maneja cambio en inputs de formulario producto
   const handleChange = e => {
     const { name, value } = e.target;
     if ((name === 'price' || name === 'stock') && value !== '') {
-      if (!/^\d*\.?\d*$/.test(value)) return; // valida solo números y punto decimal
+      if (!/^\d*\.?\d*$/.test(value)) return;
     }
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  // Crear o actualizar producto en backend
   const handleSubmit = async e => {
     e.preventDefault();
-
     if (!form.name.trim() || !form.flavor.trim() || form.price === '' || form.stock === '') {
       toast.error('Completa todos los campos correctamente');
       return;
@@ -97,7 +87,6 @@ const AdminPanel = () => {
 
     try {
       if (editingProduct) {
-        // Actualizar producto
         const res = await fetch(`${API_PRODUCTS}/${editingProduct.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -109,44 +98,24 @@ const AdminPanel = () => {
           }),
         });
         if (!res.ok) throw new Error('Error al actualizar producto');
-
         await fetchProducts();
         toast.success('Producto actualizado correctamente');
         setEditingProduct(null);
-      } else {
-        // Crear nuevo producto
-        const res = await fetch(API_PRODUCTS, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: form.name.trim(),
-            flavor: form.flavor.trim(),
-            price: priceNum,
-            stock: stockNum,
-          }),
-        });
-        if (!res.ok) throw new Error('Error al agregar producto');
-
-        await fetchProducts();
-        toast.success('Producto agregado correctamente');
+        setForm({ name: '', flavor: '', price: '', stock: '' });
       }
-      setForm({ name: '', flavor: '', price: '', stock: '' });
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  // Eliminar producto sin confirmación
   const handleDelete = async id => {
     try {
       const res = await fetch(`${API_PRODUCTS}/${id}`, {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Error al eliminar producto');
-
       await fetchProducts();
       toast.success('Producto eliminado');
-
       if (editingProduct?.id === id) {
         setEditingProduct(null);
         setForm({ name: '', flavor: '', price: '', stock: '' });
@@ -156,10 +125,8 @@ const AdminPanel = () => {
     }
   };
 
-  // Cargar datos de producto en formulario para editar con protección
   const startEdit = product => {
     if (!product) return;
-
     setEditingProduct(product);
     setForm({
       name: product.name || '',
@@ -169,103 +136,63 @@ const AdminPanel = () => {
     });
   };
 
-  // Cancelar edición
   const cancelEdit = () => {
     setEditingProduct(null);
     setForm({ name: '', flavor: '', price: '', stock: '' });
   };
 
-  // Filtrar clientes según búsqueda y rol
   const filteredClients = useMemo(() => {
     const term = clientSearch.toLowerCase();
     return clients
-      .filter(c => c.name.toLowerCase().includes(term) || c.email.toLowerCase().includes(term))
+      .filter(c => {
+        const name = c.name?.toLowerCase() ?? '';
+        const email = c.email?.toLowerCase() ?? '';
+        return name.includes(term) || email.includes(term);
+      })
       .filter(c => (clientRoleFilter === 'all' ? true : c.role === clientRoleFilter));
   }, [clients, clientSearch, clientRoleFilter]);
 
-  // Estadísticas
   const totalProducts = products.length;
   const totalClients = clients.length;
   const totalSales = products.reduce((sum, p) => sum + p.price * p.stock, 0).toFixed(2);
 
   return (
     <div className="admin-panel">
-      {/* Sidebar - Siempre visible */}
       <aside className="sidebar">
         <h2>BlueFruit Nutrition</h2>
-
         <button
           className={activeTab === 'products' ? 'active' : ''}
           onClick={() => setActiveTab('products')}
-          aria-label="Ir a gestión de productos"
         >
           <Package /> Productos
         </button>
-
-        <button
-          className={activeTab === 'stats' ? 'active' : ''}
-          onClick={() => setActiveTab('stats')}
-          aria-label="Ver estadísticas"
-        >
+        <button className={activeTab === 'stats' ? 'active' : ''} onClick={() => setActiveTab('stats')}>
           <BarChart2 /> Estadísticas
         </button>
-
-        <button
-          className={activeTab === 'clients' ? 'active' : ''}
-          onClick={() => setActiveTab('clients')}
-          aria-label="Ver clientes y distribuidores"
-        >
+        <button className={activeTab === 'clients' ? 'active' : ''} onClick={() => setActiveTab('clients')}>
           <Users /> Clientes
         </button>
       </aside>
 
-      {/* Main Content */}
       <main className="main-content">
-        {/* Productos */}
         {activeTab === 'products' && (
           <>
             <h1>Gestión de Productos</h1>
-            <form className="product-form" onSubmit={handleSubmit} noValidate>
-              <input
-                name="name"
-                placeholder="Nombre"
-                value={form.name}
-                onChange={handleChange}
-                autoComplete="off"
-                required
-              />
-              <input
-                name="flavor"
-                placeholder="Sabor"
-                value={form.flavor}
-                onChange={handleChange}
-                autoComplete="off"
-                required
-              />
-              <input
-                name="price"
-                type="text"
-                placeholder="Precio"
-                value={form.price}
-                onChange={handleChange}
-                required
-              />
-              <input
-                name="stock"
-                type="text"
-                placeholder="Stock"
-                value={form.stock}
-                onChange={handleChange}
-                required
-              />
 
+            {!editingProduct && (
+              <p style={{ marginBottom: '1rem', color: '#0C133F', fontWeight: '600' }}>
+                Selecciona un producto para editar
+              </p>
+            )}
+
+            <form className="product-form" onSubmit={handleSubmit}>
+              <input name="name" placeholder="Nombre" value={form.name} onChange={handleChange} disabled={!editingProduct} />
+              <input name="flavor" placeholder="Sabor" value={form.flavor} onChange={handleChange} disabled={!editingProduct} />
+              <input name="price" placeholder="Precio" value={form.price} onChange={handleChange} disabled={!editingProduct} />
+              <input name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} disabled={!editingProduct} />
               <div className="form-actions">
-                <button type="submit">{editingProduct ? 'Actualizar' : 'Agregar'}</button>
-                {editingProduct && (
-                  <button type="button" onClick={cancelEdit} className="cancel-btn">
-                    Cancelar
-                  </button>
-                )}
+                {editingProduct && <button type="submit">Actualizar</button>}
+                {editingProduct && <button type="button" className="cancel-btn" onClick={cancelEdit}>Cancelar</button>}
               </div>
             </form>
 
@@ -279,14 +206,9 @@ const AdminPanel = () => {
                       <strong>{product.name}</strong> ({product.flavor})<br />
                       Precio: ${product.price.toFixed(2)} - Stock: {product.stock}
                     </div>
-
                     <div className="actions">
-                      <button onClick={() => startEdit(product)} title="Editar" className="edit-btn">
-                        <Edit size={18} />
-                      </button>
-                      <button onClick={() => handleDelete(product.id)} title="Eliminar" className="delete-btn">
-                        <Trash2 size={18} />
-                      </button>
+                      <button onClick={() => startEdit(product)} className="edit-btn"><Edit size={18} /></button>
+                      <button onClick={() => handleDelete(product.id)} className="delete-btn"><Trash2 size={18} /></button>
                     </div>
                   </div>
                 ))
@@ -295,71 +217,43 @@ const AdminPanel = () => {
           </>
         )}
 
-        {/* Estadísticas */}
         {activeTab === 'stats' && (
           <>
             <h1>Estadísticas</h1>
             <div className="stats-cards">
-              <div className="stat-card">
-                <h2>{totalProducts}</h2>
-                <p>Productos disponibles</p>
-              </div>
-              <div className="stat-card">
-                <h2>${totalSales}</h2>
-                <p>Ingresos estimados</p>
-              </div>
-              <div className="stat-card">
-                <h2>{totalClients}</h2>
-                <p>Clientes y distribuidores</p>
-              </div>
+              <div className="stat-card"><h2>{totalProducts}</h2><p>Productos</p></div>
+              <div className="stat-card"><h2>${totalSales}</h2><p>Ingresos</p></div>
+              <div className="stat-card"><h2>{totalClients}</h2><p>Clientes y Distribuidores</p></div>
             </div>
           </>
         )}
 
-        {/* Clientes + Distribuidores */}
         {activeTab === 'clients' && (
           <>
             <h1>Clientes y Distribuidores</h1>
-
-            {/* Filtros */}
             <div className="filters-container">
-              <input
-                type="search"
-                placeholder="Buscar por nombre o email"
-                value={clientSearch}
-                onChange={e => setClientSearch(e.target.value)}
-                className="client-search"
-                autoComplete="off"
-                aria-label="Buscar clientes o distribuidores"
-              />
-              <select
-                value={clientRoleFilter}
-                onChange={e => setClientRoleFilter(e.target.value)}
-                aria-label="Filtrar por rol"
-                className="role-filter"
-              >
+              <input type="search" placeholder="Buscar por nombre o email" value={clientSearch} onChange={e => setClientSearch(e.target.value)} className="client-search" />
+              <select value={clientRoleFilter} onChange={e => setClientRoleFilter(e.target.value)} className="role-filter">
                 <option value="all">Todos</option>
                 <option value="customer">Clientes</option>
                 <option value="distributor">Distribuidores</option>
               </select>
             </div>
 
-            {/* Lista */}
             <div className="clients-list">
               {filteredClients.length === 0 ? (
                 <p>No se encontraron resultados.</p>
               ) : (
                 filteredClients.map(client => (
                   <div key={client.id} className="client-card">
-                    <div>
-                      <strong>{client.name}</strong>{' '}
-                      <small style={{ fontWeight: 'normal', color: '#555' }}>
-                        ({client.role === 'customer' ? 'Cliente' : 'Distribuidor'})
-                      </small>
-                      <br />
-                      <small>{client.email}</small>
+                    <div className="client-info">
+                      <div className="client-name-role">
+                        <strong>{client.name}</strong>{' '}
+                        <small>({client.role === 'customer' ? 'Cliente' : 'Distribuidor'})</small>
+                      </div>
+                      <div className="client-email">{client.email}</div>
                     </div>
-                    <div>
+                    <div className="client-stats">
                       <p>Compras: {client.purchases ?? '-'}</p>
                       <p>Gastado: ${client.spent?.toFixed(2) ?? '-'}</p>
                     </div>

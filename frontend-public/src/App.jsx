@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
 // Context
@@ -10,7 +10,6 @@ import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
 import ProtectedRoute from './components/PrivateRoute/PrivateRoute';
 import Error404Public from './components/NotFound/NotFoundPublic';
-
 
 // Pages - Públicas
 import Home from './pages/Home/Home';
@@ -29,29 +28,38 @@ import NewPassword from './pages/RecoveryPassword/NewPasssword';
 // Pages - Privadas
 import Carrito from './pages/Carrito/Carrito';
 import Pay from './pages/Pay/pay';
-import SeleccionarGel from './pages/Personalizar/SeleccionarGel';
-import SaborPage from './pages/Personalizar/Sabores/SaborPage';
-import ProductDetail from './pages/Personalizar/productGallery/Product';
 import Suscripciones from './pages/Suscripciones/Suscripciones';
+import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
+import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
 
 function App() {
+  const location = useLocation();
+
+  // Rutas donde ocultar Nav y Footer
+  const hideNavFooterRoutes = ['/login', '/registro'];
+  const hideNavFooter = hideNavFooterRoutes.includes(location.pathname);
+
   return (
     <AuthProvider>
-      <div className="App">
-        <Toaster 
-          position="top-center" 
+      <>
+        <Toaster
+          position="top-right"
           reverseOrder={false}
           toastOptions={{
-            duration: 3000,
             style: {
-              background: '#363636',
+              background: '#0C133F',
               color: '#fff',
+              fontSize: '16px',
+              zIndex: 99999,
             },
           }}
+          containerStyle={{
+            marginTop: '100px',
+          }}
         />
-        
-        <Nav />
-        
+
+        {!hideNavFooter && <Nav />}
+
         <Routes>
           {/* RUTAS PÚBLICAS */}
           <Route path="/" element={<Home />} />
@@ -70,21 +78,19 @@ function App() {
           {/* RUTAS PRIVADAS */}
           <Route path="/carrito" element={<ProtectedRoute><Carrito /></ProtectedRoute>} />
           <Route path="/pay" element={<ProtectedRoute><Pay /></ProtectedRoute>} />
-          <Route path="/gel" element={<ProtectedRoute><SeleccionarGel /></ProtectedRoute>} />
-          <Route path="/sabores" element={<ProtectedRoute><SaborPage /></ProtectedRoute>} />
-          <Route path="/detail" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
           <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
-        
- {/* RUTA CATCH-ALL PARA 404 */}
-    <Route path="*" element={<Error404Public />} />
+          <Route path="/Metodo" element={<ProtectedRoute><MetodoDePago /></ProtectedRoute>} />
+          <Route path="/personalizar" element={<ProtectedRoute><Personalizar /></ProtectedRoute>} />
 
+          {/* RUTA CATCH-ALL PARA 404 */}
+          <Route path="*" element={<Error404Public />} />
         </Routes>
-        
-        <Footer />
-        
-      </div>
+
+        {!hideNavFooter && <Footer />}
+      </>
     </AuthProvider>
   );
 }
 
 export default App;
+

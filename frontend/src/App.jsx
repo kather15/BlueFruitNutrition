@@ -1,30 +1,37 @@
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import NavBar from './components/Nav/Nav';
-import Footer from './components/Footer/Footer';
 
-// Páginas principales
-import AddProduct from './pages/AddProducts/AddProduct';
-import Products1 from './pages/Products/Products1';
-import Suscripciones from './pages/Suscripcionees/Suscripcionees';
-import Ordenes from './pages/Ordenes/Ordenes';
-import Homep from './pages/Home/Homep';
+// Context
+import { AuthProvider } from './context/useAuth';
+
+// Components
+import Nav from './components/Nav/Nav';
+import Footer from './components/Footer/Footer';
+import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
+import Error404Private from './components/NotFound/NotFoundPrivate.jsx'; // 404 admin
+
+// Pages - Login (público)
+import Login from './pages/Login/Login';
 import RequestCode from './pages/RecoveryPassword/RequestCode';
 import VerifyCode from './pages/RecoveryPassword/VerifyCode';
 import NewPassword from './pages/RecoveryPassword/NewPasssword';
+
+// Pages - Admin (protegidas)
+import HomeP from './pages/Home/homep';
+import Products1 from './pages/Products/Products1';
+import Suscripciones from './pages/Suscripcionees/Suscripcionees';
+import Ordenes from './pages/Ordenes/Ordenes';
 import Ventas from './pages/Ventas/Ventas.jsx';
-import Usuarios from './pages/Users/UsersList.jsx';
-import Login from './pages/Login/Login.jsx'; 
-import Error404Private from './components/NotFound/NotFoundPrivate.jsx'; // ⬅ IMPORTACIÓN
+import UsersList from './pages/Users/UsersList';
+import UserForm from './pages/Users/UserForm';
+import PerfilAdmin from './pages/AdminPorfile/PerfilAdmin';
 
-
-// Componente envolvente para manejar Nav y Footer
 function AppContent() {
   const location = useLocation();
 
-  // Rutas donde NO quieres que aparezcan el NavBar y el Footer
+  // Rutas donde NO mostrar Nav y Footer
   const hideLayoutRoutes = ['/', '/enviar-codigo', '/verificar-codigo', '/nueva-contraseña'];
-
   const shouldHideLayout = hideLayoutRoutes.includes(location.pathname);
 
   return (
@@ -41,35 +48,36 @@ function AppContent() {
           },
         }}
         containerStyle={{
-          marginTop: '100px', 
+          marginTop: '100px',
         }}
       />
 
-      {/* Mostrar NavBar solo si no está en las rutas ocultas */}
-      {!shouldHideLayout && <NavBar />}
+      {!shouldHideLayout && <Nav />}
 
       <div className="main-content" style={{ paddingTop: !shouldHideLayout ? '100px' : '0' }}>
         <Routes>
+          {/* Rutas públicas */}
           <Route path="/" element={<Login />} />
-          <Route path="/productos1" element={<Products1 />} />
-          <Route path="/addProduct" element={<AddProduct />} />
-          <Route path="/ordenes" element={<Ordenes />} />
-          <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/home" element={<Homep />} />
-          <Route path="/homep" element={<Homep />} />
           <Route path="/enviar-codigo" element={<RequestCode />} />
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
-          <Route path="/ventas" element={<Ventas />} />
-          <Route path="/usuarios" element={<Usuarios />} />
 
-           {/* Ruta comodín para páginas no encontradas */}
+          {/* Rutas protegidas */}
+          <Route path="/home" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
+          <Route path="/homep" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
+          <Route path="/productos1" element={<ProtectedRoute><Products1 /></ProtectedRoute>} />
+          <Route path="/ordenes" element={<ProtectedRoute><Ordenes /></ProtectedRoute>} />
+          <Route path="/ventas" element={<ProtectedRoute><Ventas /></ProtectedRoute>} />
+          <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
+          <Route path="/usuarios" element={<ProtectedRoute><UsersList /></ProtectedRoute>} />
+          <Route path="/users/edit/:type/:id" element={<ProtectedRoute><UserForm /></ProtectedRoute>} />
+          <Route path="/perfil" element={<ProtectedRoute><PerfilAdmin /></ProtectedRoute>} />
+
+          {/* 404 admin */}
           <Route path="*" element={<Error404Private />} />
-
         </Routes>
       </div>
 
-      {/* Mostrar Footer solo si no está en las rutas ocultas */}
       {!shouldHideLayout && <Footer />}
     </>
   );
@@ -77,10 +85,13 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 }
 
-export default App;
+export default App;
+
