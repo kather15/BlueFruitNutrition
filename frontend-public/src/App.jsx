@@ -13,7 +13,7 @@ import Error404Public from './components/NotFound/NotFoundPublic';
 
 // Pages - Públicas
 import Home from './pages/Home/Home';
-import ProductsC from './pages/Products/ProductsC';
+import ProductsMenu from './pages/Products/ProductsMenu';
 import ProductsReview from './pages/Products/ProductsReview';
 import SobreNosotros from './pages/SobreNosotros/SobreNosotros';
 import Contact from './components/Contact/Contact';
@@ -63,7 +63,7 @@ function App() {
         <Routes>
           {/* RUTAS PÚBLICAS */}
           <Route path="/" element={<Home />} />
-          <Route path="/product" element={<ProductsC />} />
+          <Route path="/product" element={<ProductsMenu />} />
           <Route path="/producto/:id" element={<ProductsReview />} />
           <Route path="/sobre-nosotros" element={<SobreNosotros />} />
           <Route path="/contact" element={<Contact />} />
