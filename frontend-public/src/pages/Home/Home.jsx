@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Home.css';
 import { Link } from 'react-router-dom'
+import { useForm } from "react-hook-form"
+import Contacto from '../../components/Contact/Contact';
 
 
 const productos = [
@@ -10,8 +12,23 @@ const productos = [
   { nombre: 'Ener Balance', imagen: '/EnerBalance.png' },
 ];
 
+ 
+
 const Home = () => {
   const [productoActivo, setProductoActivo] = useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log("Formulario enviado:", data);
+    alert("¡Mensaje enviado con éxito!");
+    reset(); // Limpia el formulario
+  };
 
   return (
     <div className="blue-fruit-home">
@@ -122,34 +139,15 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      <main>
-        <section className="blue-fruit-contact-section">
-          <div className="blue-fruit-contact-wrapper">
-            <div className="blue-fruit-contact-info">
-              <h2>Contáctanos</h2>
-              <h3>Llámanos</h3>
-              <p>Estamos disponibles 24 horas al día, 7 días a la semana.</p>
-              <p>Celular: +503 6859 7103</p>
+      {/* Sección Nuestro de contactos */}
+       <main>
+      {/* Otras secciones del home */}
+      
+      {/* Sección de contacto */}
+      <Contacto />
 
-              <hr />
-
-              <h3>Escríbenos</h3>
-              <p>Llena nuestro formulario y nos pondremos en contacto contigo en 24 horas.</p>
-              <p>Email: info@blueletrunutrition.com</p>
-            </div>
-
-            <div className="blue-fruit-contact-form">
-              <form onSubmit={(e) => e.preventDefault()}>
-                <input type="text" placeholder="Tu Nombre*" required />
-                <input type="email" placeholder="Tu Email*" required />
-                <input type="tel" placeholder="Tu Celular*" required />
-                <textarea placeholder="Tu mensaje" rows="5" required></textarea>
-                <button type="submit">Enviar Mensaje</button>
-              </form>
-            </div>
-          </div>
-        </section>
-      </main>
+      {/* Más contenido si hay */}
+    </main>
     </div>
   );
 };
