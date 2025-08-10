@@ -6,17 +6,28 @@
   justify-content: center;
   align-items: center;
   color: #0c133F;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Poppins', sans-serif;
   text-align: center;
-  padding: 0 20px;
+  padding-top: 2px;
 }
 
 .error404-private-title {
-  font-family: 'Inter Black', 'Inter', sans-serif;
-  font-weight: 900;
-  font-size: 9rem;
+  font-family: 'Poppins Black', 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 8rem;
   margin: 0;
+  margin-bottom: 0px;
+  line-height: 1;
 }
+
+.error404-public-image {
+ width: 300px;  
+  margin-bottom: 5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;    
+}
+
 
 .error404-private-subtitle {
   font-family: 'Inter Medium', 'Inter', sans-serif;
@@ -27,12 +38,10 @@
 }
 
 .error404-private-text {
-  font-family: 'Inter Regular', 'Inter', sans-serif;
+  font-family: 'Poppins Regular', 'Poppins', sans-serif;
   font-weight: 400;
   margin-top: 0.5rem;
-  max-width: 400px;
   color: rgba(12, 19, 63, 0.83);
-  text-align: center;
 }
 
 .error404-private-buttons {

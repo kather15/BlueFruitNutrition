@@ -1,22 +1,25 @@
 .sobre-container {
   
   font-family: 'Segoe UI', sans-serif;
-  color: #333;
+  color: #001f4d;
 }
 
 .historia {
+  color:#000000;
   padding: 4rem 2rem;
   background-color: #f5f5f5;
   text-align: center;
 }
 
 .historia-content {
+   margin-bottom: 2rem;
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
   justify-content: center;
   align-items: center;
   margin-top: 2rem;
+  
 }
 
 .historia-text {
@@ -36,12 +39,26 @@
 }
 
 .estadisticas {
+  
   display: flex;
   justify-content: center;
   gap: 1rem;
   padding: 3rem 2rem;
   background: white;
   flex-wrap: wrap;
+}
+.img-white {
+  background-color: #001f4d; /* Fondo azul oscuro */
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 60px;
+  display: block;
+  margin: 0 auto 1rem;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+.img-white:hover {
+  background-color: #001f4d; /* Fondo azul al pasar el mouse */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .card {
@@ -50,17 +67,19 @@
   text-align: center;
   border-radius: 10px;
   width: 150px;
+   transition: background-color 0.3s ease;
+  cursor: pointer; /* opcional, para que se note que es interactivo */
+}
+.card:hover {
+  background-color: #001f4d; /* Fondo azul al hacer hover */
+  color: white; /* Cambia texto a blanco para mejor contraste */
 }
 
-.card.principal {
-  background: #001f4d;
-  color: white;
-  transform: scale(1.05);
-}
+
 
 .equipo {
   
-  
+  color:#000000;
   padding: 4rem 2rem;
   background-color: #f5f5f5;
   text-align: center;
@@ -78,8 +97,8 @@
 .miembro img {
   width: 150px;
   height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
+  object-fit: cover; 
+  border-radius: 0; 
 }
 
 .iconos {
@@ -91,14 +110,20 @@
   text-align: center;
 }
 
-.icono i {
-  font-size: 2rem;
-  color: #001f4d;
-  margin-bottom: 0.5rem;
+.icono {
+  font-size: 14px;
+  color: #000000;
+  line-height: 1.4;
+  margin-top: 5px;
+  max-width: 200px;
+  width: 200px; /* ancho fijo para que el texto se ajuste bien */
+  white-space: normal; /* asegura que el texto pueda hacer salto de línea */
+  overflow-wrap: break-word; /* para romper palabras largas si hiciera falta */
 }
 
+
 .footer {
-  background: #001f4d;
+  background: #000000;
   color: white;
   padding: 2rem;
   font-size: 0.9rem;

@@ -9,6 +9,8 @@ const Error404Public = () => {
       <p className="error404-public-text">
         Lo sentimos, la página que buscas no existe.
       </p>
+        <img src="/MoraConfundida.png" alt="Mora confundida" className="error404-public-image" />
+
       <a href="/" className="error404-public-button">
         Volver al inicio
       </a>

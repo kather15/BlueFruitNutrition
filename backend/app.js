@@ -1,9 +1,9 @@
-//Dependencias--------------------------------------------------------------------------------
+// Dependencias--------------------------------------------------------------------------------
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-//Rutas----------------------------------------------------------------------------------------
+// Rutas----------------------------------------------------------------------------------------
 import productsRoutes from "./src/routes/products.js";
 import customersRouter from "./src/routes/customers.js";
 import distributorsRoutes from "./src/routes/distributors.js";
@@ -23,7 +23,7 @@ const app = express();
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:5174"], // Permite ambos puertos
-    credentials: true
+    credentials: true,
   })
 );
 
@@ -39,11 +39,12 @@ app.use("/api/passwordRecovery", passwordRecoveryRoutes);
 app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
 app.use("/api/shoppingCart", shoppingCartRoutes);
-app.use('/api/subscriptions', subscriptionRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/ordenes", ordenes);
 app.use("/api/reviews", ReviewRouters);
-app.use('/api', ContactRoutes);
+app.use("/api", ContactRoutes);
 
 export default app;
 
-//en package.json poner"   "type": "module",  
+// Recuerda agregar en package.json:
+// "type": "module"

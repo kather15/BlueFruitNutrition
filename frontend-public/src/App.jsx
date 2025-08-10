@@ -9,12 +9,13 @@ import { AuthProvider } from './context/useAuth';
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
 import ProtectedRoute from './components/PrivateRoute/PrivateRoute';
+import Error404Public from './components/NotFound/NotFoundPublic';
 
 // Pages - Públicas
 import Home from './pages/Home/Home';
 import ProductsC from './pages/Products/ProductsC';
 import ProductsReview from './pages/Products/ProductsReview';
-import Historia from './pages/Historia/Historia';
+import SobreNosotros from './pages/SobreNosotros/SobreNosotros';
 import Contact from './components/Contact/Contact';
 
 // Pages - Autenticación
@@ -40,49 +41,88 @@ function App() {
 
   return (
     <AuthProvider>
-      {/* Toaster con estilo de la rama Rodri */}
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-        toastOptions={{
-          style: {
-            background: '#0C133F',
-            color: '#fff',
-            fontSize: '16px',
-            zIndex: 99999,
-          },
-        }}
-        containerStyle={{
-          marginTop: '100px',
-        }}
-      />
+      <>
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          toastOptions={{
+            style: {
+              background: '#0C133F',
+              color: '#fff',
+              fontSize: '16px',
+              zIndex: 99999,
+            },
+          }}
+          containerStyle={{
+            marginTop: '100px',
+          }}
+        />
 
-      {!hideNavFooter && <Nav />}
+        {!hideNavFooter && <Nav />}
 
-      <Routes>
-        {/* RUTAS PÚBLICAS */}
-        <Route path="/" element={<Home />} />
-        <Route path="/product" element={<ProductsC />} />
-        <Route path="/producto/:id" element={<ProductsReview />} />
-        <Route path="/sobre-nosotros" element={<Historia />} />
-        <Route path="/contact" element={<Contact />} />
+        <Routes>
+          {/* RUTAS PÚBLICAS */}
+          <Route path="/" element={<Home />} />
+          <Route path="/product" element={<ProductsC />} />
+          <Route path="/producto/:id" element={<ProductsReview />} />
+          <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+          <Route path="/contact" element={<Contact />} />
 
-        {/* RUTAS DE AUTENTICACIÓN */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Register />} />
-        <Route path="/enviar-codigo" element={<RequestCode />} />
-        <Route path="/verificar-codigo" element={<VerifyCode />} />
-        <Route path="/nueva-contraseña" element={<NewPassword />} />
+          {/* RUTAS DE AUTENTICACIÓN */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Register />} />
+          <Route path="/enviar-codigo" element={<RequestCode />} />
+          <Route path="/verificar-codigo" element={<VerifyCode />} />
+          <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-        {/* RUTAS PRIVADAS */}
-        <Route path="/carrito" element={<ProtectedRoute><Carrito /></ProtectedRoute>} />
-        <Route path="/pay" element={<ProtectedRoute><Pay /></ProtectedRoute>} />
-        <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
-        <Route path="/Metodo" element={<ProtectedRoute><MetodoDePago /></ProtectedRoute>} />
-        <Route path="/personalizar" element={<ProtectedRoute><Personalizar /></ProtectedRoute>} />
-      </Routes>
+          {/* RUTAS PRIVADAS */}
+          <Route
+            path="/carrito"
+            element={
+              <ProtectedRoute>
+                <Carrito />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/pay"
+            element={
+              <ProtectedRoute>
+                <Pay />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/suscripciones"
+            element={
+              <ProtectedRoute>
+                <Suscripciones />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/Metodo"
+            element={
+              <ProtectedRoute>
+                <MetodoDePago />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/personalizar"
+            element={
+              <ProtectedRoute>
+                <Personalizar />
+              </ProtectedRoute>
+            }
+          />
 
-      {!hideNavFooter && <Footer />}
+          {/* RUTA CATCH-ALL PARA 404 */}
+          <Route path="*" element={<Error404Public />} />
+        </Routes>
+
+        {!hideNavFooter && <Footer />}
+      </>
     </AuthProvider>
   );
 }

@@ -9,24 +9,23 @@ import { AuthProvider } from './context/useAuth';
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
 import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
+import Error404Private from './components/NotFound/NotFoundPrivate.jsx'; // 404 admin
 
 // Pages - Login (público)
 import Login from './pages/Login/Login';
+import RequestCode from './pages/RecoveryPassword/RequestCode';
+import VerifyCode from './pages/RecoveryPassword/VerifyCode';
+import NewPassword from './pages/RecoveryPassword/NewPasssword';
 
 // Pages - Admin (protegidas)
 import HomeP from './pages/Home/homep';
 import Products1 from './pages/Products/Products1';
-import Ordenes from './pages/Ordenes/Ordenes';
-import Ventas from './pages/Ventas/Ventas';
 import Suscripciones from './pages/Suscripcionees/Suscripcionees';
+import Ordenes from './pages/Ordenes/Ordenes';
+import Ventas from './pages/Ventas/Ventas.jsx';
 import UsersList from './pages/Users/UsersList';
 import UserForm from './pages/Users/UserForm';
 import PerfilAdmin from './pages/AdminPorfile/PerfilAdmin';
-
-// Recuperación de contraseña
-import RequestCode from './pages/RecoveryPassword/RequestCode';
-import VerifyCode from './pages/RecoveryPassword/VerifyCode';
-import NewPassword from './pages/RecoveryPassword/NewPasssword';
 
 function AppContent() {
   const location = useLocation();
@@ -37,7 +36,6 @@ function AppContent() {
 
   return (
     <>
-      {/* Toaster con estilo Rodri */}
       <Toaster
         position="top-right"
         reverseOrder={false}
@@ -75,40 +73,8 @@ function AppContent() {
           <Route path="/users/edit/:type/:id" element={<ProtectedRoute><UserForm /></ProtectedRoute>} />
           <Route path="/perfil" element={<ProtectedRoute><PerfilAdmin /></ProtectedRoute>} />
 
-          {/* 404 */}
-          <Route path="*" element={
-            <ProtectedRoute>
-              <div style={{
-                textAlign: 'center',
-                padding: '4rem 2rem',
-                fontSize: '1.2rem',
-                backgroundColor: '#f5f8fa',
-                minHeight: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <div style={{
-                  background: 'white',
-                  padding: '3rem 4rem',
-                  borderRadius: '15px',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                  maxWidth: '500px'
-                }}>
-                  <h2 style={{
-                    color: '#0C133F',
-                    marginBottom: '1rem',
-                    fontSize: '1.8rem'
-                  }}>
-                    📄 Página no encontrada
-                  </h2>
-                  <p style={{ color: '#6b7280', fontSize: '1.1rem' }}>
-                    La página de administración que buscas no existe.
-                  </p>
-                </div>
-              </div>
-            </ProtectedRoute>
-          } />
+          {/* 404 admin */}
+          <Route path="*" element={<Error404Private />} />
         </Routes>
       </div>
 
