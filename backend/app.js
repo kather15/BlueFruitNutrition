@@ -14,7 +14,7 @@ import loginRoutes from "./src/routes/login.js";
 import logoutRoutes from "./src/routes/logout.js";
 import subscriptionRoutes from './src/routes/subscriptions.js';
 import shoppingCartRoutes from './src/routes/shoppingCart.js';
-import ordenes from './src/routes/ordenes.js';
+import ordenesRoutes from './src/routes/ordenes.js';
 import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
 
@@ -40,11 +40,8 @@ app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
 app.use("/api/shoppingCart", shoppingCartRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
-app.use("/api/ordenes", ordenes);
+app.use("/api/ordenes", ordenesRoutes);
 app.use("/api/reviews", ReviewRouters);
 app.use("/api", ContactRoutes);
 
 export default app;
-
-// Recuerda agregar en package.json:
-// "type": "module"

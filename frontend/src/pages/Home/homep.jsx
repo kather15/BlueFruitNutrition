@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 const API_PRODUCTS = 'http://localhost:4000/api/products';
 const API_CUSTOMERS = 'http://localhost:4000/api/customers';
 const API_DISTRIBUTORS = 'http://localhost:4000/api/distributors';
+// URL para obtener total de órdenes en proceso
+const API_ORDENES_EN_PROCESO = 'http://localhost:4000/api/ordenes/enProceso/total';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('products');
@@ -15,7 +17,10 @@ const AdminPanel = () => {
   const [form, setForm] = useState({ name: '', flavor: '', price: '', stock: '' });
   const [clientSearch, setClientSearch] = useState('');
   const [clientRoleFilter, setClientRoleFilter] = useState('all');
+  // Estado para cantidad de órdenes en proceso
+  const [ordersInProcess, setOrdersInProcess] = useState(0);
 
+  // Obtener productos
   const fetchProducts = async () => {
     try {
       const res = await fetch(API_PRODUCTS);
@@ -28,6 +33,7 @@ const AdminPanel = () => {
     }
   };
 
+  // Obtener clientes y distribuidores
   const fetchClientsAndDistributors = async () => {
     try {
       const [resCustomers, resDistributors] = await Promise.all([
@@ -57,19 +63,35 @@ const AdminPanel = () => {
     }
   };
 
+  // Obtener total órdenes en proceso
+  const fetchOrdersInProcess = async () => {
+    try {
+      const res = await fetch(API_ORDENES_EN_PROCESO);
+      if (!res.ok) throw new Error('Error al obtener órdenes en proceso');
+      const data = await res.json();
+      setOrdersInProcess(data.totalEnProceso ?? 0);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // Se ejecuta una vez al montar el componente
   useEffect(() => {
     fetchProducts();
     fetchClientsAndDistributors();
+    fetchOrdersInProcess();
   }, []);
 
+  // Maneja cambios en los inputs del formulario
   const handleChange = e => {
     const { name, value } = e.target;
     if ((name === 'price' || name === 'stock') && value !== '') {
-      if (!/^\d*\.?\d*$/.test(value)) return;
+      if (!/^\d*\.?\d*$/.test(value)) return; // Solo números y punto decimal
     }
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
+  // Función para enviar el formulario de edición de producto
   const handleSubmit = async e => {
     e.preventDefault();
     if (!form.name.trim() || !form.flavor.trim() || form.price === '' || form.stock === '') {
@@ -108,6 +130,7 @@ const AdminPanel = () => {
     }
   };
 
+  // Eliminar producto
   const handleDelete = async id => {
     try {
       const res = await fetch(`${API_PRODUCTS}/${id}`, {
@@ -125,6 +148,7 @@ const AdminPanel = () => {
     }
   };
 
+  // Iniciar edición de producto
   const startEdit = product => {
     if (!product) return;
     setEditingProduct(product);
@@ -136,11 +160,13 @@ const AdminPanel = () => {
     });
   };
 
+  // Cancelar edición
   const cancelEdit = () => {
     setEditingProduct(null);
     setForm({ name: '', flavor: '', price: '', stock: '' });
   };
 
+  // Filtrar clientes y distribuidores
   const filteredClients = useMemo(() => {
     const term = clientSearch.toLowerCase();
     return clients
@@ -154,7 +180,6 @@ const AdminPanel = () => {
 
   const totalProducts = products.length;
   const totalClients = clients.length;
-  const totalSales = products.reduce((sum, p) => sum + p.price * p.stock, 0).toFixed(2);
 
   return (
     <div className="admin-panel">
@@ -166,10 +191,16 @@ const AdminPanel = () => {
         >
           <Package /> Productos
         </button>
-        <button className={activeTab === 'stats' ? 'active' : ''} onClick={() => setActiveTab('stats')}>
+        <button
+          className={activeTab === 'stats' ? 'active' : ''}
+          onClick={() => setActiveTab('stats')}
+        >
           <BarChart2 /> Estadísticas
         </button>
-        <button className={activeTab === 'clients' ? 'active' : ''} onClick={() => setActiveTab('clients')}>
+        <button
+          className={activeTab === 'clients' ? 'active' : ''}
+          onClick={() => setActiveTab('clients')}
+        >
           <Users /> Clientes
         </button>
       </aside>
@@ -186,13 +217,41 @@ const AdminPanel = () => {
             )}
 
             <form className="product-form" onSubmit={handleSubmit}>
-              <input name="name" placeholder="Nombre" value={form.name} onChange={handleChange} disabled={!editingProduct} />
-              <input name="flavor" placeholder="Sabor" value={form.flavor} onChange={handleChange} disabled={!editingProduct} />
-              <input name="price" placeholder="Precio" value={form.price} onChange={handleChange} disabled={!editingProduct} />
-              <input name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} disabled={!editingProduct} />
+              <input
+                name="name"
+                placeholder="Nombre"
+                value={form.name}
+                onChange={handleChange}
+                disabled={!editingProduct}
+              />
+              <input
+                name="flavor"
+                placeholder="Sabor"
+                value={form.flavor}
+                onChange={handleChange}
+                disabled={!editingProduct}
+              />
+              <input
+                name="price"
+                placeholder="Precio"
+                value={form.price}
+                onChange={handleChange}
+                disabled={!editingProduct}
+              />
+              <input
+                name="stock"
+                placeholder="Stock"
+                value={form.stock}
+                onChange={handleChange}
+                disabled={!editingProduct}
+              />
               <div className="form-actions">
                 {editingProduct && <button type="submit">Actualizar</button>}
-                {editingProduct && <button type="button" className="cancel-btn" onClick={cancelEdit}>Cancelar</button>}
+                {editingProduct && (
+                  <button type="button" className="cancel-btn" onClick={cancelEdit}>
+                    Cancelar
+                  </button>
+                )}
               </div>
             </form>
 
@@ -203,12 +262,17 @@ const AdminPanel = () => {
                 products.map(product => (
                   <div key={product.id} className="product-card">
                     <div className="product-info">
-                      <strong>{product.name}</strong> ({product.flavor})<br />
+                      <strong>{product.name}</strong> ({product.flavor})
+                      <br />
                       Precio: ${product.price.toFixed(2)} - Stock: {product.stock}
                     </div>
                     <div className="actions">
-                      <button onClick={() => startEdit(product)} className="edit-btn"><Edit size={18} /></button>
-                      <button onClick={() => handleDelete(product.id)} className="delete-btn"><Trash2 size={18} /></button>
+                      <button onClick={() => startEdit(product)} className="edit-btn">
+                        <Edit size={18} />
+                      </button>
+                      <button onClick={() => handleDelete(product.id)} className="delete-btn">
+                        <Trash2 size={18} />
+                      </button>
                     </div>
                   </div>
                 ))
@@ -221,9 +285,18 @@ const AdminPanel = () => {
           <>
             <h1>Estadísticas</h1>
             <div className="stats-cards">
-              <div className="stat-card"><h2>{totalProducts}</h2><p>Productos</p></div>
-              <div className="stat-card"><h2>${totalSales}</h2><p>Ingresos</p></div>
-              <div className="stat-card"><h2>{totalClients}</h2><p>Clientes y Distribuidores</p></div>
+              <div className="stat-card">
+                <h2>{totalProducts}</h2>
+                <p>Productos</p>
+              </div>
+              <div className="stat-card">
+                <h2>{ordersInProcess}</h2>
+                <p>Ordenes en proceso</p>
+              </div>
+              <div className="stat-card">
+                <h2>{totalClients}</h2>
+                <p>Clientes y Distribuidores</p>
+              </div>
             </div>
           </>
         )}
@@ -232,8 +305,18 @@ const AdminPanel = () => {
           <>
             <h1>Clientes y Distribuidores</h1>
             <div className="filters-container">
-              <input type="search" placeholder="Buscar por nombre o email" value={clientSearch} onChange={e => setClientSearch(e.target.value)} className="client-search" />
-              <select value={clientRoleFilter} onChange={e => setClientRoleFilter(e.target.value)} className="role-filter">
+              <input
+                type="search"
+                placeholder="Buscar por nombre o email"
+                value={clientSearch}
+                onChange={e => setClientSearch(e.target.value)}
+                className="client-search"
+              />
+              <select
+                value={clientRoleFilter}
+                onChange={e => setClientRoleFilter(e.target.value)}
+                className="role-filter"
+              >
                 <option value="all">Todos</option>
                 <option value="customer">Clientes</option>
                 <option value="distributor">Distribuidores</option>
@@ -249,7 +332,9 @@ const AdminPanel = () => {
                     <div className="client-info">
                       <div className="client-name-role">
                         <strong>{client.name}</strong>{' '}
-                        <small>({client.role === 'customer' ? 'Cliente' : 'Distribuidor'})</small>
+                        <small>
+                          ({client.role === 'customer' ? 'Cliente' : 'Distribuidor'})
+                        </small>
                       </div>
                       <div className="client-email">{client.email}</div>
                     </div>
