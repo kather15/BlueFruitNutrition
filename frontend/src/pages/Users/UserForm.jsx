@@ -45,18 +45,26 @@ function UserForm() {
   return (
     <div className="user-form-page">
       <div className="user-form-header">
-        <h1 className="page-title">Editar Empleado</h1>
+        <h1 className="page-title">Editar Usuario</h1>
+        <p className="user-meta">
+          <span>ID: {formData._id}</span> |{" "}
+          <span>Tipo: {type === "clientes" ? "Cliente" : "Distribuidor"}</span> |{" "}
+          <span>
+            Registrado:{" "}
+            {formData.createdAt
+              ? new Date(formData.createdAt).toLocaleDateString()
+              : "No disponible"}
+          </span>
+        </p>
       </div>
-      
+
       <div className="user-form-container">
         <div className="user-form-card">
           <div className="user-form-content">
             {/* Avatar del usuario */}
             <div className="user-avatar-section">
               <div className="user-avatar">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
+                {formData.name?.[0] || formData.companyName?.[0] || "U"}
               </div>
             </div>
 
@@ -66,41 +74,43 @@ function UserForm() {
                 {type === "clientes" ? (
                   <>
                     <div className="input-group">
-                      <label className="input-label">Nombre:</label>
+                      <label className="input-label">Nombre</label>
                       <input
                         className="input"
                         name="name"
-                        value={formData.name || ''}
+                        value={formData.name || ""}
                         onChange={handleChange}
                         placeholder="Nombre"
                       />
                     </div>
                     <div className="input-group">
-                      <label className="input-label">Apellido:</label>
+                      <label className="input-label">Apellido</label>
                       <input
                         className="input"
                         name="lastName"
-                        value={formData.lastName || ''}
+                        value={formData.lastName || ""}
                         onChange={handleChange}
                         placeholder="Apellido"
                       />
                     </div>
                     <div className="input-group">
-                      <label className="input-label">Correo:</label>
+                      <label className="input-label">Correo</label>
                       <input
+                        type="email"
                         className="input"
                         name="email"
-                        value={formData.email || ''}
+                        value={formData.email || ""}
                         onChange={handleChange}
                         placeholder="Correo"
                       />
                     </div>
                     <div className="input-group">
-                      <label className="input-label">Teléfono:</label>
+                      <label className="input-label">Teléfono</label>
                       <input
+                        type="tel"
                         className="input"
                         name="phone"
-                        value={formData.phone || ''}
+                        value={formData.phone || ""}
                         onChange={handleChange}
                         placeholder="Teléfono"
                       />
@@ -109,31 +119,33 @@ function UserForm() {
                 ) : (
                   <>
                     <div className="input-group">
-                      <label className="input-label">Empresa:</label>
+                      <label className="input-label">Empresa</label>
                       <input
                         className="input"
                         name="companyName"
-                        value={formData.companyName || ''}
+                        value={formData.companyName || ""}
                         onChange={handleChange}
                         placeholder="Empresa"
                       />
                     </div>
                     <div className="input-group">
-                      <label className="input-label">Correo:</label>
+                      <label className="input-label">Correo</label>
                       <input
+                        type="email"
                         className="input"
                         name="email"
-                        value={formData.email || ''}
+                        value={formData.email || ""}
                         onChange={handleChange}
                         placeholder="Correo"
                       />
                     </div>
                     <div className="input-group">
-                      <label className="input-label">Teléfono:</label>
+                      <label className="input-label">Teléfono</label>
                       <input
+                        type="tel"
                         className="input"
                         name="phone"
-                        value={formData.phone || ''}
+                        value={formData.phone || ""}
                         onChange={handleChange}
                         placeholder="Teléfono"
                       />
@@ -144,7 +156,7 @@ function UserForm() {
 
               <div className="form-actions">
                 <button type="submit" className="btn-submit">
-                  Guardar
+                  Guardar Cambios
                 </button>
               </div>
             </form>
