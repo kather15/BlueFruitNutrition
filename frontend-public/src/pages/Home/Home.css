@@ -506,3 +506,13 @@
     padding: 2rem 15px;
   }
 }
+@media (max-width: 768px) {
+  .blue-fruit-banner-container {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .blue-fruit-banner-container {
+    display: none;
+  }
+}
