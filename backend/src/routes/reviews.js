@@ -13,5 +13,9 @@ router.put("/:id", authenticateToken, reviewController.updateReview);
 //  Eliminar reseña (requiere autenticación)
 router.delete("/:id", authenticateToken, reviewController.deleteReview);
 
+// Rutas de administrador para reviews (sin autenticación)
+router.delete('/reviews/:id', reviewController.deleteReviewAdmin);
+router.get('/reviews', reviewController.getReviews);
+
 export default router;
 

@@ -73,7 +73,7 @@
 .product-price-new {
   font-size: 2rem;
   font-weight: bold;
-  color: #1a1a3a;
+  color: #007bff;
   margin: 0;
 }
 
@@ -219,7 +219,7 @@
 }
 
 .add-review-btn-new {
-  background: #1a1a3a;
+  background: #007bff;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -369,7 +369,7 @@
 }
 
 .back-to-products-btn {
-  background: #1a1a3a;
+  background: #007bff;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -381,7 +381,7 @@
 }
 
 .back-to-products-btn:hover {
-  background: #1a1a3a;
+  background: #0056b3;
 }
 
 /* Scrollbar personalizado para la columna de reseñas */
@@ -493,7 +493,7 @@
 .back-button {
   background: none;
   border: none;
-  color: #1a1a3a;
+  color: #007bff;
   font-size: 16px;
   cursor: pointer;
   margin: 20px;
@@ -598,7 +598,7 @@
 .product-price {
   font-size: 2rem;
   font-weight: bold;
-  color: #007bff;
+  color: #1a1a3a;
   margin-bottom: 15px;
 }
 
@@ -941,7 +941,7 @@
 }
 
 .back-to-products-btn {
-  background: #007bff;
+  background: #1a1a3a;
   color: white;
   border: none;
   padding: 12px 24px;

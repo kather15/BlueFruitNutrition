@@ -26,6 +26,8 @@ import Ventas from './pages/Ventas/Ventas.jsx';
 import UsersList from './pages/Users/UsersList';
 import UserForm from './pages/Users/UserForm';
 import PerfilAdmin from './pages/AdminPorfile/PerfilAdmin';
+import AddProducts from "./pages/AddProducts/AddProduct.jsx";
+import ProductsReviews from "./pages/Products/ProductsReview.jsx";
 
 function AppContent() {
   const location = useLocation();
@@ -72,6 +74,8 @@ function AppContent() {
           <Route path="/usuarios" element={<UsersList />} />
           <Route path="/users/edit/:type/:id" element={<UserForm />} />
           <Route path="/perfil" element={<PerfilAdmin />} />
+          <Route path="/addProduct" element={<AddProducts />} />
+          <Route path="/product/:id" element={<ProductsReviews />} />
 
 
           {/* 404 admin */}
