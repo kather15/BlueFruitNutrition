@@ -8,7 +8,7 @@ import { AuthProvider } from './context/useAuth';
 // Components
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
-import ProtectedRoute from './components/PrivateRoute/PrivateRoute';
+// import ProtectedRoute from './components/PrivateRoute/PrivateRoute'; // Quitado
 import Error404Public from './components/NotFound/NotFoundPublic';
 
 // Pages - Públicas
@@ -25,7 +25,7 @@ import RequestCode from './pages/RecoveryPassword/RequestCode';
 import VerifyCode from './pages/RecoveryPassword/VerifyCode';
 import NewPassword from './pages/RecoveryPassword/NewPasssword';
 
-// Pages - Privadas
+// Pages - Privadas (temporalmente públicas)
 import Carrito from './pages/Carrito/Carrito';
 import Pay from './pages/Pay/pay';
 import Suscripciones from './pages/Suscripciones/Suscripciones';
@@ -75,47 +75,12 @@ function App() {
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-          {/* RUTAS PRIVADAS */}
-          <Route
-            path="/carrito"
-            element={
-              <ProtectedRoute>
-                <Carrito />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/pay"
-            element={
-              <ProtectedRoute>
-                <Pay />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/suscripciones"
-            element={
-              <ProtectedRoute>
-                <Suscripciones />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/Metodo"
-            element={
-              <ProtectedRoute>
-                <MetodoDePago />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/personalizar"
-            element={
-              <ProtectedRoute>
-                <Personalizar />
-              </ProtectedRoute>
-            }
-          />
+          {/* RUTAS PRIVADAS (ahora públicas) */}
+          <Route path="/carrito" element={<Carrito />} />
+          <Route path="/pay" element={<Pay />} />
+          <Route path="/suscripciones" element={<Suscripciones />} />
+          <Route path="/Metodo" element={<MetodoDePago />} />
+          <Route path="/personalizar" element={<Personalizar />} />
 
           {/* RUTA CATCH-ALL PARA 404 */}
           <Route path="*" element={<Error404Public />} />
