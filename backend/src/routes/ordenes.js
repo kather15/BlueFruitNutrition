@@ -1,12 +1,20 @@
-import express from 'express';
-import ordenController from '../controllers/CtrlOrdenes.js';
+import express from "express";
+import ordenesController from "../controllers/CtrlOrdenes.js";
 
 const router = express.Router();
 
-router.get('/', ordenController.getOrdenes);
-router.post('/', ordenController.crearOrden);
-router.get('/:id', ordenController.getOrdenPorId);
-router.delete('/:id', ordenController.eliminarOrden);
+
+router.route("/enProceso/total")
+  .get(ordenesController.contarOrdenesEnProceso);
+  
+router.route("/")
+  .get(ordenesController.getOrdenes)
+  .post(ordenesController.crearOrden);
+
+router.route("/:id")
+  .get(ordenesController.getOrdenPorId)
+  .delete(ordenesController.eliminarOrden);
+
+
 
 export default router;
-
