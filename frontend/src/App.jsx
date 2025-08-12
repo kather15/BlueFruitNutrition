@@ -3,16 +3,16 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { Toaster } from 'react-hot-toast';
 
 // Context
-//import { AuthProvider } from './context/useAuth';
+import { AuthProvider } from './context/useAuth';
 
 // Components
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
-//import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
-import Error404Private from './components/NotFound/NotFoundPrivate.jsx'; // 404 admin
+import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
+import Error404Private from './components/NotFound/NotFoundPrivate.jsx';
 
 // Pages - Login (público)
-import Login from './pages/Login/Login';
+
 import RequestCode from './pages/RecoveryPassword/RequestCode';
 import VerifyCode from './pages/RecoveryPassword/VerifyCode';
 import NewPassword from './pages/RecoveryPassword/NewPasssword';
@@ -59,24 +59,67 @@ function AppContent() {
       <div className="main-content" style={{ paddingTop: !shouldHideLayout ? '100px' : '0' }}>
         <Routes>
           {/* Rutas públicas */}
-          <Route path="/" element={<Login />} />
+
           <Route path="/enviar-codigo" element={<RequestCode />} />
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-          {/* Rutas públicas (antes protegidas) */}
-          <Route path="/home" element={<HomeP />} />
-          <Route path="/homep" element={<HomeP />} />
-          <Route path="/productos1" element={<Products1 />} />
-          <Route path="/ordenes" element={<Ordenes />} />
-          <Route path="/ventas" element={<Ventas />} />
-          <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/usuarios" element={<UsersList />} />
-          <Route path="/users/edit/:type/:id" element={<UserForm />} />
-          <Route path="/perfil" element={<PerfilAdmin />} />
-          <Route path="/addProduct" element={<AddProducts />} />
-          <Route path="/product/:id" element={<ProductsReviews />} />
-
+          {/* Rutas privadas protegidas */}
+          <Route path="/home" element={
+            <ProtectedRoute>
+              <HomeP />
+            </ProtectedRoute>
+          } />
+          <Route path="/homep" element={
+            <ProtectedRoute>
+              <HomeP />
+            </ProtectedRoute>
+          } />
+          <Route path="/productos1" element={
+            <ProtectedRoute>
+              <Products1 />
+            </ProtectedRoute>
+          } />
+          <Route path="/ordenes" element={
+            <ProtectedRoute>
+              <Ordenes />
+            </ProtectedRoute>
+          } />
+          <Route path="/ventas" element={
+            <ProtectedRoute>
+              <Ventas />
+            </ProtectedRoute>
+          } />
+          <Route path="/suscripciones" element={
+            <ProtectedRoute>
+              <Suscripciones />
+            </ProtectedRoute>
+          } />
+          <Route path="/usuarios" element={
+            <ProtectedRoute>
+              <UsersList />
+            </ProtectedRoute>
+          } />
+          <Route path="/users/edit/:type/:id" element={
+            <ProtectedRoute>
+              <UserForm />
+            </ProtectedRoute>
+          } />
+          <Route path="/perfil" element={
+            <ProtectedRoute>
+              <PerfilAdmin />
+            </ProtectedRoute>
+          } />
+          <Route path="/addProduct" element={
+            <ProtectedRoute>
+              <AddProducts />
+            </ProtectedRoute>
+          } />
+          <Route path="/product/:id" element={
+            <ProtectedRoute>
+              <ProductsReviews />
+            </ProtectedRoute>
+          } />
 
           {/* 404 admin */}
           <Route path="*" element={<Error404Private />} />
@@ -90,13 +133,12 @@ function AppContent() {
 
 function App() {
   return (
-   
-      <Router>
+    <Router>
+      <AuthProvider>
         <AppContent />
-      </Router>
-    
+      </AuthProvider>
+    </Router>
   );
 }
 
 export default App;
-
