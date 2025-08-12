@@ -1,14 +1,40 @@
-import { useAuth } from "../../global/hooks/useAuth.js";
-import { Navigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useAuthContext } from '../../context/useAuth';
 
-function RouteProtected({ children }) {
-  const { user } = useAuth();
+function ProtectedRoute({ children }) {
+  const { user, loading } = useAuthContext();
+  const location = useLocation();
 
-  if (!user) {
-    toast.error("You must be logged in to access this page.");
-    return <Navigate to="/login" replace />;
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontSize: '1.2rem',
+        backgroundColor: '#f8f9fa'
+      }}>
+        <div style={{
+          background: 'white',
+          padding: '2rem 3rem',
+          borderRadius: '10px',
+          boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+        }}>
+          Verificando sesión...
+        </div>
+      </div>
+    );
+  }
+
+  if (!user?.isAuthenticated) {
+    toast.error("Debes iniciar sesión para acceder a esta página");
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;
 }
+
+export default ProtectedRoute;

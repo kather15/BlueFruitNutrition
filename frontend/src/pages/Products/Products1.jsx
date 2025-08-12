@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const API_URL = "http://localhost:4000/api/products";
 
-function ProductCard({ product, onView, onEdit, onDelete }) {
+function ProductCard({ product, onView, onDelete }) {
   return (
     <div className="product-card">
       <div className="product-image-container">
@@ -25,12 +25,6 @@ function ProductCard({ product, onView, onEdit, onDelete }) {
           onClick={() => onView(product)} 
         >
           Ver producto
-        </button>
-        <button 
-          className="edit-btn"
-          onClick={() => onEdit(product)}
-        >
-          Editar
         </button>
         <button 
           className="delete-btn"
@@ -89,10 +83,6 @@ function Product() {
     }
   };
 
-const handleEdit = (product) => {
-  navigate(`/homep/${product._id}`);
-};
-
   const handleView = (product) => {
     navigate(`/product/${product._id}`); 
   };
@@ -125,7 +115,6 @@ const handleEdit = (product) => {
               key={product._id}
               product={product}
               onView={handleView}
-              onEdit={handleEdit}
               onDelete={handleDelete}
             />
           ))}
