@@ -74,8 +74,15 @@ function App() {
           <Route path="/enviar-codigo" element={<RequestCode />} />
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
+           <Route
+            path="/personalizar"
+            element={
+                <Personalizar />
+            }
+          />
 
-          {/* RUTAS PRIVADAS */}
+          {/* RUTAS PRIVADAS (comentadas para no usarse actualmente) */}
+          {/*
           <Route
             path="/carrito"
             element={
@@ -116,6 +123,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          */}
 
           {/* RUTA CATCH-ALL PARA 404 */}
           <Route path="*" element={<Error404Public />} />

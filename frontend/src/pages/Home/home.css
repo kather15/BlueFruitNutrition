@@ -1,4 +1,4 @@
-/* Reset */
+/* Reset y estilos base */
 * {
   box-sizing: border-box;
 }
@@ -10,60 +10,101 @@ body {
   color: #222;
 }
 
-/* Panel general */
+/* Layout general: sidebar fijo + contenido a la derecha */
 .admin-panel {
-  display: flex;
-  height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  display: block; /* no hace falta flex porque sidebar es fixed */
 }
 
 /* Sidebar */
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 220px;
-  background-color: #0C133F; /* Color principal */
+  height: 100vh;
+  background-color: #1a1a3a;
   color: white;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
-  gap: 1rem;
-  box-shadow: 2px 0 8px rgb(12 19 63 / 0.5);
+  padding: 20px 0;
+  box-sizing: border-box;
   user-select: none;
+  box-shadow: 2px 0 8px rgb(12 19 63 / 0.5);
 }
 
-.sidebar h2 {
-  margin-bottom: 1rem;
-  font-weight: 700;
-  font-size: 1.7rem;
-  letter-spacing: 1px;
+.sidebar-logo {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.sidebar button {
-  background: none;
+.sidebar-logo img {
+  max-width: 150px;
+  height: auto;
+  display: inline-block;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.sidebar-menu li {
+  margin-bottom: 18px;
+}
+
+.sidebar-menu li a {
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+  padding: 10px 24px;
+  display: block;
+  border-radius: 6px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.sidebar-menu li a:hover {
+  background-color: #2a2a5a;
+}
+
+.sidebar-footer {
+  padding: 10px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid #333;
+}
+
+.sidebar-footer button {
+  width: 100%;
+  background: #25254a;
+  color: white;
   border: none;
-  color: inherit;
-  font-size: 1.15rem;
-  padding: 0.75rem 1rem;
-  text-align: left;
+  border-radius: 6px;
+  padding: 10px 0;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  font-weight: 600;
+  justify-content: center;
 }
 
-.sidebar button:hover,
-.sidebar button.active {
-  background-color: rgba(255 255 255 / 0.15);
-  color: #b0b8ff;
+.sidebar-footer button:hover {
+  background-color: #3a3a7a;
 }
 
-/* Main content */
+.chaba{
+  margin-left: -200px !important;
+}
+
+/* Main content: con margen para sidebar */
 .main-content {
-  flex: 1;
-  overflow-y: auto;
+  margin-left: 200px;
   padding: 2rem 3rem;
+  overflow-y: auto;
+  height: 100vh;
   background-color: #ffffff;
   box-shadow: inset 0 0 15px rgb(12 19 63 / 0.05);
   border-top-left-radius: 25px;
@@ -230,140 +271,49 @@ body {
   background-color: rgba(231, 76, 60, 0.1);
 }
 
-/* Stats */
-.stats-cards {
-  display: flex;
-  gap: 2.4rem;
-  flex-wrap: wrap;
-}
-
-.stat-card {
-  background-color: #0C133F;
-  color: white;
-  padding: 2.3rem 2.5rem;
-  border-radius: 14px;
-  flex: 1 1 180px;
-  text-align: center;
-  box-shadow: 0 6px 14px rgb(12 19 63 / 0.3);
-  transition: transform 0.35s ease, box-shadow 0.3s ease;
-  user-select: none;
-}
-
-.stat-card:hover {
-  transform: scale(1.07);
-  box-shadow: 0 8px 18px rgb(12 19 63 / 0.45);
-}
-
-.stat-card h2 {
-  font-size: 3rem;
-  margin-bottom: 0.4rem;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-}
-
-/* Clients List */
-.clients-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.3rem;
-  max-height: 65vh;
-  overflow-y: auto;
-  padding-right: 0.5rem;
-  user-select: none;
-}
-
-/* Scrollbar estilo para clients */
-.clients-list::-webkit-scrollbar {
-  width: 8px;
-}
-.clients-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-.clients-list::-webkit-scrollbar-thumb {
-  background-color: #0C133F;
-  border-radius: 10px;
-}
-
-/* Cliente: contenedor principal */
-.client-card {
-  background-color: rgba(12, 19, 63, 0.07);
-  padding: 1rem 1.4rem;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  box-shadow: 0 1px 6px rgb(12 19 63 / 0.1);
-  user-select: none;
-}
-
-/* Hover */
-.client-card:hover {
-  background-color: rgba(12, 19, 63, 0.12);
-}
-
-/* Contenedor info (nombre+rol y email) */
-.client-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  color: #0C133F;
-  min-width: 200px;
-  flex: 1 1 auto;
-}
-
-/* Nombre y rol en una línea */
-.client-name-role {
-  font-weight: 700;
-  font-size: 1.1rem;
-  line-height: 1.2;
-}
-
-.client-name-role small {
-  font-weight: 400;
-  color: #555;
-  margin-left: 0.4rem;
-  font-size: 0.9rem;
-}
-
-/* Email debajo */
-.client-email {
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #555;
-  word-break: break-word;
-}
-
-/* Estadísticas */
-.client-stats {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.3rem;
-  min-width: 130px;
-  font-weight: 600;
-  color: #0C133F;
-}
-
 /* Responsive para pantallas pequeñas */
 @media (max-width: 768px) {
-  .client-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .client-info {
-    min-width: 100%;
-  }
-  .client-stats {
-    align-items: flex-start;
-    min-width: 100%;
-    margin-top: 0.5rem;
-  }
   .product-form {
     flex-direction: column;
     align-items: stretch;
   }
   .form-actions {
     justify-content: flex-start;
+  }
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+    height: auto;
+  }
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+    flex-direction: row;
+    padding: 10px;
+  }
+  .sidebar-menu {
+    display: flex;
+    gap: 1rem;
+    flex-grow: 1;
+  }
+  .sidebar-menu li {
+    margin-bottom: 0;
+  }
+  .sidebar-menu li a {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  .sidebar-footer {
+    flex-direction: row;
+    gap: 10px;
+    border-top: none;
+    padding: 0 10px;
+  }
+  .sidebar-footer button {
+    flex: 1;
+    font-size: 14px;
+    padding: 8px 0;
   }
 }
