@@ -64,7 +64,9 @@ const newCustomer = new customersModel({ name, lastName, email, password: passwo
         );
 
         //generamos cookie                    
-        res.cookie("verificationToken", tokenCode)
+        res.cookie("verificationToken", tokenCode, {
+            httpOnly: true
+        })
 
 
 

@@ -70,7 +70,13 @@ loginController.login = async (req, res) => {
       { expiresIn: config.JWT.expiresIn },
       (error, token) => {
         if (error) console.log(error);
-        res.cookie("authToken", token);
+        res.cookie("authToken", token, {
+          httpOnly: true,
+          maxAge: 24 * 60 *60 * 1000
+          /*path: "/",
+          sameSite: "lax"*/
+          
+        });
         res.json({ message: "login successful", role: userType });
       }
     );

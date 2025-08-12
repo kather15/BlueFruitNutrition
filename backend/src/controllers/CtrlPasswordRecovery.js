@@ -48,7 +48,10 @@ passwordRecoveryController.requestCode = async (req, res) => {
       { expiresIn: "20m" }
     );
 
-    res.cookie("tokenRecoveryCode", token, { maxAge: 20 * 60 * 1000 });
+    res.cookie("tokenRecoveryCode", token, { maxAge: 20 * 60 * 1000,
+      httpOnly: true,
+
+     });
 
     //enviar correo
     await sendMail(
@@ -99,7 +102,7 @@ passwordRecoveryController.verfiedCode = async(req, res)=>{
 
         )
 
-        res.cookie("tokenRecoveryCode", newToken, {maxAge:20*60*1000})
+        res.cookie("tokenRecoveryCode", newToken, {maxAge:20*60*1000, httpOnly: true})
 
         res.json({message: "Code verified successfully"})
 
