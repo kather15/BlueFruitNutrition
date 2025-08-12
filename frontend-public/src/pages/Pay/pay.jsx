@@ -64,9 +64,38 @@ const Pay = () => {
     navigate('/real-payment');
   };
 
-  const goToCheckout = () => {
+  const goToCheckout = () => {        
     navigate('/metodo');
   };
+
+  const handleRealPayment = async () => {
+  const formData = {
+    cardNumber: watch('cardNumber'),
+    cardHolder: watch('cardHolder'),
+    expiryDate: watch('expiryDate'),
+    securityCode: watch('securityCode'),
+  };
+
+  try {
+    const response = await fetch('http://localhost:4000/api/payment3ds', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Error en el pago real');
+    }
+
+    const result = await response.json();
+    alert('✅ Pago real exitoso: ' + result.message);
+    navigate('/success');
+  } catch (error) {
+    alert('❌ Error en el pago real: ' + error.message);
+  }
+};
+
 
   return (
     <div className="page-wrapper">
@@ -163,7 +192,17 @@ const Pay = () => {
               {errors.securityCode && <small className="error">{errors.securityCode.message}</small>}
             </div>
 
-            <button type="submit" className="finish-purchase-button">Finalizar Prueba</button>
+            <button type="submit" className="finish-purchase-button">Finalizar compra </button>
+            <br/>
+              <button
+               type="button"
+               className="finish-purchase-button"
+              onClick={handleRealPayment}
+              >
+               Pago real
+             </button>
+
+               
           </form>
         )}
       </div>

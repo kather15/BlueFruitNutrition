@@ -8,7 +8,7 @@ import { Toaster } from 'react-hot-toast';
 // Components
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
-//import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
+import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
 import Error404Private from './components/NotFound/NotFoundPrivate.jsx'; // 404 admin
 
 // Pages - Login (público)

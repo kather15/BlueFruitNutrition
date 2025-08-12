@@ -34,5 +34,10 @@ export const config={
         cloudinary_name: process.env.CLOUDINARY_NAME,           //Subir imagenes a cloudinary
         cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
         cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET 
+    },
+
+    wompi: {
+        wompi_client_id:process.env.CLIENT_ID,
+        wompi_secret: process.env.CLIENT_SECRET,
     }
-}
+};
