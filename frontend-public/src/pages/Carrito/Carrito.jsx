@@ -37,7 +37,7 @@ const Carrito = () => {
         : producto
     );
     setProductos(actualizados);
-  };
+  }; 
 
   const eliminarProducto = (id) => {
     setProductos(productos.filter((producto) => producto.id !== id));
@@ -58,6 +58,7 @@ const Carrito = () => {
     items: productos.reduce((acc, p) => acc + p.cantidad, 0),
     estado: "En proceso",
     productos: productos.map(p => ({
+     id: p.id.toString(),
       nombre: p.nombre,
       precio: p.precio,
       cantidad: p.cantidad
@@ -74,8 +75,8 @@ const Carrito = () => {
     });
 
     if (response.ok) {
-      alert("Orden enviada correctamente 🎉");
-      navigate("/Metodo"); // o donde quieras ir después
+      alert("Orden enviada correctamente");
+      navigate("/pay"); 
     } else {
       alert("Error al enviar la orden");
     }

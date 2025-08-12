@@ -4,7 +4,7 @@ import Orden from '../models/Ordenes.js';
 const getOrdenes = async (req, res) => {
   try {
     const ordenes = await Orden.find();
-     console.log(ordenes);
+    console.log(ordenes);
     res.json(ordenes);
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al obtener órdenes' });
@@ -14,29 +14,32 @@ const getOrdenes = async (req, res) => {
 // Crear nueva orden
 const crearOrden = async (req, res) => {
   try {
-       //validar ordenes
-       if(!numeroOrden || !fecha || !total || !items || !estado){
-      return res.status(400).json({ message: 'Faltan campos obligatorios' });
-    } 
-    
-
+    // Validar que vengan productos
     if (!req.body.productos || req.body.productos.length === 0) {
       return res.status(400).json({ mensaje: 'La orden debe tener al menos un producto.' });
     }
 
-    const numeroOrden = Date.now().toString(); // O cualquier generador de ID
-    const fecha = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    // Generar datos de la orden
+    const numeroOrden = `ORD-${Date.now()}`;
+    const fecha = new Date().toISOString().split('T')[0];
     const total = req.body.productos.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
-    const items = req.body.productos.length;
+    const items = req.body.productos.reduce((acc, p) => acc + p.cantidad, 0);
+    const estado = 'En proceso';
 
+    // Validar campos obligatorios
+    if (!numeroOrden || !fecha || total === undefined || !items || !estado) {
+      return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
+    }
+
+    // Crear y guardar la orden
     const nuevaOrden = new Orden({
       numeroOrden,
       fecha,
       total,
       items,
-      estado: 'En proceso'
+      estado,
+      productos: req.body.productos // Aquí se guardan los productos
     });
-
 
     const ordenGuardada = await nuevaOrden.save();
     res.status(201).json(ordenGuardada);
@@ -67,7 +70,6 @@ const eliminarOrden = async (req, res) => {
   }
 };
 
-// Exportar todo como un objeto
 export default {
   getOrdenes,
   crearOrden,

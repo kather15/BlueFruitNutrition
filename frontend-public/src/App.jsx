@@ -62,6 +62,8 @@ function App() {
 
         <Routes>
           {/* RUTAS PÚBLICAS */}
+       <Route path="/carrito" element={<Carrito />} />
+
           <Route path="/" element={<Home />} />
           <Route path="/product" element={<ProductsC />} />
           <Route path="/producto/:id" element={<ProductsReview />} />
@@ -76,7 +78,6 @@ function App() {
           <Route path="/nueva-contraseña" element={<NewPassword />} />
 
           {/* RUTAS PRIVADAS */}
-          <Route path="/carrito" element={<ProtectedRoute><Carrito /></ProtectedRoute>} />
           <Route path="/pay" element={<ProtectedRoute><Pay /></ProtectedRoute>} />
           <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
           <Route path="/Metodo" element={<ProtectedRoute><MetodoDePago /></ProtectedRoute>} />
