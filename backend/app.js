@@ -17,6 +17,7 @@ import shoppingCartRoutes from './src/routes/shoppingCart.js';
 import ordenesRoutes from './src/routes/ordenes.js'; 
 import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
+import PayRoutes from "./src/routes/pay.js"
 
 const app = express();
 
@@ -44,5 +45,6 @@ app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/ordenes", ordenesRoutes);
 app.use("/api/reviews", ReviewRouters);
 app.use("/api", ContactRoutes);
+app.use("/api/pay",PayRoutes);
 
 export default app;
