@@ -94,6 +94,22 @@ body {
   -webkit-box-orient: vertical;
 }
 
+.products-header {
+  display: flex;
+  justify-content: center; /* Centra el grupo horizontalmente */
+  align-items: center;
+  gap: 2rem; /* Espacio entre título y botón */
+  margin-bottom: 30px;
+}
+
+.add-product-btn {
+  margin-top: 8px; /* Ajusta este valor según lo que se vea mejor */
+}
+
+.products-title {
+  margin: 0;
+}
+
 .product-flavor,
 .product-price {
   font-size: 14px;

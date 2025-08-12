@@ -2,6 +2,7 @@
   min-height: 100vh;
   background-color: #f3f4f6;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding-bottom: 2rem;
 }
 
 .header {
@@ -19,23 +20,35 @@
   margin: 0;
 }
 
-.users-list-container {
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #d1d5db;
+  padding-bottom: 0.5rem;
+}
+
+.users-section {
   padding: 2rem;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
+.users-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
 @media (min-width: 768px) {
-  .users-list-container {
+  .users-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  .users-list-container {
+  .users-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }

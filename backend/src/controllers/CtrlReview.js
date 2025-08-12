@@ -153,4 +153,25 @@ reviewController.updateReview = async (req, res) => {
   }
 };
 
+// Eliminar reseña por ID ( sin autenticación)
+reviewController.deleteReviewAdmin = async (req, res) => {
+  try {
+    const reviewId = req.params.id;
+    
+    const review = await reviewModel.findById(reviewId);
+    
+    if (!review) {
+      return res.status(404).json({ message: "Reseña no encontrada" });
+    }
+
+    await reviewModel.findByIdAndDelete(reviewId);
+    res.json({ message: "Reseña eliminada correctamente" });
+  } catch (error) {
+    res.status(500).json({ 
+      message: "Error al eliminar reseña", 
+      error: error.message 
+    });
+  }
+};
+
 export default reviewController;
