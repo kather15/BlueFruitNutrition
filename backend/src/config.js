@@ -37,7 +37,9 @@ export const config={
     },
 
     wompi: {
-        wompi_client_id:process.env.CLIENT_ID,
-        wompi_secret: process.env.CLIENT_SECRET,
+        client_id:process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        grant_type: process.env.GRANT_TYPE,
+        audience: process.env.AUDIENCE
     }
 };

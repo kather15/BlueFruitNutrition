@@ -1,4 +1,3 @@
-// src/pages/Pay.js
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +22,41 @@ const Pay = () => {
     }
   });
 
+  // Función para obtener el token desde el backend
+  const fetchToken = async () => {
+    const response = await fetch('http://localhost:4000/api/token', {
+      method: 'POST',
+    });
+    if (!response.ok) throw new Error('No se pudo obtener el token');
+    const data = await response.json();
+    return data.access_token; // Ajusta esto si tu token viene con otro nombre
+  };
+
+  // Envío de datos del formulario junto con el token
+  const onSubmitBack = async (formData) => {
+    try {
+      const token = await fetchToken();  // Obtener token primero
+
+      const response = await fetch('http://localhost:4000/api/testPay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ token, formData })  // Envía token y datos juntos
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al procesar el pago');
+      }
+
+      const result = await response.json();
+      alert('✅ Pago simulado exitoso: ' + (result.message || JSON.stringify(result)));
+      navigate('/home'); // Redirige a la pantalla deseada
+    } catch (error) {
+      alert('❌ Error en el pago: ' + error.message);
+    }
+  };
+
   const handleExpiryInput = (e) => {
     let rawValue = e.target.value.replace(/\D/g, '');
     if (rawValue.length >= 3) {
@@ -38,64 +72,9 @@ const Pay = () => {
     setShowBack(true);
   };
 
-  const onSubmitBack = async (data) => {
-    try {
-      const response = await fetch('http://localhost:4000/api/pay', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al procesar el pago');
-      }
-
-      const result = await response.json();
-      alert('✅ Pago simulado exitoso: ' + result.message);
-      navigate('/success');
-    } catch (error) {
-      alert('❌ Error en el pago: ' + error.message);
-    }
-  };
-
-  const goToRealPayment = () => {
-    navigate('/real-payment');
-  };
-
-  const goToCheckout = () => {        
+  const goToCheckout = () => {
     navigate('/metodo');
   };
-
-  const handleRealPayment = async () => {
-  const formData = {
-    cardNumber: watch('cardNumber'),
-    cardHolder: watch('cardHolder'),
-    expiryDate: watch('expiryDate'),
-    securityCode: watch('securityCode'),
-  };
-
-  try {
-    const response = await fetch('http://localhost:4000/api/payment3ds', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText || 'Error en el pago real');
-    }
-
-    const result = await response.json();
-    alert('✅ Pago real exitoso: ' + result.message);
-    navigate('/success');
-  } catch (error) {
-    alert('❌ Error en el pago real: ' + error.message);
-  }
-};
-
 
   return (
     <div className="page-wrapper">
@@ -192,17 +171,7 @@ const Pay = () => {
               {errors.securityCode && <small className="error">{errors.securityCode.message}</small>}
             </div>
 
-            <button type="submit" className="finish-purchase-button">Finalizar compra </button>
-            <br/>
-              <button
-               type="button"
-               className="finish-purchase-button"
-              onClick={handleRealPayment}
-              >
-               Pago real
-             </button>
-
-               
+            <button type="submit" className="finish-purchase-button">Finalizar compra</button>
           </form>
         )}
       </div>

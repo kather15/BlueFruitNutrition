@@ -18,6 +18,8 @@ import ordenesRoutes from './src/routes/ordenes.js';
 import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
 import PayRoutes from "./src/routes/pay.js"
+import TestPay from "./src/routes/testPayment.js";
+import tokenRouter from "./src/routes/token.js";
 
 const app = express();
 
@@ -44,7 +46,11 @@ app.use("/api/shoppingCart", shoppingCartRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/ordenes", ordenesRoutes);
 app.use("/api/reviews", ReviewRouters);
-app.use("/api", ContactRoutes);
+app.use("/api/contact", ContactRoutes);
 app.use("/api/pay",PayRoutes);
+app.use("/api/testPay", TestPay);
+app.use("/api/token", tokenRouter);
+
+
 
 export default app;
