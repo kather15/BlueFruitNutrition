@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
 // Context
@@ -58,8 +58,10 @@ function AppContent() {
 
       <div className="main-content" style={{ paddingTop: !shouldHideLayout ? '100px' : '0' }}>
         <Routes>
-          {/* Rutas públicas */}
+          {/* Redirección de la raíz a /homep */}
+          <Route path="/" element={<Navigate to="/homep" replace />} />
 
+          {/* Rutas públicas */}
           <Route path="/enviar-codigo" element={<RequestCode />} />
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
