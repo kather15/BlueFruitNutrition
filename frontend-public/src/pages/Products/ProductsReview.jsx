@@ -144,9 +144,38 @@ const ProductsReview = () => {
     }
   };
 
-  const handleAddToCart = () => {
-    alert(`Agregado al carrito: ${quantity} x ${product.name} - $${(product.price * quantity).toFixed(2)}`);
-  };
+ const handleAddToCart = () => {
+  if (!product) return;
+
+  const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
+
+  const productId = product._id || product.id;
+  const existe = carritoActual.find((p) => p.id === productId);
+
+  let nuevoCarrito;
+  if (existe) {
+    nuevoCarrito = carritoActual.map((p) =>
+      p.id === productId
+        ? { ...p, cantidad: p.cantidad + quantity }
+        : p
+    );
+  } else {
+    nuevoCarrito = [
+      ...carritoActual,
+      {
+        id: productId,
+        nombre: product.name,
+        precio: product.price,
+        cantidad: quantity,
+        imagen: product.image || "/placeholder-product.png",
+      },
+    ];
+  }
+
+  localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+  alert(`Agregado al carrito: ${quantity} x ${product.name}`);
+};
+
 
   const handleCustomizeProduct = () => navigate('/SeleccionarGel');
   const handleBackToProducts = () => navigate('/product');
