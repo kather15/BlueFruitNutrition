@@ -22,6 +22,7 @@ import HomeP from './pages/Home/homep';
 import Products1 from './pages/Products/Products1';
 import Suscripciones from './pages/Suscripcionees/Suscripcionees';
 import Ordenes from './pages/Ordenes/Ordenes';
+import ResumenOrden from './pages/ResumenOrdenes/ResumenOrden';
 import Ventas from './pages/Ventas/Ventas.jsx';
 import UsersList from './pages/Users/UsersList';
 import UserForm from './pages/Users/UserForm';
@@ -69,6 +70,7 @@ function AppContent() {
           <Route path="/homep" element={<HomeP />} />
           <Route path="/productos1" element={<Products1 />} />
           <Route path="/ordenes" element={<Ordenes />} />
+        <Route path="/ordenes/:id" element={<ResumenOrden />} />
           <Route path="/ventas" element={<Ventas />} />
           <Route path="/suscripciones" element={<Suscripciones />} />
           <Route path="/usuarios" element={<UsersList />} />

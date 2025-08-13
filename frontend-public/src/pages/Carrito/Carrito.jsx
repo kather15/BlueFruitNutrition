@@ -76,7 +76,7 @@ const Carrito = () => {
 
     if (response.ok) {
       alert("Orden enviada correctamente");
-      navigate("/pay"); 
+      navigate("/metodo"); 
     } else {
       alert("Error al enviar la orden");
     }
