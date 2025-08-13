@@ -1,3 +1,4 @@
+// src/App.jsx (o donde tengas el componente principal con rutas)
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -12,7 +13,6 @@ import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
 import Error404Private from './components/NotFound/NotFoundPrivate.jsx';
 
 // Pages - Login (público)
-
 import RequestCode from './pages/RecoveryPassword/RequestCode';
 import VerifyCode from './pages/RecoveryPassword/VerifyCode';
 import NewPassword from './pages/RecoveryPassword/NewPasssword';
@@ -32,9 +32,9 @@ import ProductsReviews from "./pages/Products/ProductsReview.jsx";
 function AppContent() {
   const location = useLocation();
 
-  // Rutas donde NO mostrar Nav y Footer
-  const hideLayoutRoutes = ['/', '/enviar-codigo', '/verificar-codigo', '/nueva-contraseña'];
-  const shouldHideLayout = hideLayoutRoutes.includes(location.pathname);
+  // Rutas donde NO mostrar Nav (sidebar)
+  const hideNavRoutes = ['/', '/enviar-codigo', '/verificar-codigo', '/nueva-contraseña'];
+  const shouldHideNav = hideNavRoutes.includes(location.pathname);
 
   return (
     <>
@@ -54,9 +54,11 @@ function AppContent() {
         }}
       />
 
-      {!shouldHideLayout && <Nav />}
+      {/* Solo mostrar Nav si la ruta NO está en hideNavRoutes */}
+      {!shouldHideNav && <Nav />}
 
-      <div className="main-content" style={{ paddingTop: !shouldHideLayout ? '100px' : '0' }}>
+      {/* Agrega padding si Nav está visible para no tapar contenido */}
+      <div className="main-content" style={{ paddingTop: shouldHideNav ? '0' : '100px' }}>
         <Routes>
           {/* Redirección de la raíz a /homep */}
           <Route path="/" element={<Navigate to="/homep" replace />} />
@@ -127,8 +129,6 @@ function AppContent() {
           <Route path="*" element={<Error404Private />} />
         </Routes>
       </div>
-
-      {!shouldHideLayout && <Footer />}
     </>
   );
 }

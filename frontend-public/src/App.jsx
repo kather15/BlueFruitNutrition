@@ -8,7 +8,6 @@ import { AuthProvider } from './context/useAuth';
 // Components
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
-// import ProtectedRoute from './components/PrivateRoute/PrivateRoute'; // Quitado
 import Error404Public from './components/NotFound/NotFoundPublic';
 
 // Pages - Públicas
@@ -17,7 +16,7 @@ import ProductsMenu from './pages/Products/ProductsMenu';
 import ProductsReview from './pages/Products/ProductsReview';
 import SobreNosotros from './pages/SobreNosotros/SobreNosotros';
 import Contact from './components/Contact/Contact';
-import Suscipciones from './pages/Suscripciones/Suscripciones';
+import Suscripciones from './pages/Suscripciones/Suscripciones';
 
 // Pages - Autenticación
 import Login from './pages/Login/Login';
@@ -29,7 +28,6 @@ import NewPassword from './pages/RecoveryPassword/NewPasssword';
 // Pages - Privadas (temporalmente públicas)
 import Carrito from './pages/Carrito/Carrito';
 import Pay from './pages/Pay/pay';
-import Suscripciones from './pages/Suscripciones/Suscripciones';
 import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
 import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
 
@@ -54,9 +52,7 @@ function App() {
               zIndex: 99999,
             },
           }}
-          containerStyle={{
-            marginTop: '100px',
-          }}
+          containerStyle={{ marginTop: '100px' }}
         />
 
         {!hideNavFooter && <Nav />}
@@ -68,7 +64,7 @@ function App() {
           <Route path="/producto/:id" element={<ProductsReview />} />
           <Route path="/sobre-nosotros" element={<SobreNosotros />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/suscripciones" element={<Suscipciones />} />
+          <Route path="/suscripciones" element={<Suscripciones />} />
 
           {/* RUTAS DE AUTENTICACIÓN */}
           <Route path="/login" element={<Login />} />
@@ -77,7 +73,7 @@ function App() {
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-          {/* RUTAS PRIVADAS (ahora públicas) */}
+          {/* RUTAS PRIVADAS (temporalmente públicas) */}
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/pay" element={<Pay />} />
           <Route path="/suscripciones" element={<Suscripciones />} />
