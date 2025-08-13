@@ -17,6 +17,7 @@ import ProductsMenu from './pages/Products/ProductsMenu';
 import ProductsReview from './pages/Products/ProductsReview';
 import SobreNosotros from './pages/SobreNosotros/SobreNosotros';
 import Contact from './components/Contact/Contact';
+import Suscipciones from './pages/Suscripciones/Suscripciones';
 
 // Pages - Autenticación
 import Login from './pages/Login/Login';
@@ -67,6 +68,7 @@ function App() {
           <Route path="/producto/:id" element={<ProductsReview />} />
           <Route path="/sobre-nosotros" element={<SobreNosotros />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/suscripciones" element={<Suscipciones />} />
 
           {/* RUTAS DE AUTENTICACIÓN */}
           <Route path="/login" element={<Login />} />
