@@ -17,6 +17,8 @@ import ProductsReview from './pages/Products/ProductsReview';
 import SobreNosotros from './pages/SobreNosotros/SobreNosotros';
 import Contact from './components/Contact/Contact';
 import Suscripciones from './pages/Suscripciones/Suscripciones';
+import ChatBot from './pages/ChatBot/ChatBot';
+
 
 // Pages - Autenticación
 import Login from './pages/Login/Login';
@@ -30,6 +32,7 @@ import Carrito from './pages/Carrito/Carrito';
 import Pay from './pages/Pay/pay';
 import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
 import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
+
 
 function App() {
   const location = useLocation();
@@ -65,6 +68,7 @@ function App() {
           <Route path="/sobre-nosotros" element={<SobreNosotros />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/suscripciones" element={<Suscripciones />} />
+          <Route path="/chatbot" element={<ChatBot />} />
 
           {/* RUTAS DE AUTENTICACIÓN */}
           <Route path="/login" element={<Login />} />
