@@ -16,7 +16,7 @@ import RequestCode from "./pages/RecoveryPassword/RequestCode";
 import VerifyCode from "./pages/RecoveryPassword/VerifyCode";
 import NewPassword from "./pages/RecoveryPassword/NewPasssword";
 
-// Pages - Admin / Privadas
+// Pages - Admin
 import HomeP from "./pages/Home/homep";
 import Products1 from "./pages/Products/Products1";
 import Suscripciones from "./pages/Suscripcionees/Suscripcionees";
@@ -58,13 +58,7 @@ function AppContent() {
 
       {!shouldHideNav && <Nav />}
 
-      <div
-        className="main-content"
-        style={{
-          marginLeft: !shouldHideNav ? "320px" : "0", // aplica el espacio si hay Nav
-          paddingTop: !shouldHideNav ? "100px" : "0",
-        }}
-      >
+      <div className="main-content" style={{ paddingTop: !shouldHideNav ? "100px" : "0" }}>
         <Routes>
           {/* Rutas públicas */}
           <Route path="/" element={<Navigate to="/homep" replace />} />
@@ -73,7 +67,7 @@ function AppContent() {
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-          {/* Rutas privadas */}
+          {/* Rutas protegidas */}
           <Route path="/home" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
           <Route path="/homep" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
           <Route path="/productos1" element={<ProtectedRoute><Products1 /></ProtectedRoute>} />

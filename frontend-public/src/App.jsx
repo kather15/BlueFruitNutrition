@@ -26,7 +26,7 @@ import RequestCode from './pages/RecoveryPassword/RequestCode';
 import VerifyCode from './pages/RecoveryPassword/VerifyCode';
 import NewPassword from './pages/RecoveryPassword/NewPasssword';
 
-// Pages - Privadas (ahora públicas)
+// Pages - Privadas (temporales públicas)
 import Carrito from './pages/Carrito/Carrito';
 import Pay from './pages/Pay/pay';
 import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
@@ -35,28 +35,12 @@ import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
 function App() {
   const location = useLocation();
 
-  // Ocultar nav/footer en login y registro
+  // Ocultar Nav/Footer en login y registro
   const hideNavFooterRoutes = ['/login', '/registro'];
   const hideNavFooter = hideNavFooterRoutes.includes(location.pathname);
 
   return (
     <AuthProvider>
-<<<<<<< HEAD
-      <>
-        <Toaster
-          position="top-right"
-          reverseOrder={false}
-          toastOptions={{
-            style: {
-              background: '#0C133F',
-              color: '#fff',
-              fontSize: '16px',
-              zIndex: 99999,
-            },
-          }}
-          containerStyle={{ marginTop: '100px' }}
-        />
-=======
       <CarritoProvider>
         <>
           <Toaster
@@ -70,24 +54,11 @@ function App() {
                 zIndex: 99999,
               },
             }}
-            containerStyle={{
-              marginTop: '100px',
-            }}
+            containerStyle={{ marginTop: '100px' }}
           />
->>>>>>> 244313f053d5684d1c928b9920d106f9a7664961
 
           {!hideNavFooter && <Nav />}
 
-<<<<<<< HEAD
-        <Routes>
-          {/* RUTAS PÚBLICAS */}
-          <Route path="/" element={<Home />} />
-          <Route path="/product" element={<ProductsMenu />} />
-          <Route path="/producto/:id" element={<ProductsReview />} />
-          <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/suscripciones" element={<Suscripciones />} />
-=======
           <Routes>
             {/* RUTAS PÚBLICAS */}
             <Route path="/" element={<Home />} />
@@ -95,7 +66,7 @@ function App() {
             <Route path="/producto/:id" element={<ProductsReview />} />
             <Route path="/sobre-nosotros" element={<SobreNosotros />} />
             <Route path="/contact" element={<Contact />} />
->>>>>>> 244313f053d5684d1c928b9920d106f9a7664961
+            <Route path="/suscripciones" element={<Suscripciones />} />
 
             {/* RUTAS DE AUTENTICACIÓN */}
             <Route path="/login" element={<Login />} />
@@ -104,23 +75,13 @@ function App() {
             <Route path="/verificar-codigo" element={<VerifyCode />} />
             <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-<<<<<<< HEAD
-          {/* RUTAS PRIVADAS (temporalmente públicas) */}
-          <Route path="/carrito" element={<Carrito />} />
-          <Route path="/pay" element={<Pay />} />
-          <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/Metodo" element={<MetodoDePago />} />
-          <Route path="/personalizar" element={<Personalizar />} />
-=======
-            {/* RUTAS PRIVADAS (ahora públicas) */}
+            {/* RUTAS PRIVADAS (temporalmente públicas) */}
             <Route path="/carrito" element={<Carrito />} />
             <Route path="/pay" element={<Pay />} />
-            <Route path="/suscripciones" element={<Suscripciones />} />
             <Route path="/Metodo" element={<MetodoDePago />} />
             <Route path="/personalizar" element={<Personalizar />} />
->>>>>>> 244313f053d5684d1c928b9920d106f9a7664961
 
-            {/* RUTA CATCH-ALL PARA 404 */}
+            {/* 404 */}
             <Route path="*" element={<Error404Public />} />
           </Routes>
 
