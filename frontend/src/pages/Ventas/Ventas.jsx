@@ -1,29 +1,39 @@
 // src/pages/Ventas.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Ventas.css';
 
-const ventas = [
-  { id: 1, fecha: '15/07/25', total: '$45.00', items: 3, estado: 'Finalizado' },
-  { id: 2, fecha: '14/07/25', total: '$32.50', items: 2, estado: 'Finalizado' },
-  { id: 3, fecha: '14/07/25', total: '$68.75', items: 5, estado: 'Finalizado' },
-  { id: 4, fecha: '13/07/25', total: '$25.00', items: 2, estado: 'Finalizado' },
-  { id: 5, fecha: '13/07/25', total: '$89.25', items: 6, estado: 'Finalizado' },
-  { id: 6, fecha: '12/07/25', total: '$37.50', items: 3, estado: 'Finalizado' },
-  { id: 7, fecha: '12/07/25', total: '$54.00', items: 4, estado: 'Finalizado' },
-  { id: 8, fecha: '11/07/25', total: '$28.75', items: 2, estado: 'Finalizado' },
-  { id: 9, fecha: '11/07/25', total: '$76.50', items: 5, estado: 'Finalizado' },
-  { id: 10, fecha: '10/07/25', total: '$42.25', items: 3, estado: 'Finalizado' },
-];
-
 const Ventas = () => {
+  const [ventas, setVentas] = useState([]);
+
+  // Cargar las órdenes y filtrar solo las completadas
+  const fetchVentas = async () => {
+    try {
+      const res = await fetch('http://localhost:4000/api/ordenes');
+      const data = await res.json();
+
+      // Filtrar las que tienen estado "Completada"
+      const completadas = data.filter((orden) => orden.estado === 'Completada');
+      setVentas(completadas);
+    } catch (error) {
+      console.error('Error al cargar ventas:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchVentas();
+  }, []);
+
   // Calcular estadísticas
-  const totalVentas = ventas.reduce((sum, venta) => sum + parseFloat(venta.total.replace('$', '')), 0);
-  const totalItems = ventas.reduce((sum, venta) => sum + venta.items, 0);
+  const totalVentas = ventas.reduce((sum, venta) => sum + (venta.total || 0), 0);
+  const totalItems = ventas.reduce(
+    (sum, venta) => sum + (Array.isArray(venta.items) ? venta.items.length : venta.items || 0),
+    0
+  );
 
   return (
     <div className="ventas-container">
       <h2>VENTAS</h2>
-      
+
       {/* Estadísticas resumidas */}
       <div className="ventas-estadisticas">
         <div className="estadistica-card">
@@ -52,11 +62,17 @@ const Ventas = () => {
         </thead>
         <tbody>
           {ventas.map((venta, index) => (
-            <tr key={index}>
-              <td>#{venta.id}</td>
-              <td>{venta.fecha}</td>
-              <td>{venta.total}</td>
-              <td>{venta.items}</td>
+            <tr key={venta._id || index}>
+              <td>#{index + 1}</td>
+              <td>
+                {new Date(venta.fecha).toLocaleDateString(undefined, {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })}
+              </td>
+              <td>${venta.total?.toFixed(2)}</td>
+              <td>{Array.isArray(venta.items) ? venta.items.length : venta.items || 0}</td>
               <td>
                 <span className="estado-finalizado">{venta.estado}</span>
               </td>

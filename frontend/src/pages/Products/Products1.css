@@ -16,25 +16,39 @@ body {
   padding: 0;
 }
 
+/* WRAPPER GENERAL: ocupa toda la pantalla y centra su contenido */
+/* Ajusta tu wrapper principal */
+.products-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: calc(100% - 250px); /* ancho total menos sidebar */
+  margin-left: 250px;        /* empuja el contenido al lado del sidebar */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 /* CONTENEDOR PRINCIPAL */
 .products-container {
-  min-height: 100vh;              
-  display: flex;                  
-  flex-direction: column;         
-  justify-content: center;        /* ✅ centra verticalmente */
-  align-items: center;            /* ✅ centra horizontalmente */
-  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;       
+  justify-content: center;      /* centra vertical */
+  align-items: center;          /* centra horizontal */
   text-align: center;
+  width: 200%;
+  max-width: 1200px;            /* ancho máximo */
+  padding: 40px 20px;
 }
 
 /* HEADER con título + botón en la misma línea */
 .products-header {
   display: flex;
-  justify-content: center;  /* ✅ centrado horizontal */
-  align-items: center;      /* ✅ centrado vertical */
-  gap: 1.5rem;              /* espacio entre título y botón */
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
   margin-bottom: 30px;
-  flex-wrap: wrap;          /* si la pantalla es chica, se baja el botón */
+  flex-wrap: wrap;
 }
 
 .products-title {
@@ -65,7 +79,7 @@ body {
 /* GRID DE PRODUCTOS */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* ✅ responsivo */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 2rem;
   justify-content: center;
   align-items: stretch;
@@ -110,16 +124,15 @@ body {
   font-weight: 700;
   color: var(--primary);
   margin-bottom: 0.5rem;
-  min-height: 2.4rem; /* para alinear altura aunque nombre varíe */
+  min-height: 2.4rem;
 }
 
-/* NUEVOS ESTILOS PARA DESCRIPCIÓN, SABOR Y PRECIO */
 .product-description {
   font-size: 14px;
   color: #333;
   margin: 6px 0;
   line-height: 1.4;
-  max-height: 3.6em; /* aprox 2 líneas */
+  max-height: 3.6em;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -148,7 +161,8 @@ body {
 }
 
 .edit-btn,
-.delete-btn {
+.delete-btn,
+.view-btn {
   background-color: var(--button);
   color: var(--button-text);
   padding: 0.5rem 1rem;
@@ -164,7 +178,8 @@ body {
   background-color: #002244;
 }
 
-.edit-btn:hover {
+.edit-btn:hover,
+.view-btn:hover {
   background-color: #1c1c2a;
 }
 

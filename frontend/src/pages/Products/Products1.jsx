@@ -47,7 +47,6 @@ function Product() {
     fetchProducts();
   }, []);
 
-  // Sin token, pública (DE MOMENTO)
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -66,11 +65,7 @@ function Product() {
     if (!window.confirm("¿Estás seguro de eliminar este producto?")) return;
 
     try {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: "DELETE"
-        //  No enviamos token
-      });
-
+      const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
       if (response.ok) {
         await fetchProducts();
         alert("Producto eliminado correctamente");
@@ -88,38 +83,40 @@ function Product() {
   };
 
   return (
-    <div className="products-container">
-      <div className="products-header">
-        <h2 className="products-title">Productos</h2>
-        <button
-          className="add-product-btn"
-          onClick={() => navigate('/addProduct')}
-        >
-          Agregar Productos
-        </button>
-      </div>
+    <div className="products-wrapper"> {/* WRAPPER CENTRADO */}
+      <div className="products-container">
+        <div className="products-header">
+          <h2 className="products-title">Productos</h2>
+          <button
+            className="add-product-btn"
+            onClick={() => navigate('/addProduct')}
+          >
+            Agregar Productos
+          </button>
+        </div>
 
-      {loading ? (
-        <div className="loading">Cargando productos...</div>
-      ) : error ? (
-        <div className="error">
-          <p>Error: {error}</p>
-          <button onClick={fetchProducts}>Reintentar</button>
-        </div>
-      ) : products.length === 0 ? (
-        <div className="loading">No hay productos disponibles</div>
-      ) : (
-        <div className="product-grid">
-          {products.map((product) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              onView={handleView}
-              onDelete={handleDelete}
-            />
-          ))}
-        </div>
-      )}
+        {loading ? (
+          <div className="loading">Cargando productos...</div>
+        ) : error ? (
+          <div className="error">
+            <p>Error: {error}</p>
+            <button onClick={fetchProducts}>Reintentar</button>
+          </div>
+        ) : products.length === 0 ? (
+          <div className="loading">No hay productos disponibles</div>
+        ) : (
+          <div className="product-grid">
+            {products.map((product) => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                onView={handleView}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

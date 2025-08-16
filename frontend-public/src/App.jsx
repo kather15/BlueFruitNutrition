@@ -26,7 +26,7 @@ import RequestCode from './pages/RecoveryPassword/RequestCode';
 import VerifyCode from './pages/RecoveryPassword/VerifyCode';
 import NewPassword from './pages/RecoveryPassword/NewPasssword';
 
-// Pages - Privadas (ahora públicas)
+// Pages - Privadas (temporales públicas)
 import Carrito from './pages/Carrito/Carrito';
 import Pay from './pages/Pay/pay';
 import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
@@ -35,7 +35,7 @@ import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
 function App() {
   const location = useLocation();
 
-  // Ocultar nav/footer en login y registro
+  // Ocultar Nav/Footer en login y registro
   const hideNavFooterRoutes = ['/login', '/registro'];
   const hideNavFooter = hideNavFooterRoutes.includes(location.pathname);
 
@@ -75,13 +75,13 @@ function App() {
             <Route path="/verificar-codigo" element={<VerifyCode />} />
             <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-            {/* RUTAS PRIVADAS (ahora públicas) */}
+            {/* RUTAS PRIVADAS (temporalmente públicas) */}
             <Route path="/carrito" element={<Carrito />} />
             <Route path="/pay" element={<Pay />} />
             <Route path="/Metodo" element={<MetodoDePago />} />
             <Route path="/personalizar" element={<Personalizar />} />
 
-            {/* RUTA CATCH-ALL PARA 404 */}
+            {/* 404 */}
             <Route path="*" element={<Error404Public />} />
           </Routes>
 

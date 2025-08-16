@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './ResumenOrden.css';
 
 const estadosPosibles = ['Pendiente', 'En proceso', 'Completada', 'Cancelada'];
@@ -21,23 +20,16 @@ const ResumenOrden = () => {
   useEffect(() => {
     const fetchOrden = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/ordenes/${id}`);
-        console.log('Orden cargada:', res.data); // Para verificar estructura
-        setOrden(res.data);
-        setNuevoEstado(res.data.estado);
-        setLoading(false);
+        const res = await fetch(`http://localhost:4000/api/ordenes/${id}`);
+        if (!res.ok) throw new Error(`Error ${res.status}`);
+        const data = await res.json();
+        console.log('Orden cargada:', data);
+        setOrden(data);
+        setNuevoEstado(data.estado);
       } catch (err) {
-        if (err.response) {
-          console.error('Error response status:', err.response.status);
-          console.error('Error response data:', err.response.data);
-          setError(`Error ${err.response.status}: ${JSON.stringify(err.response.data)}`);
-        } else if (err.request) {
-          console.error('No response received:', err.request);
-          setError('No se recibió respuesta del servidor.');
-        } else {
-          console.error('Error message:', err.message);
-          setError(`Error: ${err.message}`);
-        }
+        console.error(err);
+        setError(err.message || 'Error al cargar la orden.');
+      } finally {
         setLoading(false);
       }
     };
@@ -57,29 +49,36 @@ const ResumenOrden = () => {
 
     try {
       console.log('Intentando actualizar estado a:', nuevoEstado);
-      const res = await axios.put(`http://localhost:4000/api/ordenes/${id}`, { estado: nuevoEstado });
-      console.log('Respuesta actualización:', res.data);
+      const res = await fetch(`http://localhost:4000/api/ordenes/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ estado: nuevoEstado }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(JSON.stringify(errorData));
+      }
+
       setOrden(prev => ({ ...prev, estado: nuevoEstado }));
       setExitoGuardar('Estado actualizado con éxito');
-    } catch (err) {
-      if (err.response) {
-        console.error('Error response status:', err.response.status);
-        console.error('Error response data:', err.response.data);
-        setErrorGuardar(`Error ${err.response.status}: ${JSON.stringify(err.response.data)}`);
-      } else if (err.request) {
-        console.error('No response received:', err.request);
-        setErrorGuardar('No se recibió respuesta del servidor.');
-      } else {
-        console.error('Error message:', err.message);
-        setErrorGuardar(`Error: ${err.message}`);
+
+      // Redirigir si el estado es "Completada"
+      if (nuevoEstado === 'Completada') {
+        navigate('/ventas');
       }
+    } catch (err) {
+      console.error(err);
+      setErrorGuardar(`Error: ${err.message}`);
     } finally {
       setGuardando(false);
     }
   };
 
   if (loading) return <p>Cargando...</p>;
-  if (error) return <p style={{color: 'red'}}>{error}</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
     <div className="resumen-container">
@@ -107,7 +106,6 @@ const ResumenOrden = () => {
           </select>
         </div>
 
-        {/* Mensajes */}
         {guardando && <p style={{ color: 'blue' }}>Guardando...</p>}
         {exitoGuardar && <p style={{ color: 'green' }}>{exitoGuardar}</p>}
         {errorGuardar && <p style={{ color: 'red' }}>{errorGuardar}</p>}

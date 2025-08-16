@@ -7,9 +7,8 @@ import { AuthProvider } from "./context/useAuth";
 
 // Components
 import Nav from "./components/Nav/Nav";
-import Footer from "./components/Footer/Footer";
 import ProtectedRoute from "./components/PrivateRoute/ProtectedRoute";
-import Error404Private from "./components/NotFound/NotFoundPrivate.jsx"; 
+import Error404Private from "./components/NotFound/NotFoundPrivate.jsx";
 
 // Pages - Login / Recovery
 import Login from "./pages/Login/Login";
@@ -17,7 +16,7 @@ import RequestCode from "./pages/RecoveryPassword/RequestCode";
 import VerifyCode from "./pages/RecoveryPassword/VerifyCode";
 import NewPassword from "./pages/RecoveryPassword/NewPasssword";
 
-// Pages - Admin / Privadas
+// Pages - Admin
 import HomeP from "./pages/Home/homep";
 import Products1 from "./pages/Products/Products1";
 import Suscripciones from "./pages/Suscripcionees/Suscripcionees";
@@ -37,9 +36,9 @@ function AppContent() {
   const location = useLocation();
   const [theme, setTheme] = useState("light");
 
-  // Rutas donde no mostrar Nav/Sidebar
+  // Rutas donde NO mostrar Nav
   const hideNavRoutes = ["/", "/login", "/enviar-codigo", "/verificar-codigo", "/nueva-contraseña"];
-  const shouldHideLayout = hideNavRoutes.includes(location.pathname);
+  const shouldHideNav = hideNavRoutes.includes(location.pathname);
 
   return (
     <ThemeContext.Provider value={{ setTheme, theme }}>
@@ -57,18 +56,19 @@ function AppContent() {
         containerStyle={{ marginTop: "100px" }}
       />
 
-      {!shouldHideLayout && <Nav />}
+      {!shouldHideNav && <Nav />}
 
-      <div className="main-content" style={{ marginLeft: !shouldHideLayout ? "320px" : "0", paddingTop: "30px" }}>
+      {/* main-content con clase condicional para centrado */}
+      <div className={`main-content ${shouldHideNav ? "no-sidebar" : ""}`}>
         <Routes>
           {/* Rutas públicas */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/homep" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/enviar-codigo" element={<RequestCode />} />
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-          {/* Rutas privadas */}
+          {/* Rutas protegidas */}
           <Route path="/home" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
           <Route path="/homep" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
           <Route path="/productos1" element={<ProtectedRoute><Products1 /></ProtectedRoute>} />
@@ -86,8 +86,6 @@ function AppContent() {
           <Route path="*" element={<Error404Private />} />
         </Routes>
       </div>
-
-      {!shouldHideLayout && <Footer />}
     </ThemeContext.Provider>
   );
 }
@@ -103,4 +101,3 @@ function App() {
 }
 
 export default App;
-

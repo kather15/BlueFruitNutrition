@@ -37,6 +37,16 @@ body, html, #root {
   margin-left: 0;
 }
 
+/* Centrado de contenido dentro de main-content */
+.main-content > * {
+  width: 100%;             /* ocupa todo el ancho disponible */
+  max-width: 1200px;       /* opcional: limita ancho máximo */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centra vertical */
+  align-items: center;     /* centra horizontal */
+}
+
 /* --- Opcional: estilos que tenías --- */
 .logo {
   height: 6em;
