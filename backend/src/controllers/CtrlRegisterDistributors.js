@@ -58,7 +58,9 @@ registerDistributorController.register = async (req, res) => {
         );
 
         //generamos cookie                    
-        res.cookie("verificationToken", tokenCode)
+        res.cookie("verificationToken", tokenCode, {
+            httpOnly: true
+        })
 
 
 

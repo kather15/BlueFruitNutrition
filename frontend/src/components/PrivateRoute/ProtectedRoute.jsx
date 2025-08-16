@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuthContext } from '../../context/useAuth';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuthContext();
+  const location = useLocation();
+
+  // Mostrar toast solo una vez cuando se detecta que no está autenticado
+  useEffect(() => {
+    if (!loading && !user?.isAuthenticated) {
+      toast.error("Debes iniciar sesión para acceder a esta página");
+    }
+  }, [loading, user]);
 
   if (loading) {
     return (
@@ -12,47 +21,24 @@ function ProtectedRoute({ children }) {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        backgroundColor: '#f5f8fa',
-        fontFamily: 'Segoe UI, sans-serif'
+        fontSize: '1.2rem',
+        backgroundColor: '#f8f9fa'
       }}>
         <div style={{
           background: 'white',
-          padding: '3rem 4rem',
-          borderRadius: '15px',
-          boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-          textAlign: 'center'
+          padding: '2rem 3rem',
+          borderRadius: '10px',
+          boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
         }}>
-          <div style={{
-            marginBottom: '1rem',
-            fontSize: '1.5rem',
-            color: '#0C133F'
-          }}>
-            🔐
-          </div>
-          <h3 style={{ 
-            color: '#0C133F', 
-            marginBottom: '0.5rem',
-            fontSize: '1.2rem'
-          }}>
-            Verificando permisos
-          </h3>
-          <p style={{ 
-            color: '#6b7280',
-            margin: 0,
-            fontSize: '1rem'
-          }}>
-            Validando credenciales de administrador...
-          </p>
+          Verificando sesión...
         </div>
       </div>
     );
   }
 
-  if (!user || user.role !== 'admin') {
-    toast.error("Acceso denegado. Se requieren permisos de administrador.");
-    // Redirigir al login público
-    window.location.href = 'http://localhost:3000/login';
-    return null;
+  if (!user?.isAuthenticated) {
+    // Aquí ya no llamamos toast, solo hacemos la redirección
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;

@@ -11,7 +11,7 @@ import registerCustomersRoutes from "./src/routes/registerCustomer.js";
 import registerDistributorsRoutes from "./src/routes/registerDistributor.js";
 import passwordRecoveryRoutes from "./src/routes/passwordRecovery.js";
 import loginRoutes from "./src/routes/login.js";
-import logoutRoutes from "./src/routes/logout.js";
+import logoutRoutes from './src/routes/logout.js';
 import subscriptionRoutes from './src/routes/subscriptions.js';
 import shoppingCartRoutes from './src/routes/shoppingCart.js';
 import ordenesRoutes from './src/routes/ordenes.js'; 
@@ -20,6 +20,10 @@ import ContactRoutes from "./src/routes/contact.js";
 import PayRoutes from "./src/routes/pay.js"
 import TestPay from "./src/routes/testPayment.js";
 import tokenRouter from "./src/routes/token.js";
+import adminVerifyRoutes from "./src/routes/adminVerify.js";
+import sessionRouter from "./src/routes/session.js";
+import chatRoutes from "./src/routes/chatRoutes.js";
+
 
 const app = express();
 
@@ -50,7 +54,9 @@ app.use("/api/contact", ContactRoutes);
 app.use("/api/pay",PayRoutes);
 app.use("/api/testPay", TestPay);
 app.use("/api/token", tokenRouter);
-
-
+app.use("/api", ContactRoutes);
+app.use("/api/admin", adminVerifyRoutes);
+app.use("/api", sessionRouter);
+app.use("/api/chat", chatRoutes);
 
 export default app;
