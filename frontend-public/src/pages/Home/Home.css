@@ -421,6 +421,40 @@
   background-color: #003366;
 }
 
+/* BOTON DE WHATSAPP FIJO CON TEXTO */
+.blue-fruit-whatsapp-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25D366; /* verde WhatsApp */
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 50px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  text-decoration: none;
+  z-index: 1000;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.blue-fruit-whatsapp-button img {
+  width: 30px;
+  height: 30px;
+}
+
+.blue-fruit-whatsapp-button span {
+  display: inline-block;
+}
+
+.blue-fruit-whatsapp-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .blue-fruit-historia-content {
