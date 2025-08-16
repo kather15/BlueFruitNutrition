@@ -1,24 +1,50 @@
 /* src/pages/Suscripciones.css */
-.suscripciones-container {
-  padding: 40px;
-  background-color: #fff;
-  min-height: 100vh;
-  text-align: center;
+
+/* Aseguramos que el body ocupe toda la pantalla */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
+.suscripciones-container {
+  display: flex;
+  flex-direction: column;   /* apila elementos verticalmente */
+  justify-content: center;  /* centra verticalmente */
+  align-items: center;      /* centra horizontalmente */
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: #fff;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Inner para alinear contenido */
+.suscripciones-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Título */
 .suscripciones-container h2 {
   font-size: 2rem;
-  margin-bottom: 30px;
+  margin: 5px 0 30px 0; /* margen superior reducido para subir el título */
   font-weight: bold;
   color: #000;
+  text-align: center; /* centrado horizontal */
 }
 
+/* Tabla */
 .suscripciones-tabla {
-  margin: 0 auto;
   border-collapse: collapse;
   width: 85%;
+  max-width: 1000px;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
 }
 
 .suscripciones-tabla th {
@@ -26,17 +52,21 @@
   color: white;
   padding: 15px;
   font-weight: 600;
+  text-align: center;
 }
 
 .suscripciones-tabla td {
   padding: 15px;
   border-bottom: 1px solid #ddd;
   color: #000;
+  text-align: center;
 }
 
 .suscripciones-tabla tr:last-child td {
   border-bottom: none;
 }
+
+/* Botón */
 .btn-editar {
   padding: 5px 10px;
   background-color: #3498db;
@@ -44,8 +74,20 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-top: 20px; /* separación de la tabla */
 }
 
 .btn-editar:hover {
   background-color: #2980b9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .suscripciones-tabla {
+    width: 95%;
+  }
+  .suscripciones-tabla th,
+  .suscripciones-tabla td {
+    padding: 10px;
+  }
 }

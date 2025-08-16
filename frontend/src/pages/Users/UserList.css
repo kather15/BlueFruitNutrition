@@ -1,44 +1,75 @@
+/* ==========================
+   Contenedor principal
+========================== */
 .page-container {
   min-height: 100vh;
-  background-color: #f3f4f6;
+  display: flex;
+  flex-direction: column;   /* apila header y secciones verticalmente */
+  justify-content: center;  /* centra verticalmente */
+  align-items: center;      /* centra horizontalmente */
+  background-color: #ffffff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding-bottom: 2rem;
+  box-sizing: border-box;
 }
 
+/* ==========================
+   Header
+========================== */
 .header {
+  width: 100%;
   background-color: white;
   padding: 2rem 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #ffffff;
+  text-align: center;
 }
 
 .page-title {
-  text-align: center;
   font-size: 2rem;
   font-weight: bold;
-  color: #1f2937;
+  color: #374151; /* color más legible */
   margin: 0;
 }
 
+/* ==========================
+   Secciones
+========================== */
 .section-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #374151;
-  margin-bottom: 1rem;
+  color: #8d4040;           /* color de título destacado */
+  margin-bottom: 1.5rem;    /* espacio debajo del título */
   border-bottom: 2px solid #d1d5db;
   padding-bottom: 0.5rem;
+  text-align: center;
+  width: fit-content;        /* ancho del contenido del título */
+  max-width: 100%;           /* no exceder el contenedor */
+  margin-left: auto;
+  margin-right: auto;        /* centra horizontalmente */
 }
 
+/* ==========================
+   Sección de usuarios
+========================== */
 .users-section {
-  padding: 2rem;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* centra los grids dentro de la sección */
 }
 
+/* ==========================
+   Grilla de usuarios
+========================== */
 .users-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
+  justify-items: center;    /* centra cada tarjeta en su celda */
 }
 
 @media (min-width: 768px) {

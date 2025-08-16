@@ -58,7 +58,8 @@ function AppContent() {
 
       {!shouldHideNav && <Nav />}
 
-      <div className="main-content" style={{ paddingTop: !shouldHideNav ? "100px" : "0" }}>
+      {/* main-content con clase condicional para centrado */}
+      <div className={`main-content ${shouldHideNav ? "no-sidebar" : ""}`}>
         <Routes>
           {/* Rutas públicas */}
           <Route path="/" element={<Navigate to="/homep" replace />} />
