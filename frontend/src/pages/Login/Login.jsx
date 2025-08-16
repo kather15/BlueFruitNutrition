@@ -42,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <div className="login-page">
+    <div className="login-page chaba">
       {/* Lado izquierdo - Imagen */}
       <div className="left-side">
         <div className="image-container">

@@ -103,10 +103,19 @@ const PerfilAdmin = () => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      // Llama al endpoint de logout para limpiar la cookie en el backend
+      await fetch("http://localhost:4000/api/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      // Opcional: puedes mostrar un toast de error si falla el logout
+    }
     localStorage.removeItem("token");
     toast.success("Sesión cerrada");
-    navigate("/");
+    window.location.href = "http://localhost:5173";
   };
 
   if (loading) return <p>Cargando perfil...</p>;

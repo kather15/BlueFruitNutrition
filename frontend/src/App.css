@@ -1,10 +1,43 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+body, html, #root {
+  height: 100%;
+  width: 100%;
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #ffffff;
+  color: #0C133F;
+}
+
+/* Layout principal con sidebar + contenido */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Contenido principal con Nav */
+.main-content {
+  flex: 1;
+  margin-left: 220px; /* espacio del sidebar */
+  display: flex;
+  justify-content: center;   /* centra horizontal */
+  align-items: center;       /* centra vertical */
+  padding: 20px;
+  background: #ffffff;       /* fondo más claro */
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+/* Cuando no hay Nav (login/recovery), ocupa todo */
+.hide-nav .main-content {
+  margin-left: 0;
+}
+
+/* --- Opcional: estilos que tenías --- */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -38,5 +71,5 @@
 }
 
 .read-the-docs {
-  color: #888;
+  color: #ffffff;
 }

@@ -1,127 +1,79 @@
-/* BlueFruitNavbar.css */
-.blue-fruit-main-navbar {
-  background-color: #1a1a3a;
-  padding: 12px 0;
-  width: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: sticky;
+/* src/components/Nav/Nav.css */
+.sidebar {
+  position: fixed;
+  left: 0;
   top: 0;
+  width: 220px;
+  height: 100vh;
+  background-color: #1a1a3a;
+  color: rgb(196, 169, 169);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  box-sizing: border-box;
+  user-select: none;
   z-index: 1000;
 }
 
-.blue-fruit-navbar-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  flex-wrap: wrap;
+.sidebar-logo {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.blue-fruit-navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  flex-wrap: wrap;
+.sidebar-logo img {
+  max-width: 150px;
+  height: auto;
+  display: inline-block;
 }
 
-.blue-fruit-logo img {
-  height: 45px;
-  width: auto;
-}
-
-.blue-fruit-nav-menu {
-  display: flex;
+.sidebar-menu {
   list-style: none;
-  margin: 0;
   padding: 0;
-  gap: 30px;
-  flex-wrap: wrap;
+  margin: 0;
+  flex-grow: 1;
 }
 
-.blue-fruit-nav-menu li a {
-  color: #ffffff;
+.sidebar-menu li {
+  margin-bottom: 18px;
+}
+
+.sidebar-menu li a {
+  color: white;
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-  transition: color 0.3s ease;
-  padding: 8px 0;
-  white-space: nowrap;
+  font-size: 17px;
+  padding: 10px 24px;
+  display: block;
+  border-radius: 6px;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.blue-fruit-nav-menu li a:hover {
-  color: #66ccff;
+.sidebar-menu li a:hover {
+  background-color: #2a2a5a;
 }
 
-.blue-fruit-navbar-right {
+.sidebar-footer {
+  padding: 10px 24px;
   display: flex;
-  align-items: center;
-  margin-top: 0;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid #333;
 }
 
-/* Botón perfil con icono */
-.blue-fruit-profile-btn {
-  background: transparent;
+.sidebar-footer button {
+  width: 100%;
+  background: #25254a;
+  color: white;
   border: none;
+  border-radius: 6px;
+  padding: 10px 0;
+  font-size: 15px;
   cursor: pointer;
-  padding: 6px;
+  transition: background-color 0.2s ease-in-out;
   display: flex;
   align-items: center;
-  margin-left: 15px;
+  justify-content: center;
 }
 
-.blue-fruit-profile-icon {
-  font-size: 36px;
-  color: white; /* color azul bonito */
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.blue-fruit-profile-icon:hover {
-  color: #91d1ff; /* azul más claro al pasar mouse */
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .blue-fruit-navbar-container {
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 15px;
-    gap: 15px;
-  }
-
-  .blue-fruit-navbar-left {
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    align-items: center;
-  }
-
-  .blue-fruit-logo img {
-    height: 40px;
-  }
-
-  .blue-fruit-nav-menu {
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-
-  .blue-fruit-nav-menu li a {
-    font-size: 14px;
-    padding: 6px 10px;
-  }
-
-  .blue-fruit-navbar-right {
-    margin-top: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-
-  .blue-fruit-profile-btn {
-    margin-left: 0;
-  }
+.sidebar-footer button:hover {
+  background-color: #3a3a7a;
 }

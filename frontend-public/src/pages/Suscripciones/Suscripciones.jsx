@@ -73,7 +73,7 @@ const Beneficios = ({ usuarioId, onNuevaSuscripcion }) => {
 
               <div className="beneficios-product">
                 <div className="product-image">
-                  <img src="/dist/reppobanano.png" alt="Reppo Banano" />
+                  <img src="./public/guineyo.png" alt="Reppo Banano" />
                 </div>
                 <div className="product-price">$19.99</div>
               </div>
