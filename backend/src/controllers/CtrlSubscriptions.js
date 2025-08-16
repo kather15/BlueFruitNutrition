@@ -10,7 +10,7 @@ export const getSubscriptions = async (req, res) => {
   }
 };
 
-// Crear una suscripción
+// Crear una suscripción con beneficios predefinidos
 export const createSubscription = async (req, res) => {
   try {
     const { suscripcionId, fechaInicio, usuario, precio, plan, estado } = req.body;
@@ -19,7 +19,26 @@ export const createSubscription = async (req, res) => {
       return res.status(400).json({ message: 'Faltan campos obligatorios' });
     }
 
-    const nueva = new Subscription({ suscripcionId, fechaInicio, usuario, precio, plan, estado });
+    // Agregar beneficios predeterminados
+    const beneficios = [
+      'Descuentos exclusivos',
+      'Promociones anticipadas',
+      'Envío gratis',
+      'Descuento especial en el mes de cumpleaños',
+      'Sistema de acumulación de puntos',
+      'Promocionales (camisas, gorras, etc) por acumulación de puntos'
+    ];
+
+    const nueva = new Subscription({
+      suscripcionId,
+      fechaInicio,
+      usuario,
+      precio,
+      plan,
+      estado,
+      beneficios
+    });
+
     await nueva.save();
     res.status(201).json(nueva);
   } catch (error) {
