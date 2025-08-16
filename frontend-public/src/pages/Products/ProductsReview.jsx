@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star } from 'lucide-react';
+
 import './ProductsReview.css';
 
 const ProductsReview = () => {
@@ -147,33 +148,30 @@ const ProductsReview = () => {
  const handleAddToCart = () => {
   if (!product) return;
 
-  const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
+  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
   const productId = product._id || product.id;
-  const existe = carritoActual.find((p) => p.id === productId);
+  const existente = carrito.find(p => p.id === productId);
 
-  let nuevoCarrito;
-  if (existe) {
-    nuevoCarrito = carritoActual.map((p) =>
-      p.id === productId
-        ? { ...p, cantidad: p.cantidad + quantity }
-        : p
-    );
+  if (existente) {
+    existente.cantidad += quantity;
   } else {
-    nuevoCarrito = [
-      ...carritoActual,
-      {
-        id: productId,
-        nombre: product.name,
-        precio: product.price,
-        cantidad: quantity,
-        imagen: product.image || "/placeholder-product.png",
-      },
-    ];
+    carrito.push({
+      id: productId,
+      nombre: product.name,
+      precio: product.price,
+      cantidad: quantity,
+      imagen: product.image || '/placeholder-product.png'
+    });
   }
 
-  localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+  // 🔹 Guardar en localStorage
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+
   alert(`Agregado al carrito: ${quantity} x ${product.name}`);
+
+  // 👉 Si quieres enviar directo al carrito:
+  // navigate("/carrito");
 };
 
 
@@ -251,9 +249,13 @@ const ProductsReview = () => {
                 </div>
 
                 <div className="action-buttons">
-                  <button className="add-to-cart-btn" onClick={handleAddToCart}>
-                    Agregar Al Carrito
-                  </button>
+                  <button
+  className="add-to-cart-btn"
+  onClick={() => handleAddToCart(product)}
+>
+  Agregar Al Carrito
+</button>
+
                   <button className="customize-btn" onClick={handleCustomizeProduct}>
                     Personalizar Producto
                   </button>
