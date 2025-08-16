@@ -8,6 +8,7 @@
   align-items: center; /* hace que los hijos (la tabla) se estiren */
 }
 
+/* Botón agregar */
 .btn-agregar {
   padding: 10px 15px;
   margin-bottom: 20px;
@@ -125,3 +126,21 @@
 .ordenes-tabla tr:last-child td {
   border-bottom: none;
 }
+
+/* Botones de acción (Eliminar y Resumen) */
+.btn-accion {
+  background: linear-gradient(90deg, #000428, #004e92);
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 2px;
+  transition: opacity 0.3s ease;
+}
+
+.btn-accion:hover {
+  opacity: 0.9;
+}
+

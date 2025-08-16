@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star } from 'lucide-react';
+
 import './ProductsReview.css';
 
 const ProductsReview = () => {
@@ -144,9 +145,35 @@ const ProductsReview = () => {
     }
   };
 
-  const handleAddToCart = () => {
-    alert(`Agregado al carrito: ${quantity} x ${product.name} - $${(product.price * quantity).toFixed(2)}`);
-  };
+ const handleAddToCart = () => {
+  if (!product) return;
+
+  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+  const productId = product._id || product.id;
+  const existente = carrito.find(p => p.id === productId);
+
+  if (existente) {
+    existente.cantidad += quantity;
+  } else {
+    carrito.push({
+      id: productId,
+      nombre: product.name,
+      precio: product.price,
+      cantidad: quantity,
+      imagen: product.image || '/placeholder-product.png'
+    });
+  }
+
+  // 🔹 Guardar en localStorage
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+
+  alert(`Agregado al carrito: ${quantity} x ${product.name}`);
+
+  // 👉 Si quieres enviar directo al carrito:
+  // navigate("/carrito");
+};
+
 
   const handleCustomizeProduct = () => navigate('/SeleccionarGel');
   const handleBackToProducts = () => navigate('/product');
@@ -222,9 +249,13 @@ const ProductsReview = () => {
                 </div>
 
                 <div className="action-buttons">
-                  <button className="add-to-cart-btn" onClick={handleAddToCart}>
-                    Agregar Al Carrito
-                  </button>
+                  <button
+  className="add-to-cart-btn"
+  onClick={() => handleAddToCart(product)}
+>
+  Agregar Al Carrito
+</button>
+
                   <button className="customize-btn" onClick={handleCustomizeProduct}>
                     Personalizar Producto
                   </button>
