@@ -1,130 +1,179 @@
-import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Package, Users, BarChart3 } from 'lucide-react';
-import './Home.css';
+import React, { useState, useEffect } from "react";
+import Sidebar from "../../components/Nav/Nav.jsx";
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
+import toast from "react-hot-toast";
+import "./home.css";
 
-const SportsGelAdmin = () => {
-  const [activeTab, setActiveTab] = useState('productos');
-  const [products, setProducts] = useState([
-    { id: 1, nombre: 'Gel CarboUpp', sabor: 'Cítrico', precio: 2.50, stock: 150 },
-    { id: 2, nombre: 'Gel Ener kik', sabor: 'Frutos Rojos', precio: 2.80, stock: 120 },
-    { id: 3, nombre: 'Gel EnerBalance', sabor: 'Tropical', precio: 3.00, stock: 80 }
-  ]);
+const API_PRODUCTS = "http://localhost:4000/api/products";
+const API_CUSTOMERS = "http://localhost:4000/api/customers";
+const API_DISTRIBUTORS = "http://localhost:4000/api/distributors";
+const API_ORDERS_IN_PROCESS = "http://localhost:4000/api/ordenes/enProceso/total";
 
-  const handleDeleteProduct = (id) => {
-    setProducts(products.filter(product => product.id !== id));
-  };
+const COLORS = ["#0C133F", "#1a265f", "#394a85", "#5260a3", "#6878bf"];
 
-  const TabButton = ({ tab, label, icon: Icon }) => (
-    <button
-      onClick={() => setActiveTab(tab)}
-      className={`tab-button ${activeTab === tab ? 'active' : ''}`}
-    >
-      <Icon size={20} />
-      {label}
-    </button>
-  );
+const AdminPanel = () => {
+  const [products, setProducts] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [ordersInProcess, setOrdersInProcess] = useState(0);
 
-  const ProductsTab = () => (
-    <div className="tab-content">
-      <div className="section-header">
-        <h2>Gestión de Productos</h2>
-      </div>
-      
-      <div className="products-grid">
-        {products.map(product => (
-          <div key={product.id} className="product-card">
-            <div className="product-info">
-              <h3>{product.nombre}</h3>
-              <p className="flavor">Sabor: {product.sabor}</p>
-              <div className="price-stock">
-                <span className="price">${product.precio}</span>
-                <span className={`stock ${product.stock < 100 ? 'low' : ''}`}>
-                  Stock: {product.stock}
-                </span>
-              </div>
-            </div>
-            <div className="product-actions">
-              <button className="btn-edit">
-                <Edit size={16} />
-              </button>
-              <button 
-                className="btn-delete"
-                onClick={() => handleDeleteProduct(product.id)}
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(API_PRODUCTS);
+        if (!res.ok) throw new Error("Error al obtener productos");
+        const data = await res.json();
+        setProducts(data.map(p => ({ ...p, id: p.id ?? p._id })));
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
 
-  const StatsTab = () => (
-    <div className="tab-content">
-      <h2>Estadísticas de Ventas</h2>
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-number">1,247</div>
-          <div className="stat-label">Productos Vendidos</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-number">$3,421</div>
-          <div className="stat-label">Ingresos del Mes</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-number">89</div>
-          <div className="stat-label">Clientes Activos</div>
-        </div>
-      </div>
-    </div>
-  );
+    const fetchClients = async () => {
+      try {
+        const [resCustomers, resDistributors] = await Promise.all([
+          fetch(API_CUSTOMERS),
+          fetch(API_DISTRIBUTORS),
+        ]);
+        if (!resCustomers.ok || !resDistributors.ok)
+          throw new Error("Error al obtener clientes o distribuidores");
 
-  const CustomersTab = () => (
-    <div className="tab-content">
-      <h2>Gestión de Clientes</h2>
-      <div className="customers-list">
-        <div className="customer-item">
-          <div className="customer-info">
-            <h4>Juan Pérez</h4>
-            <span>juan@email.com</span>
-          </div>
-          <div className="customer-stats">
-            <span>15 compras</span>
-            <span>$127.50</span>
-          </div>
-        </div>
-        <div className="customer-item">
-          <div className="customer-info">
-            <h4>María González</h4>
-            <span>maria@email.com</span>
-          </div>
-          <div className="customer-stats">
-            <span>8 compras</span>
-            <span>$84.20</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+        const customers = await resCustomers.json();
+        const distributors = await resDistributors.json();
+
+        setClients([
+          ...customers.map(c => ({ ...c, role: "Cliente" })),
+          ...distributors.map(d => ({ ...d, role: "Distribuidor" })),
+        ]);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+
+    const fetchOrders = async () => {
+      try {
+        const res = await fetch(API_ORDERS_IN_PROCESS);
+        if (!res.ok) throw new Error("Error al obtener órdenes en proceso");
+        const data = await res.json();
+        setOrdersInProcess(data.totalEnProceso ?? 0);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+
+    fetchProducts();
+    fetchClients();
+    fetchOrders();
+  }, []);
+
+  const statsCards = [
+    { title: "Total Productos", value: products.length },
+    { title: "Usuarios Registrados", value: clients.length },
+    { title: "Órdenes en Proceso", value: ordersInProcess },
+  ];
+
+  const splitCards = [];
+  for (let i = 0; i < statsCards.length; i += 2) {
+    splitCards.push(statsCards.slice(i, i + 2));
+  }
+
+  const roleData = [
+    { name: "Clientes", value: clients.filter(c => c.role === "Cliente").length },
+    { name: "Distribuidores", value: clients.filter(c => c.role === "Distribuidor").length },
+  ];
 
   return (
-    <div className="admin-container">
+    <div className="admin-panel">
+      <Sidebar />
+      <main className="admin-main-content">
+        <div className="admin-welcome-banner">
+          <h1>Bienvenido, Administrador</h1>
+          <p>Visualiza estadísticas y métricas clave de tu plataforma.</p>
+        </div>
 
+        {/* Cards de métricas */}
+        {splitCards.map((cardPair, idx) => (
+          <div key={idx} className="admin-stats-grid">
+            {cardPair.map((card, index) => (
+              <div key={index} className="admin-stat-card">
+                <h2>{card.value}</h2>
+                <span>{card.title}</span>
+              </div>
+            ))}
+          </div>
+        ))}
 
-      <nav className="admin-nav">
-        <TabButton tab="productos" label="Productos" icon={Package} />
-        <TabButton tab="estadisticas" label="Estadísticas" icon={BarChart3} />
-        <TabButton tab="clientes" label="Clientes" icon={Users} />
-      </nav>
+        {/* Gráfica + Productos */}
+        <div className="admin-top-section">
+          <div className="admin-card">
+            <h3>Distribución de Usuarios</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={roleData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={90}
+                  fill="#0C133F"
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  labelLine={false}
+                >
+                  {roleData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip contentStyle={{ backgroundColor: "#e0e6f3", borderRadius: "8px", border: "none" }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
 
-      <main className="admin-main">
-        {activeTab === 'productos' && <ProductsTab />}
-        {activeTab === 'estadisticas' && <StatsTab />}
-        {activeTab === 'clientes' && <CustomersTab />}
+          <div className="admin-card admin-table-container">
+            <h3>Lista de Productos</h3>
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Precio</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((p, i) => (
+                  <tr key={i}>
+                    <td>{p.name}</td>
+                    <td>${p.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Usuarios Registrados */}
+        <div className="admin-users-section">
+          <div className="admin-table-container">
+            <h3>Usuarios Registrados</h3>
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                </tr>
+              </thead>
+              <tbody>
+                {clients.map((c, i) => (
+                  <tr key={i}>
+                    <td>{c.name}</td>
+                    <td>{c.email}</td>
+                    <td>{c.role}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </main>
     </div>
   );
 };
 
-export default SportsGelAdmin;
+export default AdminPanel;

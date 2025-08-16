@@ -1,124 +1,235 @@
-// src/pages/AddProducts/AddProduct.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 import './AddProduct.css';
 
-function AddProduct() {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    flavor: '',
-    price: '',
-    image: null
-  });
+const AddProduct = () => {
+  const fileInputRef = useRef(null);
 
-  const [preview, setPreview] = useState(null);
+  const gels = {
+    "CarboUpp": ["Banano", "Mora", "Limón", "Manzana", "Piña", "Frambuesa", "Coco"],
+    "EnerKik": ["Ponche de Frutas", "Maracuya", "Limón", "Banano", "Frambuesa"],
+    "Enerbalance": ["Mora", "Banano", "Manzana"]
+  };
+
+  const [formData, setFormData] = useState({
+    name: "",
+    flavor: "",
+    description: "",
+    price: "",
+  });
+  const [availableFlavors, setAvailableFlavors] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!imageFile) {
+      setImagePreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(imageFile);
+    setImagePreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [imageFile]);
+
+  const handleUploadClick = () => {
+    if (fileInputRef.current) fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      if (!validTypes.includes(file.type)) {
+        toast.error("Please upload an image with jpg, jpeg or png format");
+        e.target.value = null;
+        setImageFile(null);
+        setImagePreview(null);
+        return;
+      }
+
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Si se cambia el nombre del gel, actualizar los sabores disponibles
+    if (name === "name") {
+      setAvailableFlavors(gels[value] || []);
+      setFormData((prev) => ({ ...prev, flavor: "" })); // reset flavor
+    }
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setFormData((prev) => ({ ...prev, image: file }));
-    setPreview(URL.createObjectURL(file));
-  };
-
-  const handleReset = () => {
+  const handleClear = () => {
     setFormData({
-      name: '',
-      description: '',
-      flavor: '',
-      price: '',
-      image: null
+      name: "",
+      flavor: "",
+      description: "",
+      price: "",
     });
-    setPreview(null);
+    setAvailableFlavors([]);
+    setImageFile(null);
+    setImagePreview(null);
+    toast.success("Formulario limpiado");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = new FormData();
-    data.append('name', formData.name);
-    data.append('description', formData.description);
-    data.append('flavor', formData.flavor);
-    data.append('price', formData.price);
-    if (formData.image) {
-      data.append('image', formData.image);
+    if (
+      !formData.name.trim() ||
+      !formData.flavor.trim() ||
+      !formData.description.trim() ||
+      !formData.price || 
+      !imageFile
+    ) {
+      toast.error("Todos los campos son obligatorios");
+      return;
     }
 
+    setLoading(true);
+
     try {
-      const response = await fetch('http://localhost:4000/api/products', {
-        method: 'POST',
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("flavor", formData.flavor);
+      data.append("description", formData.description);
+      data.append("price", formData.price);
+      data.append("imagen", imageFile);
+
+      const res = await fetch("http://localhost:4000/api/products", {
+        method: "POST",
         body: data,
+        credentials: "include",
       });
 
-      if (response.ok) {
-        alert('Producto agregado exitosamente');
-        handleReset();
-      } else {
-        const error = await response.json();
-        alert('Error al agregar producto: ' + (error.message || 'Error desconocido'));
-      }
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.message || "Error al subir el producto");
+
+      toast.success("Producto agregado correctamente");
+      handleClear();
     } catch (error) {
-      console.error('Error al enviar producto:', error);
-      alert('Error al enviar el formulario');
+      toast.error(error.message || "Error del servidor");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="add-product-form">
-      <h2>Añadir un nuevo Producto</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div className="image-upload">
-          {preview ? (
-            <img src={preview} alt="Vista previa" className="preview-image" />
-          ) : (
-            <div className="image-placeholder">?</div>
-          )}
-          <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
-        </div>
+    <div className="add-product-wrapper">
+      <h2>Agregar Producto</h2>
+      <form className="add-product-form" onSubmit={handleSubmit}>
+        <div className="left-column">
+          <div className={`image-preview ${!imagePreview ? "error-border" : ""}`}>
+            {imagePreview ? (
+              <img src={imagePreview} alt="Preview" />
+            ) : (
+              <span className="image-placeholder">Vista previa de la imagen</span>
+            )}
+          </div>
 
-        <div className="form-fields">
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <button
+              type="button"
+              className="btn-upload"
+              onClick={handleUploadClick}
+              disabled={loading}
+            >
+              {imageFile ? "Cambiar imagen" : "Seleccionar imagen"}
+            </button>
+            <button type="button" className="btn-clear" onClick={handleClear} disabled={loading}>
+              Limpiar
+            </button>
+          </div>
+
           <input
-            type="text"
-            name="name"
-            placeholder="Nombre"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="description"
-            placeholder="Descripción"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="flavor"
-            placeholder="Sabor"
-            value={formData.flavor}
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            name="price"
-            placeholder="Contenido Neto"
-            value={formData.price}
-            onChange={handleChange}
-            required
+            type="file"
+            accept="image/jpeg, image/jpg, image/png"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+            disabled={loading}
           />
         </div>
 
-        <div className="form-actions">
-          <button type="button" onClick={handleReset}>Limpiar Formulario</button>
-          <button type="submit">Agregar Producto</button>
+        <div className="right-column">
+          <div>
+            <label htmlFor="name">Nombre del producto</label>
+            <select
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className={!formData.name.trim() ? "error-border" : ""}
+              disabled={loading}
+            >
+              <option value="">Selecciona un gel</option>
+              {Object.keys(gels).map((gel) => (
+                <option key={gel} value={gel}>{gel}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="flavor">Sabor</label>
+            <select
+              id="flavor"
+              name="flavor"
+              value={formData.flavor}
+              onChange={handleChange}
+              className={!formData.flavor.trim() ? "error-border" : ""}
+              disabled={loading || !formData.name}
+            >
+              <option value="">Selecciona un sabor</option>
+              {availableFlavors.map((flavor) => (
+                <option key={flavor} value={flavor}>{flavor}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="description">Descripción</label>
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Descripción del producto"
+              value={formData.description}
+              onChange={handleChange}
+              className={!formData.description.trim() ? "error-border" : ""}
+              rows={3}
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="price">Precio</label>
+            <input
+              id="price"
+              name="price"
+              type="number"
+              placeholder="Precio"
+              value={formData.price}
+              onChange={handleChange}
+              className={!formData.price ? "error-border" : ""}
+              min="0"
+              step="0.01"
+              disabled={loading}
+            />
+          </div>
+
+          <div className="button-group" style={{ marginTop: "20px" }}>
+            <button type="submit" className="btn-submit" disabled={loading}>
+              {loading ? "Subiendo..." : "Agregar Producto"}
+            </button>
+          </div>
         </div>
       </form>
     </div>
   );
-}
+};
 
 export default AddProduct;

@@ -1,0 +1,84 @@
+.error404-private-container {
+  background-color: #FFFFFF;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #0c133F;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding-top: 2px;
+}
+
+.error404-private-title {
+  font-family: 'Poppins Black', 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 8rem;
+  margin: 0;
+  margin-bottom: 0px;
+  line-height: 1;
+}
+
+.error404-public-image {
+ width: 300px;  
+  margin-bottom: 5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;    
+}
+
+
+.error404-private-subtitle {
+  font-family: 'Inter Medium', 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 2.5rem;
+  margin-top: 1rem;
+  color: rgba(12, 19, 63, 0.83);
+}
+
+.error404-private-text {
+  font-family: 'Poppins Regular', 'Poppins', sans-serif;
+  font-weight: 400;
+  margin-top: 0.5rem;
+  color: rgba(12, 19, 63, 0.83);
+}
+
+.error404-private-buttons {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-primary {
+  font-family: 'Poppins Medium', 'Poppins', sans-serif;
+  font-weight: 500;
+  color: #FFFFFF;
+  background-color: #0c133F;
+  padding: 0.9rem 2.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0a0f34;
+}
+
+.btn-secondary {
+  font-family: 'Poppins Medium', 'Poppins', sans-serif;
+  font-weight: 500;
+  color: #0c133F;
+  border: 2px solid #0c133F;
+  padding: 0.9rem 2.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #0c133F;
+  color: #FFFFFF;
+}

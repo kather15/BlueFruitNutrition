@@ -1,51 +1,106 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import NavBar from './components/Nav/Nav';
-import Footer from './components/Footer/Footer';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
-// Páginas principales
-import addProduct from './pages/AddProducts/AddProduct.jsx';
-import AddProduct from './pages/AddProducts/AddProduct'; 
-import Products1 from './pages/Products/Products1';
-import Suscripciones from './pages/Suscripcionees/Suscripcionees';
-import Ordenes from './pages/Ordenes/Ordenes';
-import Homep from './pages/Home/Homep';
-import RequestCode from './pages/RecoveryPassword/RequestCode';
-import VerifyCode from './pages/RecoveryPassword/VerifyCode';
-import NewPassword from './pages/RecoveryPassword/NewPasssword';
-import Ventas from './pages/Ventas/Ventas.jsx';
-import Usuarios from './pages/Users/UsersList.jsx';
-import UserForm from './pages/Users/UserForm'; // 👈 faltaba esta
+// Context
+import { AuthProvider } from "./context/useAuth";
 
+// Components
+import Nav from "./components/Nav/Nav";
+import Footer from "./components/Footer/Footer";
+import ProtectedRoute from "./components/PrivateRoute/ProtectedRoute";
+import Error404Private from "./components/NotFound/NotFoundPrivate.jsx"; 
 
+// Pages - Login / Recovery
+import Login from "./pages/Login/Login";
+import RequestCode from "./pages/RecoveryPassword/RequestCode";
+import VerifyCode from "./pages/RecoveryPassword/VerifyCode";
+import NewPassword from "./pages/RecoveryPassword/NewPasssword";
 
+// Pages - Admin / Privadas
+import HomeP from "./pages/Home/homep";
+import Products1 from "./pages/Products/Products1";
+import Suscripciones from "./pages/Suscripcionees/Suscripcionees";
+import Ordenes from "./pages/Ordenes/Ordenes";
+import ResumenOrden from "./pages/ResumenOrdenes/ResumenOrden";
+import Ventas from "./pages/Ventas/Ventas.jsx";
+import UsersList from "./pages/Users/UsersList";
+import UserForm from "./pages/Users/UserForm";
+import PerfilAdmin from "./pages/AdminPorfile/PerfilAdmin";
+import AddProducts from "./pages/AddProducts/AddProduct.jsx";
+import ProductsReviews from "./pages/Products/ProductsReview.jsx";
+
+// Context para temas
+export const ThemeContext = React.createContext(null);
+
+function AppContent() {
+  const location = useLocation();
+  const [theme, setTheme] = useState("light");
+
+  // Rutas donde no mostrar Nav/Sidebar
+  const hideNavRoutes = ["/", "/login", "/enviar-codigo", "/verificar-codigo", "/nueva-contraseña"];
+  const shouldHideLayout = hideNavRoutes.includes(location.pathname);
+
+  return (
+    <ThemeContext.Provider value={{ setTheme, theme }}>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: "#0C133F",
+            color: "#fff",
+            fontSize: "16px",
+            zIndex: 99999,
+          },
+        }}
+        containerStyle={{ marginTop: "100px" }}
+      />
+
+      {!shouldHideLayout && <Nav />}
+
+      <div className="main-content" style={{ marginLeft: !shouldHideLayout ? "320px" : "0", paddingTop: "30px" }}>
+        <Routes>
+          {/* Rutas públicas */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/enviar-codigo" element={<RequestCode />} />
+          <Route path="/verificar-codigo" element={<VerifyCode />} />
+          <Route path="/nueva-contraseña" element={<NewPassword />} />
+
+          {/* Rutas privadas */}
+          <Route path="/home" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
+          <Route path="/homep" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
+          <Route path="/productos1" element={<ProtectedRoute><Products1 /></ProtectedRoute>} />
+          <Route path="/ordenes" element={<ProtectedRoute><Ordenes /></ProtectedRoute>} />
+          <Route path="/ordenes/:id" element={<ProtectedRoute><ResumenOrden /></ProtectedRoute>} />
+          <Route path="/ventas" element={<ProtectedRoute><Ventas /></ProtectedRoute>} />
+          <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
+          <Route path="/usuarios" element={<ProtectedRoute><UsersList /></ProtectedRoute>} />
+          <Route path="/users/edit/:type/:id" element={<ProtectedRoute><UserForm /></ProtectedRoute>} />
+          <Route path="/perfil" element={<ProtectedRoute><PerfilAdmin /></ProtectedRoute>} />
+          <Route path="/addProduct" element={<ProtectedRoute><AddProducts /></ProtectedRoute>} />
+          <Route path="/product/:id" element={<ProtectedRoute><ProductsReviews /></ProtectedRoute>} />
+
+          {/* 404 admin */}
+          <Route path="*" element={<Error404Private />} />
+        </Routes>
+      </div>
+
+      {!shouldHideLayout && <Footer />}
+    </ThemeContext.Provider>
+  );
+}
 
 function App() {
   return (
     <Router>
-      <NavBar />
-      <div className="main-content" style={{ paddingTop: '100px' }}>
-        <Routes>
-          <Route path="/productos1" element={<Products1 />} />
-          <Route path="/addProduct" element={<AddProduct />} />
-          <Route path="/sobre-nosotros" element={<h1>Sobre Nosotros</h1>} />
-          <Route path="/ordenes" element={<Ordenes />} />
-          <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/" element={<Homep />} />
-          <Route path="/ordenes" element={<Ordenes />} />
-          <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/homep" element={<Homep />} />
-                    <Route path="/enviar-codigo" element={<RequestCode/>}/>
-                    <Route path="/verificar-codigo" element={<VerifyCode/>}/>
-                    <Route path="/nueva-contraseña" element={<NewPassword/>}/>
-                    <Route path="/ventas" element={<Ventas />} />
-                    <Route path="/usuarios" element={<Usuarios />} />
-                    <Route path="/users/edit/:type/:id" element={<UserForm />} /> {/* ✅ esta línea es clave */}s
-          {/* Puedes agregar más rutas aquí */}
-        </Routes>
-      </div>
-      <Footer />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   );
 }
 
 export default App;
+

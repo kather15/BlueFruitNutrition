@@ -7,247 +7,327 @@ import './ProductsReview.css';
 const ProductsReview = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [quantity, setQuantity] = useState(2);
+
+  const [quantity, setQuantity] = useState(1);
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      name: 'Rodrigo Torres',
-      rating: 5,
-      comment: 'Reppo es un Gel energético de "recuperación" específico que combina la sacarosa y fructosa con aminoácidos de cadena ramificada (BCAA) y vitamina C. Esta formulado para contribuir con la reconstrucción de las fibras musculares post-ejercicio. De esta manera colabora en evitar el catabolismo muscular, y así mejorando el rendimiento.'
-    },
-    {
-      id: 2,
-      name: 'David Zepeda',
-      rating: 4,
-      comment: 'Reppo es un Gel energético de "recuperación" específico que combina la sacarosa y fructosa con aminoácidos de cadena ramificada (BCAA) y vitamina C. Esta formulado para contribuir con la reconstrucción de las fibras musculares post-ejercicio. De esta manera colabora en evitar el catabolismo muscular, y así mejorando el rendimiento.'
-    },
-    {
-      id: 3,
-      name: 'Olga Flores',
-      rating: 5,
-      comment: 'Reppo es un Gel energético de "recuperación" específico que combina la sacarosa y fructosa con aminoácidos de cadena ramificada (BCAA) y vitamina C. Esta formulado para contribuir con la reconstrucción de las fibras musculares post-ejercicio. De esta manera colabora en evitar el catabolismo muscular, y así mejorando el rendimiento.'
-    }
-  ]);
+  const [product, setProduct] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
 
   const [newReview, setNewReview] = useState({
-    name: '',
     rating: 5,
-    comment: ''
+    comment: '',
   });
 
-  const products = {
-    1: { name: 'Carbo Upp', image: '/CarboUpp.png', price: 2.50 },
-    2: { name: 'Ener Kik', image: '/EnerKik.png', price: 2.75 },
-    3: { name: 'Reppo', image: '/Reppo.png', price: 2.50 }
-  };
+  //  Verificar autenticación al cargar el componente
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('userData');
+    
+    if (token && userData) {
+      setIsAuthenticated(true);
+      setUser(JSON.parse(userData));
+    }
+  }, []);
 
-  const currentProduct = products[id];
+  // Cargar producto
+  useEffect(() => {
+    fetch(`http://localhost:4000/api/products/${id}`)
+      .then(res => res.json())
+      .then(data => setProduct(data))
+      .catch(err => {
+        console.error('Error al cargar el producto:', err);
+        setProduct(null);
+      });
+  }, [id]);
+
+  // Cargar reseñas del producto
+  useEffect(() => {
+    fetch(`http://localhost:4000/api/reviews?idProduct=${id}`)
+      .then(res => res.json())
+      .then(data => setReviews(data))
+      .catch(err => console.error('Error al obtener reseñas:', err));
+  }, [id]);
 
   const handleQuantityChange = (change) => {
     setQuantity(prev => Math.max(1, prev + change));
   };
 
-  const handleSubmitReview = (e) => {
+  const handleSubmitReview = async (e) => {
     e.preventDefault();
-    if (newReview.name.trim() && newReview.comment.trim()) {
-      const review = {
-        id: reviews.length + 1,
-        name: newReview.name,
-        rating: newReview.rating,
-        comment: newReview.comment
-      };
-      setReviews([review, ...reviews]);
-      setNewReview({ name: '', rating: 5, comment: '' });
-      setShowReviewForm(false);
-      alert('¡Reseña agregada exitosamente!');
+
+    if (!isAuthenticated) {
+      alert('Debes iniciar sesión para dejar una reseña.');
+      navigate('/login'); // Redirigir al login
+      return;
+    }
+
+    if (!newReview.comment.trim()) {
+      alert('Por favor escribe un comentario.');
+      return;
+    }
+
+    const token = localStorage.getItem('authToken');
+    
+    const reviewToSend = {
+      comment: newReview.comment,
+      rating: newReview.rating,
+      idProduct: id
+      //  No enviamos idClient, viene del token en el backend
+    };
+
+    try {
+      const response = await fetch(`http://localhost:4000/api/reviews`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` //  Incluir token
+        },
+        body: JSON.stringify(reviewToSend)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('¡Reseña agregada exitosamente!');
+        setNewReview({ rating: 5, comment: '' });
+        setShowReviewForm(false);
+        // Recargar reseñas
+        loadReviews();
+      } else {
+        if (data.requiresAuth) {
+          alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userData');
+          setIsAuthenticated(false);
+          navigate('/login');
+        } else {
+          alert(data.message || 'Error al guardar reseña');
+        }
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Error al enviar la reseña');
     }
   };
 
-  const handleAddToCart = () => {
-    alert(`Agregado al carrito: ${quantity} x ${currentProduct.name} - $${(currentProduct.price * quantity).toFixed(2)}`);
+  const loadReviews = () => {
+    fetch(`http://localhost:4000/api/reviews?idProduct=${id}`)
+      .then(res => res.json())
+      .then(data => setReviews(data))
+      .catch(err => console.error('Error al obtener reseñas:', err));
   };
 
-  const handleCustomizeProduct = () => {
-    navigate(`/sabores/`);
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('¿Estás seguro de eliminar esta reseña?')) return;
+
+    const token = localStorage.getItem('authToken');
+    
+    try {
+      const response = await fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert('Reseña eliminada correctamente');
+        loadReviews();
+      } else {
+        const data = await response.json();
+        alert(data.message || 'Error al eliminar reseña');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Error al eliminar la reseña');
+    }
   };
 
-  const handleBackToProducts = () => {
-    navigate('/productos'); // CORREGIDO: Ruta correcta
-  };
+ const handleAddToCart = () => {
+  if (!product) return;
 
-  const renderStars = (rating) => {
-    return [...Array(5)].map((_, i) => (
-      <Star
-        key={i}
-        className={`star ${i < rating ? 'filled' : 'empty'}`}
-        size={16}
-      />
-    ));
-  };
+  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-  const renderInteractiveStars = (rating, onRatingChange) => {
-    return [...Array(5)].map((_, i) => (
+  const productId = product._id || product.id;
+  const existente = carrito.find(p => p.id === productId);
+
+  if (existente) {
+    existente.cantidad += quantity;
+  } else {
+    carrito.push({
+      id: productId,
+      nombre: product.name,
+      precio: product.price,
+      cantidad: quantity,
+      imagen: product.image || '/placeholder-product.png'
+    });
+  }
+
+  // 🔹 Guardar en localStorage
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+
+  alert(`Agregado al carrito: ${quantity} x ${product.name}`);
+
+  // 👉 Si quieres enviar directo al carrito:
+  // navigate("/carrito");
+};
+
+
+  const handleCustomizeProduct = () => navigate('/SeleccionarGel');
+  const handleBackToProducts = () => navigate('/product');
+
+  const renderStars = (rating) => (
+    [...Array(5)].map((_, i) => (
+      <Star key={i} className={`star ${i < rating ? 'filled' : 'empty'}`} size={16} />
+    ))
+  );
+
+  const renderInteractiveStars = (rating, onRatingChange) => (
+    [...Array(5)].map((_, i) => (
       <Star
         key={i}
         className={`star interactive ${i < rating ? 'filled' : 'empty'}`}
         size={20}
         onClick={() => onRatingChange(i + 1)}
       />
-    ));
-  };
+    ))
+  );
 
-  if (!currentProduct) {
+  if (product === null) {
     return (
       <div className="products-review-wrapper">
-        
         <div className="product-detail-screen">
           <div className="product-not-found">
             <h2>Producto no encontrado</h2>
-            <p>El producto que buscas no existe o ha sido eliminado.</p>
             <button onClick={handleBackToProducts} className="back-to-products-btn">
               Volver a Productos
             </button>
           </div>
         </div>
-        
       </div>
     );
   }
 
   return (
     <div className="products-review-wrapper">
-      
       <div className="product-detail-screen">
         <div className="product-detail-main">
           <div className="product-detail-container">
-            {/* Botón de volver */}
-            <button 
-              className="back-button"
-              onClick={handleBackToProducts}
-            >
-              ← Volver a Productos
+            <button className="back-button" onClick={handleBackToProducts}>
+              Volver a Productos
             </button>
 
             <div className="product-detail-layout">
-              {/* Lado izquierdo - Imagen */}
               <div className="product-image-section">
                 <div className="product-image-container">
-                  <img 
-                    src={currentProduct.image} 
-                    alt={currentProduct.name}
+                  <img
+                    src={product.image || '/placeholder-product.png'}
+                    alt={product.name}
                     className="product-main-image"
                     onError={(e) => {
                       e.target.src = '/placeholder-product.png';
-                      console.log(`Error loading image: ${currentProduct.image}`);
+                      console.error(`Error loading image: ${product.image}`);
                     }}
                   />
                 </div>
               </div>
 
-              {/* Lado derecho - Información */}
               <div className="product-info-section">
-                <h1 className="product-title">{currentProduct.name}</h1>
-                <div className="product-price">${currentProduct.price.toFixed(2)}</div>
-                <div className="product-flavor">Sabor: 🥭</div>
-                
+                <h1 className="product-title">{product.name}</h1>
+                <div className="product-price">${product.price.toFixed(2)}</div>
+                {product.flavor && <div className="product-flavor">Sabor: {product.flavor}</div>}
+
                 <div className="quantity-section">
                   <span>Cantidad:</span>
                   <div className="quantity-controls">
-                    <button 
-                      className="quantity-btn"
-                      onClick={() => handleQuantityChange(-1)}
-                    >
-                      -
-                    </button>
+                    <button className="quantity-btn" onClick={() => handleQuantityChange(-1)}>-</button>
                     <span className="quantity-display">{quantity}</span>
-                    <button 
-                      className="quantity-btn"
-                      onClick={() => handleQuantityChange(1)}
-                    >
-                      +
-                    </button>
+                    <button className="quantity-btn" onClick={() => handleQuantityChange(1)}>+</button>
                   </div>
                 </div>
 
                 <div className="action-buttons">
-                  <button 
-                    className="add-to-cart-btn"
-                    onClick={handleAddToCart}
-                  >
-                    Agregar Al Carrito
-                  </button>
-                  <button 
-                    className="customize-btn"
-                    onClick={handleCustomizeProduct}
-                  >
+                  <button
+  className="add-to-cart-btn"
+  onClick={() => handleAddToCart(product)}
+>
+  Agregar Al Carrito
+</button>
+
+                  <button className="customize-btn" onClick={handleCustomizeProduct}>
                     Personalizar Producto
                   </button>
                 </div>
 
                 <div className="product-description">
-                  <p>Reppo es un Gel energético de "recuperación" específico que combina la sacarosa y fructosa con aminoácidos de cadena ramificada (BCAA) y vitamina C. Esta formulado para contribuir con la reconstrucción de las fibras musculares post-ejercicio. De esta manera colabora en evitar el catabolismo muscular, y así mejorando el rendimiento.</p>
+                  <p>{product.description}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Sección de Reseñas */}
+          {/* Reseñas */}
           <div className="reviews-section">
             <div className="reviews-container">
               <div className="reviews-header">
                 <h2>Reseñas</h2>
-                <button 
-                  className="add-review-btn"
-                  onClick={() => setShowReviewForm(!showReviewForm)}
-                >
-                  {showReviewForm ? 'Cancelar' : 'Agregar Reseña'}
-                </button>
+                {/*  Solo mostrar botón si está autenticado */}
+                {isAuthenticated ? (
+                  <button 
+                    className="add-review-btn" 
+                    onClick={() => setShowReviewForm(!showReviewForm)}
+                  >
+                    {showReviewForm ? 'Cancelar' : 'Agregar Reseña'}
+                  </button>
+                ) : (
+                  <button 
+                    className="login-to-review-btn" 
+                    onClick={() => navigate('/login')}
+                  >
+                    Inicia sesión para reseñar
+                  </button>
+                )}
               </div>
 
-              {/* Formulario de reseña */}
-              {showReviewForm && (
+              {showReviewForm && isAuthenticated && (
                 <div className="review-form-container">
                   <form onSubmit={handleSubmitReview} className="review-form">
                     <div className="form-group">
-                      <label>Tu nombre:</label>
-                      <input
-                        type="text"
-                        value={newReview.name}
-                        onChange={(e) => setNewReview({...newReview, name: e.target.value})}
-                        placeholder="Ingresa tu nombre"
-                        required
-                      />
+                      <label>Escribiendo como: <strong>{user?.name}</strong></label>
                     </div>
-                    
+
                     <div className="form-group">
                       <label>Calificación:</label>
                       <div className="rating-input">
                         {renderInteractiveStars(newReview.rating, (rating) => 
-                          setNewReview({...newReview, rating})
+                          setNewReview({ ...newReview, rating })
                         )}
-                        <span className="rating-text">({newReview.rating} estrella{newReview.rating !== 1 ? 's' : ''})</span>
+                        <span className="rating-text">
+                          ({newReview.rating} estrella{newReview.rating !== 1 ? 's' : ''})
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="form-group">
                       <label>Tu comentario:</label>
                       <textarea
                         value={newReview.comment}
-                        onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
+                        onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
                         placeholder="Cuéntanos qué te pareció el producto..."
                         rows="4"
                         required
                       />
                     </div>
-                    
+
                     <div className="form-buttons">
                       <button type="submit" className="submit-review-btn">
                         Enviar Reseña
                       </button>
                       <button 
                         type="button" 
-                        className="cancel-review-btn"
+                        className="cancel-review-btn" 
                         onClick={() => setShowReviewForm(false)}
                       >
                         Cancelar
@@ -258,33 +338,48 @@ const ProductsReview = () => {
               )}
 
               <div className="reviews-grid">
-                {reviews.map((review) => (
-                  <div key={review.id} className="review-card">
-                    <div className="review-header">
-                      <div className="reviewer-info">
-                        <div className="reviewer-avatar">
-                          {review.name.charAt(0).toUpperCase()}
+                {reviews.length > 0 ? (
+                  reviews.map((review) => (
+                    <div key={review._id} className="review-card">
+                      <div className="review-header">
+                        <div className="reviewer-info">
+                          <div className="reviewer-avatar">
+                            {review.idClient?.name?.charAt(0).toUpperCase() || '?'}
+                          </div>
+                          <div className="reviewer-details">
+                            <div className="reviewer-name">
+                              {review.idClient?.name || 'Usuario'}
+                            </div>
+                            <div className="review-date">
+                              {new Date(review.createdAt).toLocaleDateString()}
+                            </div>
+                          </div>
                         </div>
-                        <div className="reviewer-details">
-                          <div className="reviewer-name">{review.name}</div>
+                        <div className="review-actions">
+                          <div className="review-rating">{renderStars(review.rating)}</div>
+                          {/*  Solo mostrar botón eliminar si es el autor */}
+                          {isAuthenticated && user?.id === review.idClient?._id && (
+                            <button 
+                              className="delete-review-btn"
+                              onClick={() => handleDeleteReview(review._id)}
+                              title="Eliminar reseña"
+                            >
+                              🗑️
+                            </button>
+                          )}
                         </div>
                       </div>
-                      <div className="review-rating">
-                        {renderStars(review.rating)}
-                      </div>
+                      <div className="review-comment">{review.comment}</div>
                     </div>
-                    <div className="review-comment">
-                      {review.comment}
-                    </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p>No hay reseñas aún. ¡Sé el primero en comentar!</p>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-     
     </div>
   );
 };

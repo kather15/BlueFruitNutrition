@@ -1,63 +1,94 @@
-import { useState } from 'react';
-import './App.css';
-import { Routes, Route } from 'react-router-dom';
-import Nav from "./components/Nav/Nav";
-import Footer from "./components/Footer/Footer";
-import Home from "./pages/Home/Home";
-import Pay from "./pages/Pay/pay";
-import Contact from "./pages/Contact/Contact"; 
-import ProductC from "./pages/Products/ProductsC";
-import Register from './pages/Register/Register'
-import RequestCode from '../../frontend-public/src/pages/RecoveryPassword/RequestCode'
-import VerifyCode from '../../frontend-public/src/pages/RecoveryPassword/VerifyCode';
-import NewPassword from '../../frontend-public/src/pages/RecoveryPassword/NewPasssword';
-import Personalizar from '../../frontend-public/src/pages/Personalizar/SeleccionarGel';
-import Sabores from '../../frontend-public/src/pages/Personalizar/Sabores/SaborPage';
-import Suscripciones from '../../frontend-public/src/pages/Suscripciones/Suscripciones';
-import ProductDetail from '../../frontend-public/src/pages/Personalizar/productGallery/Product';
-import Login from '../../frontend-public/src/pages/Login/Login'; 
-import ProductsReview from "../src/pages/Products/ProductsReview";
-import Carrito from '../src/pages/Carrito/Carrito.jsx'
-import MetodoDePago from "../src/pages/MetodoDePago/CheckoutPage.jsx"
+import React from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
+// Context
+import { AuthProvider } from './context/useAuth';
+import { CarritoProvider } from "./context/CarritoContext";
 
+// Components
+import Nav from './components/Nav/Nav';
+import Footer from './components/Footer/Footer';
+import Error404Public from './components/NotFound/NotFoundPublic';
+
+// Pages - Públicas
+import Home from './pages/Home/Home';
+import ProductsMenu from './pages/Products/ProductsMenu';
+import ProductsReview from './pages/Products/ProductsReview';
+import SobreNosotros from './pages/SobreNosotros/SobreNosotros';
+import Contact from './components/Contact/Contact';
+import Suscripciones from './pages/Suscripciones/Suscripciones';
+
+// Pages - Autenticación
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
+import RequestCode from './pages/RecoveryPassword/RequestCode';
+import VerifyCode from './pages/RecoveryPassword/VerifyCode';
+import NewPassword from './pages/RecoveryPassword/NewPasssword';
+
+// Pages - Privadas (ahora públicas)
+import Carrito from './pages/Carrito/Carrito';
+import Pay from './pages/Pay/pay';
+import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
+import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
 
 function App() {
+  const location = useLocation();
 
+  // Ocultar nav/footer en login y registro
+  const hideNavFooterRoutes = ['/login', '/registro'];
+  const hideNavFooter = hideNavFooterRoutes.includes(location.pathname);
 
   return (
-    <>
-    
-      <Nav />
-        
-      <Routes>
-        <Route path="/" element={<Home />} />
-       <Route path="/pay" element={<Pay />} />
-          <Route path="/registro" element={<Register />}/>
-          <Route path="/enviar-codigo" element={<RequestCode/>}/>
-          <Route path="/personalizar" element={<Personalizar/>}/>
-          <Route path="/verificar-codigo" element={<VerifyCode/>}/>
-          <Route path="/nueva-contraseña" element={<NewPassword/>}/>
-          <Route path="/sabores" element={<Sabores/>}/>
-          <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/login" element={<Login />}/>
-          <Route path="/detail" element={<ProductDetail />} />
-          <Route path="/carrito" element={<Carrito/>} />
-          <Route path="/Metodo" element={<MetodoDePago/>} />
+    <AuthProvider>
+      <CarritoProvider>
+        <>
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+            toastOptions={{
+              style: {
+                background: '#0C133F',
+                color: '#fff',
+                fontSize: '16px',
+                zIndex: 99999,
+              },
+            }}
+            containerStyle={{ marginTop: '100px' }}
+          />
 
+          {!hideNavFooter && <Nav />}
 
-
-            <Route path="/product" element={<ProductC />} />
+          <Routes>
+            {/* RUTAS PÚBLICAS */}
+            <Route path="/" element={<Home />} />
+            <Route path="/product" element={<ProductsMenu />} />
             <Route path="/producto/:id" element={<ProductsReview />} />
-          {/* Puedes agregar más rutas aquí según sea necesario */}
+            <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/suscripciones" element={<Suscripciones />} />
 
-      
-        <Route path="/contact" element={<Contact/>} />
-      
-      </Routes>
+            {/* RUTAS DE AUTENTICACIÓN */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/registro" element={<Register />} />
+            <Route path="/enviar-codigo" element={<RequestCode />} />
+            <Route path="/verificar-codigo" element={<VerifyCode />} />
+            <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-      <Footer />
-    </>
+            {/* RUTAS PRIVADAS (ahora públicas) */}
+            <Route path="/carrito" element={<Carrito />} />
+            <Route path="/pay" element={<Pay />} />
+            <Route path="/Metodo" element={<MetodoDePago />} />
+            <Route path="/personalizar" element={<Personalizar />} />
+
+            {/* RUTA CATCH-ALL PARA 404 */}
+            <Route path="*" element={<Error404Public />} />
+          </Routes>
+
+          {!hideNavFooter && <Footer />}
+        </>
+      </CarritoProvider>
+    </AuthProvider>
   );
 }
 

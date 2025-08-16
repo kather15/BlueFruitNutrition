@@ -1,21 +1,37 @@
-// src/pages/Ordenes.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Ordenes.css';
 
-const ordenes = [
-  { id: 1, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'Terminado' },
-  { id: 2, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'En proceso' },
-  { id: 3, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'Terminado' },
-  { id: 4, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'En proceso' },
-  { id: 5, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'Terminado' },
-  { id: 6, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'En proceso' },
-  { id: 7, fecha: '12/05/22', total: '$20.00', items: 4, estado: 'Terminado' },
-];
-
 const Ordenes = () => {
+  const [ordenes, setOrdenes] = useState([]);
+  const navigate = useNavigate();
+
+  const fetchOrdenes = async () => {
+    try {
+      const res = await axios.get('http://localhost:4000/api/ordenes'); 
+      setOrdenes(res.data);
+    } catch (error) {
+      console.error('Error al cargar órdenes:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrdenes();
+  }, []);
+
+  const eliminarOrden = async (id) => {
+    try {
+      await axios.delete(`http://localhost:4000/api/ordenes/${id}`);
+      fetchOrdenes();
+    } catch (error) {
+      console.error('Error al eliminar orden:', error);
+    }
+  };
+
   return (
     <div className="ordenes-container">
-      <h2>ORDENES</h2>
+      <h2>ÓRDENES</h2>
       <table className="ordenes-tabla">
         <thead>
           <tr>
@@ -24,16 +40,37 @@ const Ordenes = () => {
             <th>Total</th>
             <th>Items</th>
             <th>Estado</th>
+            <th>   </th>
           </tr>
         </thead>
         <tbody>
           {ordenes.map((orden, index) => (
-            <tr key={index}>
-              <td>#{orden.id}</td>
-              <td>{orden.fecha}</td>
-              <td>{orden.total}</td>
-              <td>{orden.items}</td>
+            <tr key={orden._id || index}>
+              <td>#{index + 1}</td>
+              <td>
+                {new Date(orden.fecha).toLocaleDateString(undefined, {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })}
+              </td>
+              <td>${orden.total.toFixed(2)}</td>
+              <td>{Array.isArray(orden.items) ? orden.items.length : orden.items || 0}</td>
               <td>{orden.estado}</td>
+              <td>
+                <button
+                  className="btn-accion"
+                  onClick={() => eliminarOrden(orden._id)}
+                >
+                  Eliminar
+                </button>
+                <button
+                  className="btn-accion"
+                  onClick={() => navigate(`/ordenes/${orden._id}`)}
+                >
+                  Resumen de Orden
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -1,0 +1,146 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+.login-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: #f5f6fa;
+  overflow: hidden; /* evitar scroll innecesario */
+}
+
+/* LADO IZQUIERDO - IMAGEN FULL */
+.left-side {
+  flex: 1;
+  background-color: #0C133F;
+  height: 100vh;
+}
+
+.image-container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.promo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* LADO DERECHO - FORMULARIO CENTRADO */
+.right-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: white;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.05);
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  border-radius: 12px;
+}
+
+.form-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0C133F;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.form-subtitle {
+  font-size: 15px;
+  color: #6b7280;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 18px;
+}
+
+.login-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1.8px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.2s ease-in-out;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #0C133F;
+  box-shadow: 0 0 0 3px rgba(12, 19, 63, 0.15);
+}
+
+.login-btn {
+  width: 100%;
+  height: 48px;
+  background: #0C133F;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.login-btn:hover {
+  background: #1a1f4d;
+}
+
+.forgot-password-container {
+  text-align: center;
+  margin-top: 14px;
+}
+
+.forgot-password-link {
+  color: #0C133F;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .left-side {
+    height: 40vh;
+  }
+
+  .right-side {
+    height: 60vh;
+    padding: 20px;
+  }
+
+  .form-wrapper {
+    padding: 20px;
+  }
+}

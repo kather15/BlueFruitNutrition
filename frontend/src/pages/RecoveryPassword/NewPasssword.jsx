@@ -1,6 +1,5 @@
 import { useState } from "react";
 import './RecoveryPassword.css'
-import imgRecovery from '../../assets/recuperar-contraseña.png'
 
 
 export default function ResetPassword() {
@@ -28,7 +27,7 @@ export default function ResetPassword() {
    <div className="contenedor">
                  <div className="wrapper">
              <div className="imgrecovery">
-                 <img src={imgRecovery} alt="" className="recovery-img"/>
+                 <img src={"/recuperar-contraseña.png"} alt="" className="recovery-img"/>
              </div>
              <div className="recovery-card">
            <h2 className="text-xl font-bold mb-4">¿Olvidaste tu contraseña?</h2>

@@ -1,32 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
-import { Link } from 'react-router-dom'
-
-
-const productos = [
-  { nombre: 'Carbo Upp', imagen: '/CarboUpp.png' },
-  { nombre: 'Ener Kik', imagen: '/EnerKik.png' },
-  { nombre: 'Reppo', imagen: '/Reppo.png' },
-  { nombre: 'Ener Balance', imagen: '/EnerBalance.png' },
-];
+import { Link } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import Contacto from '../../components/Contact/Contact';
 
 const Home = () => {
   const [productoActivo, setProductoActivo] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Productos fijos (puedes luego cambiarlos por fetch si quieres)
+  const productos = [
+    { nombre: 'Carbo Upp', imagen: '/CarboUpp.png' },
+    { nombre: 'Ener Kik', imagen: '/EnerKik.png' },
+    { nombre: 'Reppo', imagen: '/Reppo.png' },
+    { nombre: 'Ener Balance', imagen: '/EnerBalance.png' },
+  ];
+
+  // Detectar si es móvil
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize(); // Ejecutar al cargar
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log("Formulario enviado:", data);
+    alert("¡Mensaje enviado con éxito!");
+    reset();
+  };
 
   return (
     <div className="blue-fruit-home">
-      {/* Imagen principal */}
-      <div className="blue-fruit-banner-container">
-        <img src="/PantallaPrincipal.png" alt="Banner Blue Fruit" className="blue-fruit-banner-image" />
-      </div>
-
-      {/* Separador debajo de la imagen */}
-      <div className="blue-fruit-separador">Nuestros Productos</div>
+      {/* Banner solo si NO es móvil */}
+      {!isMobile && (
+        <div className="blue-fruit-banner-container">
+          <img 
+            src="/Portada-home-feel-the-energy-blue-fruit.jpg" 
+            alt="Banner Blue Fruit" 
+            className="blue-fruit-banner-image" 
+          />
+        </div>
+      )}
 
       <h1>Explora Nuestros Productos</h1>
 
       <div className="blue-fruit-productos-scroll">
-        {productos.map((producto, index) => (
+        {(productos ?? []).map((producto, index) => (
           <div className="blue-fruit-product" key={index}>
             <div
               className="blue-fruit-image-container"
@@ -43,15 +72,15 @@ const Home = () => {
         ))}
       </div>
 
-     <div className="blue-fruit-boton-ver-todos-container">
-  <Link to="/product" className="blue-fruit-boton-ver-todos">
-    Ver todos los Productos
-  </Link>
-</div>
-      {/* Línea separadora debajo del botón */}
+      <div className="blue-fruit-boton-ver-todos-container">
+        <Link to="/product" className="blue-fruit-boton-ver-todos">
+          Ver todos los Productos
+        </Link>
+      </div>
+
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Sección Historia */}
+      {/* Historia */}
       <section className="blue-fruit-historia">
         <h2>Nuestra Historia</h2>
         <div className="blue-fruit-historia-content">
@@ -70,22 +99,20 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Sección Iconos */}
+      {/* Iconos */}
       <section className="blue-fruit-iconos">
         <div className="blue-fruit-icono">
-          <img src="/Group 8.png" alt="Icono Energía Sostenible" />
+          <img src="/Group 8.png" alt="Energía Sostenible" />
           <h2>Energía Sostenible</h2>
           <p>Libera energía de forma gradual para un rendimiento constante.</p>
         </div>
-        
         <div className="blue-fruit-icono">
-          <img src="/Group 9.png" alt="Icono Mejor Rendimiento" />
+          <img src="/Group 9.png" alt="Mejor Rendimiento" />
           <h2>Mejor Rendimiento</h2>
           <p>Maximiza la eficiencia y capacidad física.</p>
         </div>
-        
         <div className="blue-fruit-icono">
-          <img src="/Group 10.png" alt="Icono Salud Óptima" />
+          <img src="/Group 10.png" alt="Salud Óptima" />
           <h2>Salud Óptima</h2>
           <p>No produce caries, seguro para todas las edades.</p>
         </div>
@@ -93,7 +120,7 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Sección Nuestro Equipo */}
+      {/* Equipo */}
       <section className="blue-fruit-equipo">
         <h2>Nuestro Equipo</h2>
         <div className="blue-fruit-miembros">
@@ -122,33 +149,9 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
+      {/* Contacto */}
       <main>
-        <section className="blue-fruit-contact-section">
-          <div className="blue-fruit-contact-wrapper">
-            <div className="blue-fruit-contact-info">
-              <h2>Contáctanos</h2>
-              <h3>Llámanos</h3>
-              <p>Estamos disponibles 24 horas al día, 7 días a la semana.</p>
-              <p>Celular: +503 6859 7103</p>
-
-              <hr />
-
-              <h3>Escríbenos</h3>
-              <p>Llena nuestro formulario y nos pondremos en contacto contigo en 24 horas.</p>
-              <p>Email: info@blueletrunutrition.com</p>
-            </div>
-
-            <div className="blue-fruit-contact-form">
-              <form onSubmit={(e) => e.preventDefault()}>
-                <input type="text" placeholder="Tu Nombre*" required />
-                <input type="email" placeholder="Tu Email*" required />
-                <input type="tel" placeholder="Tu Celular*" required />
-                <textarea placeholder="Tu mensaje" rows="5" required></textarea>
-                <button type="submit">Enviar Mensaje</button>
-              </form>
-            </div>
-          </div>
-        </section>
+        <Contacto />
       </main>
     </div>
   );

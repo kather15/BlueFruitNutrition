@@ -1,43 +1,115 @@
-const Orden = require('../models/Orden');
+import Orden from '../models/Ordenes.js';
 
 // Obtener todas las órdenes
-exports.getOrdenes = async (req, res) => {
+const getOrdenes = async (req, res) => {
   try {
     const ordenes = await Orden.find();
-    res.json(ordenes);
+    console.log(ordenes);
+    res.status(200).json(ordenes);
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al obtener órdenes' });
   }
 };
 
 // Crear nueva orden
-exports.crearOrden = async (req, res) => {
+const crearOrden = async (req, res) => {
   try {
-    const nuevaOrden = new Orden(req.body);
+    if (!req.body.productos || req.body.productos.length === 0) {
+      return res.status(400).json({ mensaje: 'La orden debe tener al menos un producto.' });
+    }
+
+    const numeroOrden = Date.now().toString(); // Generador de ID simple
+    const fecha = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const total = req.body.productos.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
+    const items = req.body.productos.reduce((acc, p) => acc + p.cantidad, 0); // suma cantidades
+    const estado = 'En proceso';
+
+    // Validar campos obligatorios
+    if (!numeroOrden || !fecha || total === undefined || !items || !estado) {
+      return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
+    }
+
+    const nuevaOrden = new Orden({
+      numeroOrden,
+      fecha,
+      total,
+      items,
+      estado,
+      productos: req.body.productos
+    });
+
     const ordenGuardada = await nuevaOrden.save();
     res.status(201).json(ordenGuardada);
   } catch (error) {
+    console.error(error);
     res.status(400).json({ mensaje: 'Error al crear la orden' });
   }
 };
 
 // Obtener orden por ID
-exports.getOrdenPorId = async (req, res) => {
+const getOrdenPorId = async (req, res) => {
   try {
     const orden = await Orden.findById(req.params.id);
     if (!orden) return res.status(404).json({ mensaje: 'Orden no encontrada' });
-    res.json(orden);
+    res.status(200).json(orden);
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al obtener la orden' });
   }
 };
 
 // Eliminar orden
-exports.eliminarOrden = async (req, res) => {
+const eliminarOrden = async (req, res) => {
   try {
     await Orden.findByIdAndDelete(req.params.id);
-    res.json({ mensaje: 'Orden eliminada' });
+    res.status(200).json({ mensaje: 'Orden eliminada' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al eliminar orden' });
   }
+};
+
+// Contar órdenes en proceso
+const contarOrdenesEnProceso = async (req, res) => {
+  try {
+    const totalEnProceso = await Orden.countDocuments({ estado: 'En proceso' });
+    res.status(200).json({ totalEnProceso });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al contar órdenes en proceso' });
+  }
+};
+
+// Actualizar orden por ID (actualizar estado)
+const actualizarOrden = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    const estadosValidos = ['Pendiente', 'En proceso', 'Completada', 'Cancelada'];
+    if (!estadosValidos.includes(estado)) {
+      return res.status(400).json({ mensaje: 'Estado no válido' });
+    }
+
+    const ordenActualizada = await Orden.findByIdAndUpdate(
+      id,
+      { estado },
+      { new: true }
+    );
+
+    if (!ordenActualizada) {
+      return res.status(404).json({ mensaje: 'Orden no encontrada' });
+    }
+
+    res.status(200).json(ordenActualizada);
+  } catch (error) {
+    console.error('Error actualizando orden:', error);
+    res.status(500).json({ mensaje: 'Error al actualizar la orden' });
+  }
+};
+
+export default {
+  getOrdenes,
+  crearOrden,
+  getOrdenPorId,
+  eliminarOrden,
+  contarOrdenesEnProceso,
+  actualizarOrden // <-- función agregada
 };

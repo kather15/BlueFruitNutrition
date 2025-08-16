@@ -18,26 +18,59 @@ body {
 
 /* CONTENEDOR PRINCIPAL */
 .products-container {
+  min-height: 100vh;              
+  display: flex;                  
+  flex-direction: column;         
+  justify-content: center;        /* ✅ centra verticalmente */
+  align-items: center;            /* ✅ centra horizontalmente */
   padding: 40px 20px;
   text-align: center;
+}
+
+/* HEADER con título + botón en la misma línea */
+.products-header {
+  display: flex;
+  justify-content: center;  /* ✅ centrado horizontal */
+  align-items: center;      /* ✅ centrado vertical */
+  gap: 1.5rem;              /* espacio entre título y botón */
+  margin-bottom: 30px;
+  flex-wrap: wrap;          /* si la pantalla es chica, se baja el botón */
 }
 
 .products-title {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 30px;
   color: var(--primary);
+  margin: 0;
+}
+
+/* BOTÓN DE AGREGAR PRODUCTO */
+.add-product-btn {
+  background-color: var(--button);
+  color: var(--button-text);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.add-product-btn:hover {
+  background-color: #1c1c2a;
 }
 
 /* GRID DE PRODUCTOS */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* ✅ responsivo */
   gap: 2rem;
   justify-content: center;
   align-items: stretch;
-  max-width: 1000px;  /* aumenta ancho para 4 columnas */
-  margin: 0 auto;
+  max-width: 1000px;
+  width: 100%;
 }
 
 /* CARD DE PRODUCTO */
@@ -106,7 +139,7 @@ body {
   color: var(--primary);
 }
 
-/* BOTONES */
+/* BOTONES DE CADA PRODUCTO */
 .product-buttons {
   display: flex;
   justify-content: center;
@@ -115,8 +148,7 @@ body {
 }
 
 .edit-btn,
-.delete-btn,
-.add-product-btn {
+.delete-btn {
   background-color: var(--button);
   color: var(--button-text);
   padding: 0.5rem 1rem;
@@ -138,13 +170,6 @@ body {
 
 .delete-btn:hover {
   background-color: #223355;
-}
-
-.add-product-btn {
-  margin-bottom: 30px;
-  font-size: 1rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius);
 }
 
 /* MODAL */

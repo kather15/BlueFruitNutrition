@@ -1,140 +1,79 @@
-/* BlueFruitNavbar.css */
-.blue-fruit-main-navbar {
+/* src/components/Nav/Nav.css */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 220px;
+  height: 100vh;
   background-color: #1a1a3a;
-  padding: 12px 0;
-  width: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.blue-fruit-navbar-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  color: rgb(196, 169, 169);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
+  flex-direction: column;
+  padding: 20px 0;
+  box-sizing: border-box;
+  user-select: none;
+  z-index: 1000;
 }
 
-.blue-fruit-navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 40px;
+.sidebar-logo {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.blue-fruit-logo img {
-  height: 45px;
-  width: auto;
+.sidebar-logo img {
+  max-width: 150px;
+  height: auto;
+  display: inline-block;
 }
 
-.blue-fruit-nav-menu {
-  display: flex;
+.sidebar-menu {
   list-style: none;
-  margin: 0;
   padding: 0;
-  gap: 30px;
+  margin: 0;
+  flex-grow: 1;
 }
 
-.blue-fruit-nav-menu li a {
-  color: #ffffff;
+.sidebar-menu li {
+  margin-bottom: 18px;
+}
+
+.sidebar-menu li a {
+  color: white;
   text-decoration: none;
+  font-size: 17px;
+  padding: 10px 24px;
+  display: block;
+  border-radius: 6px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.sidebar-menu li a:hover {
+  background-color: #2a2a5a;
+}
+
+.sidebar-footer {
+  padding: 10px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid #333;
+}
+
+.sidebar-footer button {
+  width: 100%;
+  background: #25254a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 0;
   font-size: 15px;
-  font-weight: 500;
-  transition: color 0.3s ease;
-  padding: 8px 0;
-}
-
-.blue-fruit-nav-menu li a:hover {
-  color: #66ccff;
-}
-
-.blue-fruit-navbar-right {
-  display: flex;
-  align-items: center;
-}
-
-.blue-fruit-search-container {
-  display: flex;
-  align-items: center;
-  background-color: #ffffff;
-  border-radius: 25px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.blue-fruit-search-input {
-  border: none;
-  outline: none;
-  padding: 10px 20px;
-  font-size: 14px;
-  width: 250px;
-  background: transparent;
-}
-
-.blue-fruit-search-input::placeholder {
-  color: #999;
-}
-
-.blue-fruit-search-btn {
-  background: none;
-  border: none;
-  padding: 10px 15px;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.blue-fruit-search-btn img {
-  width: 18px;
-  height: 18px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .blue-fruit-navbar-container {
-    flex-direction: column;
-    gap: 20px;
-    padding: 0 15px;
-  }
-  
-  .blue-fruit-navbar-left {
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .blue-fruit-nav-menu {
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .blue-fruit-search-input {
-    width: 200px;
-  }
-}
-
-.blue-fruit-logout-btn {
-  margin-left: 20px;
-  background-color: #d32f2f;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-family: 'Outfit', sans-serif;
-  transition: background-color 0.3s ease;
-}
-
-.blue-fruit-logout-btn:hover {
-  background-color: #b22a28;
-}
-
-/* En móvil ajustar margen si es necesario */
-@media (max-width: 768px) {
-  .blue-fruit-logout-btn {
-    margin-left: 0;
-    margin-top: 10px;
-    width: 100%;
-  }
+.sidebar-footer button:hover {
+  background-color: #3a3a7a;
 }
