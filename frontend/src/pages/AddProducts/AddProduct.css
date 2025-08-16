@@ -1,251 +1,191 @@
-/* Contenedor principal del formulario centrado vertical y horizontalmente */
 .add-product-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* centrado vertical */
-  align-items: center;     /* centrado horizontal */
-  min-height: 100vh; /* ocupa toda la altura visible */
-  padding: 40px 20px; /* espacio interior */
-  background-color: #ffffff;
-  box-sizing: border-box; /* incluye padding y border en el tamaño */
-}
-
-/* Título principal */
-.add-product-wrapper > h2 {
-  color: #0C133F;
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-align: center;
-  width: 100%;
-  max-width: 900px; /* limita el ancho máximo */
-}
-
-/* Formulario con fondo blanco, sombra y diseño flex */
-.add-product-form {
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: row; /* columnas lado a lado */
-  gap: 40px; /* espacio entre columnas */
-  width: 100%;
   max-width: 900px;
-  box-sizing: border-box;
-  justify-content: center;
-  align-items: flex-start; /* alinea los contenidos arriba */
+  margin: 40px auto;
+  padding: 24px 32px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(12, 19, 63, 0.12);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Columna izquierda: vista previa e input file */
+.add-product-wrapper h2 {
+  text-align: center;
+  color: #0c133f;
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 32px;
+}
+
+.add-product-form {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
 .left-column {
+  flex: 1 1 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1; /* ocupa 1 parte del espacio total */
+  gap: 16px;
 }
 
-/* Vista previa de la imagen */
 .image-preview {
-  width: 220px;
-  height: 220px;
-  border: 2px dashed #ccc;
-  border-radius: 12px;
+  width: 100%;
+  max-width: 280px;
+  height: 280px;
+  border: 3px dashed #ccc;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #fafafa;
   overflow: hidden;
-  background-color: #fafafa;
-  margin-bottom: 8px;
+  transition: border-color 0.3s;
 }
 
-/* Bordes rojos para error */
-.image-preview.error-border {
-  border-color: red;
-}
-
-/* Imagen dentro de la vista previa */
 .image-preview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Texto para vista previa vacía */
 .image-placeholder {
-  color: #0C133F;
+  color: #999;
   font-size: 14px;
+  font-style: italic;
 }
 
-/* Estilo para el label que abre selector de archivos */
 .file-label {
-  background-color: #0C133F;
+  background: #0c133f;
   color: white;
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  user-select: none; /* no permite seleccionar texto */
-  margin-bottom: 8px;
-  display: inline-block;
-  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  user-select: none;
+  transition: background-color 0.25s;
 }
 
-/* Hover en botón subir imagen */
 .file-label:hover {
-  background-color: #09102c;
+  background: #0e1752;
 }
 
-/* Input file oculto */
 .file-input {
   display: none;
 }
 
-/* Columna derecha: inputs y textarea */
 .right-column {
-  flex: 2; /* ocupa 2 partes del espacio */
+  flex: 2 1 500px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 32px;
+}
+
+.right-column > div {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  min-width: 0; /* evita overflow */
 }
 
-/* Etiquetas */
 .right-column label {
-  font-weight: 500;
-  color: #000;
-  font-size: 14px;
+  font-weight: 600;
+  color: #0c133f;
+  font-size: 15px;
+  margin-bottom: 8px;
 }
 
-/* Inputs y textarea con estilos */
 .right-column input,
-.right-column textarea {
-  background-color: white;
-  border: 1px solid black;
-  padding: 10px 12px;
-  font-size: 14px;
-  border-radius: 8px;
-  width: 100%;
+.right-column textarea,
+.right-column select {
+  background-color: #fff;
+  border: 1.8px solid #ccc;
+  padding: 12px 14px;
+  font-size: 15px;
+  border-radius: 10px;
+  color: #222;
   resize: none;
-  color: #000;
   box-sizing: border-box;
-  transition: border-color 0.3s;
-  min-width: 0;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-family: inherit;
 }
 
-/* Bordes rojos para inputs con error */
-.right-column input.error-border,
-.right-column textarea.error-border {
-  border-color: red;
+.right-column input:focus,
+.right-column textarea:focus,
+.right-column select:focus {
+  border-color: #0c133f;
+  outline: none;
+  box-shadow: 0 0 8px rgba(12, 19, 63, 0.25);
 }
 
-/* Textarea altura mínima */
-.right-column textarea {
-  min-height: 80px;
+.error-border {
+  border-color: #ed0000 !important;
 }
 
-/* Texto de error pequeño */
-.error-text {
-  color: red;
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-/* Contenedor de botones centrado */
 .button-group {
+  grid-column: span 2;
   display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 16px;
-  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 20px;
 }
 
-/* Estilo botones Limpiar y Añadir */
 .btn-clear,
 .btn-submit {
-  background-color: #0C133F;
-  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 24px;
+  border-radius: 12px;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
-  min-width: 100px;
-  font-weight: 600;
-  white-space: nowrap;
-  text-align: center;
+  user-select: none;
 }
 
-/* Hover botones */
-.btn-clear:hover,
-.btn-submit:hover {
-  background-color: #09102c;
+.btn-clear {
+  background-color: #444;
+  color: white;
 }
 
-/* Media queries para dispositivos medianos y pequeños */
-@media (max-width: 1024px) {
-  .add-product-form {
-    padding: 25px;
-    gap: 30px;
-  }
-  .image-preview {
-    width: 180px;
-    height: 180px;
-  }
+.btn-clear:hover:not(:disabled) {
+  background-color: #666;
 }
 
-@media (max-width: 768px) {
-  /* Cambia formulario a columna */
+.btn-clear:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.btn-submit {
+  background-color: #0c133f;
+  color: white;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #0e1752;
+}
+
+.btn-submit:disabled {
+  background-color: #555a88;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
   .add-product-form {
     flex-direction: column;
-    padding: 20px;
-    gap: 25px;
-    align-items: center;
   }
 
-  /* Columnas ocupan todo el ancho */
   .left-column,
   .right-column {
-    width: 100%;
-    flex: none;
+    flex: 1 1 100%;
   }
 
-  /* Imagen más pequeña y centrada */
-  .image-preview {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 16px auto;
+  .right-column {
+    grid-template-columns: 1fr;
   }
 
-  /* Botones centrados */
   .button-group {
     justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .add-product-wrapper {
-    padding: 20px 12px;
-  }
-
-  .add-product-wrapper > h2 {
-    font-size: 24px;
-  }
-
-  .add-product-form {
-    padding: 15px;
-    gap: 20px;
-  }
-
-  .image-preview {
-    width: 160px;
-    height: 160px;
-  }
-
-  .btn-clear,
-  .btn-submit {
-    min-width: 90px;
-    padding: 8px 14px;
-    font-size: 14px;
   }
 }
