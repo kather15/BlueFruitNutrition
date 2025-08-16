@@ -1,18 +1,16 @@
+/* Base Styles */
 .credit-card-container {
   font-family: sans-serif;
   max-width: 900px;
-  margin: 40px auto 40px 60px; /* más margen a la izquierda para alejarlo del nav */
+  margin: 40px auto;
   padding: 20px;
   background-color: #f8f8f8;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  
-  
   display: flex;
   flex-direction: row; 
-  justify-content: flex-start; 
- 
-
+  justify-content: flex-start;
+  gap: 40px;
 }
 
 .card-input-wrapper {
@@ -24,23 +22,28 @@
 }
 
 .credit-card-mockup {
-  width: 380px; /* Ancho de la tarjeta */
-  height: 240px; /* Alto de la tarjeta */
+  width: 380px;
+  height: 240px;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  padding: 25px; /* Relleno general para la tarjeta */
+  padding: 25px;
   box-sizing: border-box;
   position: relative;
   border: 1px solid #e0e0e0;
+  transition: transform 0.3s ease;
+}
+
+.credit-card-mockup:hover {
+  transform: translateY(-5px);
 }
 
 .credit-card-mockup.front {
-  display: flex; /* Usar flexbox para el frente */
-  flex-direction: column; /* Organizar elementos en columna */
-  justify-content: space-between; /* Espaciar el contenido (chip arriba, info abajo) */
-  align-items: flex-start; /* Alinear elementos a la izquierda por defecto */
-  padding: 25px 30px; /* Ajuste de padding para que se vea más exacto con la imagen */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 25px 30px;
 }
 
 .chip {
@@ -48,45 +51,42 @@
   height: 40px;
   background-color: #b0b0b0;
   border-radius: 8px;
-  /* margin-bottom se manejará por flexbox */
   position: relative;
   overflow: hidden;
-  margin-top: 5px; /* Pequeño ajuste para la posición vertical del chip */
+  margin-top: 5px;
 }
 
 .chip::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background-color: #909090;
-    transform: translateY(-50%);
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #909090;
+  transform: translateY(-50%);
 }
 
 .chip::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 1px;
-    background-color: #909090;
-    transform: translateX(-50%);
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background-color: #909090;
+  transform: translateX(-50%);
 }
-
 
 .card-number {
   font-family: monospace;
   font-size: 30px;
   letter-spacing: 2px;
-  /* margin-bottom se manejará por flexbox */
   color: #333;
-  width: 100%; /* Asegura que ocupe todo el ancho para centrar texto */
-  text-align: center; /* Centrar el número de tarjeta */
-  margin-top: auto; /* Empuja el número hacia el centro/inferior si hay espacio */
-  margin-bottom: 25px; /* Espacio debajo del número */
+  width: 100%;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: 25px;
 }
 
 .card-holder-info,
@@ -95,8 +95,7 @@
   flex-direction: column;
   font-size: 14px;
   color: #666;
-  width: 100%; /* Ocupa todo el ancho disponible */
-  /* margin-top: auto; se manejará con el contenedor de info */
+  width: 100%;
 }
 
 .card-label {
@@ -112,28 +111,23 @@
   color: #333;
 }
 
-/* Contenedor para la información del titular y vencimiento para organizar mejor */
 .card-info-bottom {
   display: flex;
   justify-content: space-between;
-  width: 100%; /* Ocupa el ancho completo */
-  margin-top: auto; /* Empuja este grupo hacia la parte inferior de la tarjeta */
+  width: 100%;
+  margin-top: auto;
 }
 
 .card-holder-info {
-  flex-basis: 60%; /* Dar más espacio al titular */
+  flex-basis: 60%;
 }
 
 .expiration-info {
-  flex-basis: 35%; /* Espacio para la fecha de vencimiento */
+  flex-basis: 35%;
   text-align: right; 
 }
 
-
-/* --- FIN de ajustes para la tarjeta frontal --- */
-
-
-
+/* Card Back Styles */
 .credit-card-mockup.back {
   padding: 0;
   overflow: hidden;
@@ -158,18 +152,17 @@
 }
 
 .card-label-back {
-    font-size: 10px;
-    color: #666;
-    display: block;
-    margin-bottom: 3px;
+  font-size: 10px;
+  color: #666;
+  display: block;
+  margin-bottom: 3px;
 }
 
 .card-value-back {
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
 }
-
 
 .security-code-label {
   font-size: 12px;
@@ -195,12 +188,13 @@
   color: #333;
 }
 
-
+/* Form Styles */
 .input-fields-group {
   flex: 1;
   padding-left: 40px;
   display: flex;
   flex-direction: column;
+  min-width: 0; /* Permite que flex funcione correctamente */
 }
 
 .input-field {
@@ -214,6 +208,22 @@
   color: #555;
   margin-bottom: 8px;
   font-weight: bold;
+  position: relative;
+}
+
+.input-field label::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #10B981;
+  transition: width 0.3s ease;
+}
+
+.input-field:focus-within label::after {
+  width: 100%;
 }
 
 .input-field input {
@@ -224,12 +234,13 @@
   font-size: 16px;
   box-sizing: border-box;
   background-color: #f5f5f5;
+  transition: all 0.3s ease;
 }
 
 .input-field input:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  border-color: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .flex-group {
@@ -241,7 +252,7 @@
   flex: 1;
 }
 
-/* Buttons */
+/* Button Styles */
 .next-step-button,
 .finish-purchase-button {
   background-color: #212140;
@@ -251,21 +262,23 @@
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
   align-self: flex-end;
   margin-top: auto;
+  min-width: 150px;
 }
 
 .next-step-button:hover,
 .finish-purchase-button:hover {
   background-color: #3a3a60;
+  transform: translateY(-2px);
 }
 
 .divider {
   border: 0;
-  height: 1px;
-  background-color: #e0e0e0;
-  margin: 40px 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #e0e0e0 20%, #e0e0e0 80%, transparent);
+  margin: 30px 0;
 }
 
 .security-code-group {
@@ -273,31 +286,34 @@
 }
 
 .security-code-group .input-field {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .security-code-group .finish-purchase-button {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .input-field.full-width input {
-    width: 60%;
+  width: 60%;
 }
 
 .top-section .input-fields-group {
-    padding-top: 25px;
+  padding-top: 25px;
 }
 
 .top-section .input-fields-group .input-field:first-child label {
-    margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 
+/* Card Flip Animation */
 .card-flip-wrapper {
   position: relative;
   width: 380px;
   height: 240px;
   perspective: 1000px;
+  flex-shrink: 0; /* Evita que se comprima */
 }
+
 .card-flip-wrapper .credit-card-mockup {
   width: 100%;
   height: 100%;
@@ -326,34 +342,416 @@
   z-index: 2;
 }
 
+/* Navigation Buttons */
 .back-button {
   background: none;
-  border: none;
+  border: 1px solid #0C133F;
   color: #0C133F;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   margin-bottom: 15px;
   text-align: left;
-  padding: 0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
 .back-button:hover {
-  text-decoration: underline;
+  background-color: #0C133F;
+  color: white;
 }
 
 .error {
-  color: red;
+  color: #ef4444;
   font-size: 12px;
   margin-top: 5px;
   display: block;
 }
 
-/* Wrapper externo para centrar el contenido en viewport (menos espacio nav) */
+/* Real Payment Section */
+.real-payment-section {
+  background-color: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  margin-top: 1rem;
+}
+
+.real-payment-button {
+  transition: all 0.3s ease !important;
+}
+
+.real-payment-button:hover {
+  transform: translateY(-2px);
+}
+
+.real-payment-button:active {
+  transform: translateY(0);
+}
+
+.success-message {
+  background-color: #f0f9ff;
+  border: 1px solid #10B981;
+  color: #059669;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.success-message::before {
+  content: '✅';
+}
+
+.security-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f0f9ff;
+  color: #0369a1;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+/* Page Wrapper */
 .page-wrapper {
   display: flex;
-  justify-content: center; /* centro horizontal */
-  align-items: center;     /* centro vertical */
-  min-height: calc(100vh - 60px); /* altura total menos nav (ajusta 60px si tu nav es otro alto) */
-  padding-top: 60px; /* espacio para nav fijo */
-  background-color: #f0f0f0; /* opcional para diferenciar */
+  justify-content: center;
+  align-items: flex-start; /* Cambiado de center a flex-start para mejor responsive */
+  min-height: calc(100vh - 60px);
+  padding: 60px 20px 20px; /* Agregado padding horizontal */
+  background-color: #f0f0f0;
+}
+
+/* ============================================ */
+/* RESPONSIVE BREAKPOINTS */
+/* ============================================ */
+
+/* Tablets (768px and down) */
+@media screen and (max-width: 768px) {
+  .page-wrapper {
+    padding: 40px 15px 15px;
+    align-items: flex-start;
+  }
+
+  .credit-card-container {
+    flex-direction: column;
+    margin: 0;
+    padding: 15px;
+    max-width: 100%;
+    gap: 20px;
+  }
+
+  .card-flip-wrapper {
+    width: 100%;
+    max-width: 350px;
+    height: 220px;
+    align-self: center;
+  }
+
+  .credit-card-mockup {
+    width: 100%;
+    height: 100%;
+    max-width: 350px;
+    max-height: 220px;
+  }
+
+  .card-number {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  .input-fields-group {
+    padding-left: 0;
+    width: 100%;
+  }
+
+  .flex-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .half-width {
+    width: 100%;
+  }
+
+  .next-step-button,
+  .finish-purchase-button {
+    align-self: stretch;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .input-field.full-width input {
+    width: 100%;
+  }
+
+  .real-payment-section {
+    padding: 1rem;
+  }
+
+  .card-holder-info,
+  .expiration-info {
+    font-size: 12px;
+  }
+
+  .card-label {
+    font-size: 10px;
+  }
+
+  .card-value {
+    font-size: 13px;
+  }
+}
+
+/* Mobile (480px and down) */
+@media screen and (max-width: 480px) {
+  .page-wrapper {
+    padding: 20px 10px 10px;
+  }
+
+  .credit-card-container {
+    padding: 10px;
+    border-radius: 8px;
+    gap: 15px;
+  }
+
+  .card-flip-wrapper {
+    max-width: 320px;
+    height: 200px;
+  }
+
+  .credit-card-mockup {
+    max-width: 320px;
+    max-height: 200px;
+    padding: 20px;
+  }
+
+  .credit-card-mockup.front {
+    padding: 20px 25px;
+  }
+
+  .chip {
+    width: 40px;
+    height: 32px;
+  }
+
+  .card-number {
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .input-field {
+    margin-bottom: 15px;
+  }
+
+  .input-field input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .input-field label {
+    font-size: 12px;
+  }
+
+  .next-step-button,
+  .finish-purchase-button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  .back-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .real-payment-section {
+    padding: 0.75rem;
+  }
+
+  .card-info-bottom {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .expiration-info {
+    text-align: left;
+  }
+
+  .security-code-display {
+    width: 60%;
+    font-size: 16px;
+  }
+
+  .magnetic-stripe {
+    height: 40px;
+    margin: 20px 0;
+  }
+
+  .card-holder-back-info {
+    margin: 0 20px 15px 20px;
+    padding: 6px 20px;
+  }
+
+  .security-code-label {
+    margin-right: 20px;
+  }
+
+  .security-code-display {
+    margin-right: 20px;
+  }
+}
+
+/* Small Mobile (360px and down) */
+@media screen and (max-width: 360px) {
+  .page-wrapper {
+    padding: 15px 5px 5px;
+  }
+
+  .credit-card-container {
+    padding: 8px;
+    margin: 0;
+  }
+
+  .card-flip-wrapper {
+    max-width: 280px;
+    height: 180px;
+  }
+
+  .credit-card-mockup {
+    max-width: 280px;
+    max-height: 180px;
+    padding: 15px;
+  }
+
+  .credit-card-mockup.front {
+    padding: 15px 20px;
+  }
+
+  .card-number {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  .chip {
+    width: 35px;
+    height: 28px;
+  }
+
+  .card-holder-info,
+  .expiration-info {
+    font-size: 10px;
+  }
+
+  .card-label {
+    font-size: 8px;
+  }
+
+  .card-value {
+    font-size: 11px;
+  }
+
+  .input-field input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .input-field label {
+    font-size: 11px;
+  }
+
+  .real-payment-section h3 {
+    font-size: 1rem;
+  }
+
+  .real-payment-section p {
+    font-size: 0.8rem;
+  }
+}
+
+/* Landscape Mobile Adjustments */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .page-wrapper {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+
+  .credit-card-container {
+    margin: 0;
+  }
+
+  .card-flip-wrapper {
+    height: 150px;
+  }
+
+  .credit-card-mockup {
+    max-height: 150px;
+  }
+
+  .card-number {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}
+
+/* Large Screens (1200px and up) */
+@media screen and (min-width: 1200px) {
+  .credit-card-container {
+    margin: 60px auto;
+    padding: 30px;
+    gap: 60px;
+  }
+
+  .input-fields-group {
+    padding-left: 60px;
+  }
+
+  .card-flip-wrapper {
+    width: 400px;
+    height: 250px;
+  }
+
+  .credit-card-mockup {
+    width: 400px;
+    height: 250px;
+  }
+
+  .card-number {
+    font-size: 32px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .page-wrapper {
+    background-color: white;
+    padding: 0;
+  }
+
+  .credit-card-container {
+    box-shadow: none;
+    background-color: white;
+    border: 1px solid #ccc;
+  }
+
+  .next-step-button,
+  .finish-purchase-button,
+  .back-button {
+    display: none;
+  }
+}
+
+/* High DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .credit-card-mockup {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  }
 }
