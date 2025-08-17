@@ -1,0 +1,64 @@
+.compra-exitosa-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: aliceblue;
+  background-size: cover;
+  background-position: center;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.card h1 {
+  color: #1b1b3c;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.card p {
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn.descargar {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn.descargar:hover {
+  background-color: #0056b3;
+}
+
+.btn.correo {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.btn.correo:hover {
+  background-color: #563d7c;
+}

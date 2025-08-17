@@ -29,6 +29,10 @@ export const config={
         to: process.env.EMAIL_USER //Para el fromulario de contactos, manda los datos llenados en el formulario a el propio gmail
     },
 
+    emailverification:{
+        emailV_user: process.env.EMAIL_V,  //Es con el correo noreply el gmail para verificar el codigo del login
+        emailV_pass: process.env.PASS_V
+    },
 
     cloudinary: {
         cloudinary_name: process.env.CLOUDINARY_NAME,           //Subir imagenes a cloudinary

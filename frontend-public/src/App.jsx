@@ -4,12 +4,13 @@ import { Toaster } from 'react-hot-toast';
 
 // Context
 import { AuthProvider } from './context/useAuth';
-import { CarritoProvider } from "./context/CarritoContext";
+import { CarritoProvider } from './context/CarritoContext';
 
 // Components
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
 import Error404Public from './components/NotFound/NotFoundPublic';
+import RutaPrivada from './components/PrivateRoute/PrivateRoute'; 
 
 // Pages - Públicas
 import Home from './pages/Home/Home';
@@ -20,7 +21,6 @@ import Contact from './components/Contact/Contact';
 import Suscripciones from './pages/Suscripciones/Suscripciones';
 import ChatBot from './pages/ChatBot/ChatBot';
 
-
 // Pages - Autenticación
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
@@ -28,17 +28,16 @@ import RequestCode from './pages/RecoveryPassword/RequestCode';
 import VerifyCode from './pages/RecoveryPassword/VerifyCode';
 import NewPassword from './pages/RecoveryPassword/NewPasssword';
 
-// Pages - Privadas (temporales públicas)
+// Pages - Privadas
 import Carrito from './pages/Carrito/Carrito';
 import Pay from './pages/Pay/pay';
 import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
 import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
-
+import Bill from './pages/Bill/Biil';
 
 function App() {
   const location = useLocation();
 
-  // Ocultar Nav/Footer en login y registro
   const hideNavFooterRoutes = ['/login', '/registro'];
   const hideNavFooter = hideNavFooterRoutes.includes(location.pathname);
 
@@ -62,16 +61,15 @@ function App() {
 
           {!hideNavFooter && <Nav />}
 
-
-        <Routes>
-          {/* RUTAS PÚBLICAS */}
-          <Route path="/" element={<Home />} />
-          <Route path="/product" element={<ProductsMenu />} />
-          <Route path="/producto/:id" element={<ProductsReview />} />
-          <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/suscripciones" element={<Suscripciones />} />
-          <Route path="/chatbot" element={<ChatBot />} />
+          <Routes>
+            {/* RUTAS PÚBLICAS */}
+            <Route path="/" element={<Home />} />
+            <Route path="/product" element={<ProductsMenu />} />
+            <Route path="/producto/:id" element={<ProductsReview />} />
+            <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/suscripciones" element={<Suscripciones />} />
+            <Route path="/chatbot" element={<ChatBot />} />
 
             {/* RUTAS DE AUTENTICACIÓN */}
             <Route path="/login" element={<Login />} />
@@ -80,11 +78,47 @@ function App() {
             <Route path="/verificar-codigo" element={<VerifyCode />} />
             <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-            {/* RUTAS PRIVADAS (temporalmente públicas) */}
-            <Route path="/carrito" element={<Carrito />} />
-            <Route path="/pay" element={<Pay />} />
-            <Route path="/Metodo" element={<MetodoDePago />} />
-            <Route path="/personalizar" element={<Personalizar />} />
+            {/* RUTAS PRIVADAS */}
+            <Route
+              path="/carrito"
+              element={
+                <RutaPrivada>
+                  <Carrito />
+                </RutaPrivada>
+              }
+            />
+            <Route
+              path="/pay"
+              element={
+                <RutaPrivada>
+                  <Pay />
+                </RutaPrivada>
+              }
+            />
+            <Route
+              path="/Metodo"
+              element={
+                <RutaPrivada>
+                  <MetodoDePago />
+                </RutaPrivada>
+              }
+            />
+            <Route
+              path="/personalizar"
+              element={
+                <RutaPrivada>
+                  <Personalizar />
+                </RutaPrivada>
+              }
+            />
+            <Route
+              path="/bill"
+              element={
+                <RutaPrivada>
+                  <Bill />
+                </RutaPrivada>
+              }
+            />
 
             {/* 404 */}
             <Route path="*" element={<Error404Public />} />

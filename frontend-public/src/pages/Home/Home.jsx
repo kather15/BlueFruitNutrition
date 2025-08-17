@@ -76,7 +76,7 @@ const Home = () => {
         <h2>Nuestra Historia</h2>
         <div className="blue-fruit-historia-content">
           <div className="blue-fruit-historia-text">
-            <p>BlueFuel ha fusionado la ciencia deportiva con la innovación alimentaria para ofrecer productos diseñados para optimizar el rendimiento y la recuperación de los atletas.</p>
+            <p>BlueFruitNutrition ha fusionado la ciencia deportiva con la innovación alimentaria para ofrecer productos diseñados para optimizar el rendimiento y la recuperación de los atletas.</p>
             <ul>
               <li>Productos naturales con ingredientes de alta calidad</li>
               <li>Diseñados para proporcionar energía rápida y sostenida</li>
@@ -152,7 +152,42 @@ const Home = () => {
   <FaWhatsapp size={28} />
   <span>Contáctanos</span>
 </a>
+
+<hr className="blue-fruit-linea-separadora" />
+
+     <hr className="blue-fruit-linea-separadora" />
+
+     <section className="blue-fruit-historia">
+        <h2>¡Proximamente! 
+       ENER GUMMIES. (Gomitas energéticas)®</h2>
+        <div className="blue-fruit-historia-content">
+          <div className="blue-fruit-historia-text">
+            <h3>Ener Gummies.</h3> <p>Gomitas solidas energéticas a
+            base de Palatinose, suministro sostenido energético,
+            sin azúcar añadido. Proporcionan y refilan las reservas
+            energéticas evitando la debilidad y la fatiga física.
+            Apto para jóvenes y adultos que practican una
+            actividad física. Ideal para seccionar la porción y el
+            aporte energético.
+            Ideal para repartir en porciones los 30g de aporte
+            energético equivalente a un Gel.
+            Disponible en sabores: Banano, Maracuyá, Naranja y
+           Ponche de Frutas</p>
+           <h3>Ener Gummies Kids.</h3> <p>Gomitas solidas energéticas a base de Palatinose, de
+           sabores tropicales que brindarán energía sostenida.
+           Únicas gomitas no cario génicas (no produce caries), sin azúcar añadido. Proporcionan
+           energía saludable evitando la debilidad y la fatiga física al momento de las prácticas
+           deportivas. Apto para todas las edades en niños. Contiene 50mg de Vitamina C
+           Disponible en sabores: Banano, Maracuyá, Naranja y Ponche de Frutas</p>
+          </div>
+          <img src="/EnerGummies.png" alt="Ener Gummies" className="ener-image" />
+        </div>
+      </section>
+
+
     </div>
+
+    
   );
 };
 

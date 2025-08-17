@@ -23,6 +23,7 @@ import tokenRouter from "./src/routes/token.js";
 import adminVerifyRoutes from "./src/routes/adminVerify.js";
 import sessionRouter from "./src/routes/session.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
+import BillRoutes from "./src/routes/bill.js"; 
 
 
 const app = express();
@@ -62,6 +63,7 @@ app.use("/api", ContactRoutes);
 app.use("/api/admin", adminVerifyRoutes);
 app.use("/api", sessionRouter);
 app.use("/api/pay", PayRoutes);
+app.use("/api/Bill", BillRoutes);
 
 
 export default app;
