@@ -19,6 +19,7 @@ import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
 import adminVerifyRoutes from "./src/routes/adminVerify.js";
 import sessionRouter from "./src/routes/session.js";
+import PayRoutes from "./src/routes/pay.js";
 
 const app = express();
 
@@ -48,5 +49,7 @@ app.use("/api/reviews", ReviewRouters);
 app.use("/api", ContactRoutes);
 app.use("/api/admin", adminVerifyRoutes);
 app.use("/api", sessionRouter);
+app.use("/api/pay", PayRoutes);
 
 export default app;
+
