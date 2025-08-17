@@ -5,13 +5,19 @@ import './AddProduct.css';
 const AddProduct = () => {
   const fileInputRef = useRef(null);
 
+  const gels = {
+    "CarboUpp": ["Banano", "Mora", "Limón", "Manzana", "Piña", "Frambuesa", "Coco"],
+    "EnerKik": ["Ponche de Frutas", "Maracuya", "Limón", "Banano", "Frambuesa"],
+    "Enerbalance": ["Mora", "Banano", "Manzana"]
+  };
+
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
     flavor: "",
+    description: "",
     price: "",
-    idNutritionalValues: "",
   });
+  const [availableFlavors, setAvailableFlavors] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -30,38 +36,42 @@ const AddProduct = () => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
 
-const handleFileChange = (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    // Validar tipo de imagen permitido
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    if (!validTypes.includes(file.type)) {
-      toast.error("Please upload an image with jpg, jpeg or png format");
-      // Limpiar input y estado de imagen
-      e.target.value = null;
-      setImageFile(null);
-      setPreviewImage(null);
-      return;
-    }
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      if (!validTypes.includes(file.type)) {
+        toast.error("Please upload an image with jpg, jpeg or png format");
+        e.target.value = null;
+        setImageFile(null);
+        setImagePreview(null);
+        return;
+      }
 
-    setImageFile(file);
-    setPreviewImage(URL.createObjectURL(file));
-  }
-};
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Si se cambia el nombre del gel, actualizar los sabores disponibles
+    if (name === "name") {
+      setAvailableFlavors(gels[value] || []);
+      setFormData((prev) => ({ ...prev, flavor: "" })); // reset flavor
+    }
   };
 
   const handleClear = () => {
     setFormData({
       name: "",
-      description: "",
       flavor: "",
+      description: "",
       price: "",
-      idNutritionalValues: "",
     });
+    setAvailableFlavors([]);
     setImageFile(null);
     setImagePreview(null);
     toast.success("Formulario limpiado");
@@ -70,29 +80,26 @@ const handleFileChange = (e) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-if (
-  !formData.name.trim() ||
-  !formData.description.trim() ||
-  !formData.flavor.trim() ||
-  !formData.price || // si es número, solo validar que exista
-  !formData.idNutritionalValues.trim() ||
-  !imageFile
-) {
-  toast.error("Todos los campos son obligatorios");
-  return;
-}
-
+    if (
+      !formData.name.trim() ||
+      !formData.flavor.trim() ||
+      !formData.description.trim() ||
+      !formData.price || 
+      !imageFile
+    ) {
+      toast.error("Todos los campos son obligatorios");
+      return;
+    }
 
     setLoading(true);
 
     try {
       const data = new FormData();
       data.append("name", formData.name);
-      data.append("description", formData.description);
       data.append("flavor", formData.flavor);
+      data.append("description", formData.description);
       data.append("price", formData.price);
-      data.append("idNutritionalValues", formData.idNutritionalValues);
-     data.append("imagen", imageFile);
+      data.append("imagen", imageFile);
 
       const res = await fetch("http://localhost:4000/api/products", {
         method: "POST",
@@ -101,7 +108,6 @@ if (
       });
 
       const result = await res.json();
-
       if (!res.ok) throw new Error(result.message || "Error al subir el producto");
 
       toast.success("Producto agregado correctamente");
@@ -153,16 +159,36 @@ if (
         <div className="right-column">
           <div>
             <label htmlFor="name">Nombre del producto</label>
-            <input
+            <select
               id="name"
               name="name"
-              type="text"
-              placeholder="Nombre del producto"
               value={formData.name}
               onChange={handleChange}
               className={!formData.name.trim() ? "error-border" : ""}
               disabled={loading}
-            />
+            >
+              <option value="">Selecciona un gel</option>
+              {Object.keys(gels).map((gel) => (
+                <option key={gel} value={gel}>{gel}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="flavor">Sabor</label>
+            <select
+              id="flavor"
+              name="flavor"
+              value={formData.flavor}
+              onChange={handleChange}
+              className={!formData.flavor.trim() ? "error-border" : ""}
+              disabled={loading || !formData.name}
+            >
+              <option value="">Selecciona un sabor</option>
+              {availableFlavors.map((flavor) => (
+                <option key={flavor} value={flavor}>{flavor}</option>
+              ))}
+            </select>
           </div>
 
           <div>
@@ -180,20 +206,6 @@ if (
           </div>
 
           <div>
-            <label htmlFor="flavor">Sabor</label>
-            <input
-              id="flavor"
-              name="flavor"
-              type="text"
-              placeholder="Sabor del producto"
-              value={formData.flavor}
-              onChange={handleChange}
-              className={!formData.flavor.trim() ? "error-border" : ""}
-              disabled={loading}
-            />
-          </div>
-
-          <div>
             <label htmlFor="price">Precio</label>
             <input
               id="price"
@@ -205,20 +217,6 @@ if (
               className={!formData.price ? "error-border" : ""}
               min="0"
               step="0.01"
-              disabled={loading}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="idNutritionalValues">ID de Valores Nutricionales</label>
-            <input
-              id="idNutritionalValues"
-              name="idNutritionalValues"
-              type="text"
-              placeholder="ID Valores Nutricionales"
-              value={formData.idNutritionalValues}
-              onChange={handleChange}
-              className={!formData.idNutritionalValues.trim() ? "error-border" : ""}
               disabled={loading}
             />
           </div>

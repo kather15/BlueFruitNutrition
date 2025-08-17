@@ -28,10 +28,7 @@ export default function Sidebar() {
       </ul>
 
       <div className="sidebar-footer">
-        <button className="profile-btn" onClick={() => navigate('/perfil')}>
-          <User size={20} color="white" style={{ marginRight: 6, verticalAlign: 'middle' }} />
-          Mi Perfil
-        </button>
+
         <button className="logout-btn" onClick={handleLogout}>
           <LogOut size={20} color="white" style={{ marginRight: 6, verticalAlign: 'middle' }} />
           Cerrar Sesión

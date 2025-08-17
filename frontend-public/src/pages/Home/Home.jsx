@@ -3,12 +3,13 @@ import './Home.css';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import Contacto from '../../components/Contact/Contact';
+import { FaWhatsapp } from 'react-icons/fa';
+
 
 const Home = () => {
   const [productoActivo, setProductoActivo] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Productos fijos (puedes luego cambiarlos por fetch si quieres)
   const productos = [
     { nombre: 'Carbo Upp', imagen: '/CarboUpp.png' },
     { nombre: 'Ener Kik', imagen: '/EnerKik.png' },
@@ -16,22 +17,14 @@ const Home = () => {
     { nombre: 'Ener Balance', imagen: '/EnerBalance.png' },
   ];
 
-  // Detectar si es móvil
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    handleResize(); // Ejecutar al cargar
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
   const onSubmit = (data) => {
     console.log("Formulario enviado:", data);
@@ -41,7 +34,6 @@ const Home = () => {
 
   return (
     <div className="blue-fruit-home">
-      {/* Banner solo si NO es móvil */}
       {!isMobile && (
         <div className="blue-fruit-banner-container">
           <img 
@@ -80,7 +72,6 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Historia */}
       <section className="blue-fruit-historia">
         <h2>Nuestra Historia</h2>
         <div className="blue-fruit-historia-content">
@@ -99,7 +90,6 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Iconos */}
       <section className="blue-fruit-iconos">
         <div className="blue-fruit-icono">
           <img src="/Group 8.png" alt="Energía Sostenible" />
@@ -120,7 +110,6 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Equipo */}
       <section className="blue-fruit-equipo">
         <h2>Nuestro Equipo</h2>
         <div className="blue-fruit-miembros">
@@ -149,10 +138,20 @@ const Home = () => {
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* Contacto */}
       <main>
         <Contacto />
       </main>
+
+{/* Botón de WhatsApp fijo con React Icon */}
+<a
+  href="https://wa.me/50312345678" // reemplaza con tu número de WhatsApp
+  target="_blank"
+  rel="noopener noreferrer"
+  className="blue-fruit-whatsapp-button"
+>
+  <FaWhatsapp size={28} />
+  <span>Contáctanos</span>
+</a>
     </div>
   );
 };

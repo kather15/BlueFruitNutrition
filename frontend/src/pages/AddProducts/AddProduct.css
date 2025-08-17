@@ -96,7 +96,8 @@
 }
 
 .right-column input,
-.right-column textarea {
+.right-column textarea,
+.right-column select {
   background-color: #fff;
   border: 1.8px solid #ccc;
   padding: 12px 14px;
@@ -105,12 +106,13 @@
   color: #222;
   resize: none;
   box-sizing: border-box;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
   font-family: inherit;
 }
 
 .right-column input:focus,
-.right-column textarea:focus {
+.right-column textarea:focus,
+.right-column select:focus {
   border-color: #0c133f;
   outline: none;
   box-shadow: 0 0 8px rgba(12, 19, 63, 0.25);

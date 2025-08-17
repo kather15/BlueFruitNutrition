@@ -58,5 +58,11 @@ app.use("/api", ContactRoutes);
 app.use("/api/admin", adminVerifyRoutes);
 app.use("/api", sessionRouter);
 app.use("/api/chat", chatRoutes);
+app.use("/api", ContactRoutes);
+app.use("/api/admin", adminVerifyRoutes);
+app.use("/api", sessionRouter);
+app.use("/api/pay", PayRoutes);
+
 
 export default app;
+
