@@ -2,89 +2,72 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star } from 'lucide-react';
 import toast from 'react-hot-toast'; 
+import { useAuthContext } from '../../context/useAuth'; 
 import './ProductsReview.css';
 
 const ProductsReview = () => {
-  // Obtiene el parámetro "id" de la URL (id del producto)
   const { id } = useParams();
-  // Hook para navegación programada
   const navigate = useNavigate();
+  
+  // Usar contexto en lugar de localStorage
+  const { user, isAuthenticated, loading } = useAuthContext();
 
   // Estados principales:
-  const [quantity, setQuantity] = useState(1);          // Cantidad seleccionada para agregar al carrito
-  const [showReviewForm, setShowReviewForm] = useState(false);  // Mostrar u ocultar formulario de reseña
-  const [product, setProduct] = useState(null);         // Datos del producto
-  const [reviews, setReviews] = useState([]);           // Lista de reseñas del producto
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticación del usuario
-  const [user, setUser] = useState(null);               // Datos del usuario autenticado
+  const [quantity, setQuantity] = useState(1);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
-  // Estado para nueva reseña (rating y comentario)
+  // Estado para nueva reseña
   const [newReview, setNewReview] = useState({
-    rating: 5,    // Calificación por defecto 5 estrellas
-    comment: '',  // Comentario vacío inicialmente
+    rating: 5,
+    comment: '',
   });
 
-  // Verificar si el usuario está autenticado al montar el componente
+  // Cargar información del producto
   useEffect(() => {
-    const token = localStorage.getItem('authToken');    // Obtener token guardado
-    const userData = localStorage.getItem('userData');  // Obtener datos de usuario guardados
-    
-    if (token && userData) {
-      setIsAuthenticated(true);                          // Si existen, marcar como autenticado
-      setUser(JSON.parse(userData));                     // Parsear y guardar datos de usuario
-    }
-  }, []);
-
-  // Cargar información del producto al cambiar el id
-  useEffect(() => {
-    fetch(`http://localhost:4000/api/products/${id}`)   // Petición GET al backend
+    fetch(`http://localhost:4000/api/products/${id}`)
       .then(res => res.json())
-      .then(data => setProduct(data))                   // Guardar datos del producto
+      .then(data => setProduct(data))
       .catch(err => {
         console.error('Error al cargar el producto:', err);
-        setProduct(null);                                // En caso de error, limpiar producto
+        setProduct(null);
       });
   }, [id]);
 
-  // Cargar reseñas cuando cambia el id del producto
+  // Cargar reseñas
   useEffect(() => {
     loadReviews();
   }, [id]);
 
-  // Función para cargar las reseñas desde el backend
   const loadReviews = () => {
     fetch(`http://localhost:4000/api/reviews?idProduct=${id}`)
       .then(res => res.json())
-      .then(data => setReviews(data))                   // Guardar reseñas recibidas
+      .then(data => setReviews(data))
       .catch(err => console.error('Error al obtener reseñas:', err));
   };
 
-  // Cambiar cantidad (máximo 1 como mínimo)
   const handleQuantityChange = (change) => {
     setQuantity(prev => Math.max(1, prev + change));
   };
 
-  // Función que se ejecuta al enviar una reseña
+  //  Función de enviar reseña usando contexto
   const handleSubmitReview = async (e) => {
     e.preventDefault();
 
-    // Si no está autenticado, mostrar error y redirigir a login
+    //  Usar isAuthenticated del contexto
     if (!isAuthenticated) {
       toast.error('Debes iniciar sesión para dejar una reseña.');
       navigate('/login');
       return;
     }
 
-    // Validar que el comentario no esté vacío o solo espacios
     if (!newReview.comment.trim()) {
       toast('Por favor escribe un comentario.', { icon: '⚠️' });
       return;
     }
 
-    // Obtener token para autorización
-    const token = localStorage.getItem('authToken');
-    
-    // Preparar objeto reseña a enviar
+    // CAMBIO: Usar token del contexto o obtener de cookies
     const reviewToSend = {
       comment: newReview.comment,
       rating: newReview.rating,
@@ -92,12 +75,12 @@ const ProductsReview = () => {
     };
 
     try {
-      // Enviar reseña al backend mediante POST
+      //  Usar credentials: 'include' para enviar cookies en lugar de Authorization header
       const response = await fetch(`http://localhost:4000/api/reviews`, {
         method: 'POST',
+        credentials: 'include', // Esto envía las cookies automáticamente
         headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`    // Autorización con token
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(reviewToSend)
       });
@@ -105,21 +88,15 @@ const ProductsReview = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Si todo bien, mostrar éxito, limpiar formulario y recargar reseñas
         toast.success('¡Reseña agregada exitosamente!');
         setNewReview({ rating: 5, comment: '' });
         setShowReviewForm(false);
         loadReviews();
       } else {
-        // Si el backend indica que la sesión expiró, limpiar y redirigir login
-        if (data.requiresAuth) {
+        if (response.status === 401) {
           toast.error('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('userData');
-          setIsAuthenticated(false);
           navigate('/login');
         } else {
-          // Mostrar mensaje de error enviado desde backend o genérico
           toast.error(data.message || 'Error al guardar reseña');
         }
       }
@@ -129,24 +106,20 @@ const ProductsReview = () => {
     }
   };
 
-  //  Función para eliminar una reseña (solo para el autor)
+  //  Función para eliminar reseña
   const handleDeleteReview = async (reviewId) => {
-    if (!window.confirm('¿Estás seguro de eliminar esta reseña?')) return; // Confirmar acción
-
-    const token = localStorage.getItem('authToken');
+    if (!window.confirm('¿Estás seguro de eliminar esta reseña?')) return;
     
     try {
-      // Petición DELETE al backend para eliminar reseña
+      //  Usar credentials: 'include' en lugar de Authorization header
       const response = await fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        credentials: 'include' //  Enviar cookies
       });
 
       if (response.ok) {
         toast.success('Reseña eliminada correctamente');
-        loadReviews(); // Recargar lista de reseñas
+        loadReviews();
       } else {
         const data = await response.json();
         toast.error(data.message || 'Error al eliminar reseña');
@@ -157,21 +130,16 @@ const ProductsReview = () => {
     }
   };
 
-  // Agregar producto al carrito guardado en localStorage
   const handleAddToCart = () => {
-    if (!product) return; // Si no hay producto, no hacer nada
+    if (!product) return;
 
-    // Obtener carrito actual o iniciar vacío
     const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
     const productId = product._id || product.id;
-    // Buscar si el producto ya está en el carrito
     const existente = carrito.find(p => p.id === productId);
 
     if (existente) {
-      existente.cantidad += quantity; // Si existe, aumentar cantidad
+      existente.cantidad += quantity;
     } else {
-      // Si no, agregar nuevo producto al carrito
       carrito.push({
         id: productId,
         nombre: product.name,
@@ -181,26 +149,19 @@ const ProductsReview = () => {
       });
     }
 
-    // Guardar carrito actualizado en localStorage
     localStorage.setItem("carrito", JSON.stringify(carrito));
-
-    // Mostrar notificación de éxito
     toast.success(`Agregado al carrito: ${quantity} x ${product.name}`);
   };
 
-  // Navegar a página para personalizar producto
-  const handleCustomizeProduct = () => navigate('/SeleccionarGel');
-  // Navegar de vuelta a listado de productos
+  const handleCustomizeProduct = () => navigate('/personalizar');
   const handleBackToProducts = () => navigate('/product');
 
-  // Función para mostrar estrellas fijas según rating
   const renderStars = (rating) => (
     [...Array(5)].map((_, i) => (
       <Star key={i} className={`star ${i < rating ? 'filled' : 'empty'}`} size={16} />
     ))
   );
 
-  // Función para mostrar estrellas interactivas para seleccionar rating
   const renderInteractiveStars = (rating, onRatingChange) => (
     [...Array(5)].map((_, i) => (
       <Star
@@ -212,7 +173,19 @@ const ProductsReview = () => {
     ))
   );
 
-  // Si el producto no fue encontrado (producto = null), mostrar mensaje y botón para volver
+  // Mostrar loading mientras se verifica autenticación
+  if (loading) {
+    return (
+      <div className="products-review-wrapper">
+        <div className="product-detail-screen">
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            Cargando...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (product === null) {
     return (
       <div className="products-review-wrapper">
@@ -228,21 +201,17 @@ const ProductsReview = () => {
     );
   }
 
-  // Visualización principal del componente con toda la información y funcionalidades
   return (
     <div className="products-review-wrapper">
       <div className="product-detail-screen">
         <div className="product-detail-main">
           <div className="product-detail-container">
 
-            {/* Botón para volver al listado */}
             <button className="back-button" onClick={handleBackToProducts}>
               Volver a Productos
             </button>
 
             <div className="product-detail-layout">
-
-              {/* Sección imagen del producto */}
               <div className="product-image-section">
                 <div className="product-image-container">
                   <img
@@ -250,7 +219,6 @@ const ProductsReview = () => {
                     alt={product.name}
                     className="product-main-image"
                     onError={(e) => {
-                      // Si falla la carga de imagen, cargar placeholder
                       e.target.src = '/placeholder-product.png';
                       console.error(`Error loading image: ${product.image}`);
                     }}
@@ -258,13 +226,11 @@ const ProductsReview = () => {
                 </div>
               </div>
 
-              {/* Información del producto */}
               <div className="product-info-section">
                 <h1 className="product-title">{product.name}</h1>
                 <div className="product-price">${product.price.toFixed(2)}</div>
                 {product.flavor && <div className="product-flavor">Sabor: {product.flavor}</div>}
 
-                {/* Sección para controlar cantidad */}
                 <div className="quantity-section">
                   <span>Cantidad:</span>
                   <div className="quantity-controls">
@@ -274,7 +240,6 @@ const ProductsReview = () => {
                   </div>
                 </div>
 
-                {/* Botones para agregar al carrito o personalizar */}
                 <div className="action-buttons">
                   <button className="add-to-cart-btn" onClick={() => handleAddToCart(product)}>
                     Agregar Al Carrito
@@ -284,7 +249,6 @@ const ProductsReview = () => {
                   </button>
                 </div>
 
-                {/* Descripción del producto */}
                 <div className="product-description">
                   <p>{product.description}</p>
                 </div>
@@ -292,13 +256,12 @@ const ProductsReview = () => {
             </div>
           </div>
 
-          {/* Sección de reseñas */}
           <div className="reviews-section">
             <div className="reviews-container">
               <div className="reviews-header">
                 <h2>Reseñas</h2>
 
-                {/* Mostrar botón para agregar reseña si está autenticado, si no, botón para login */}
+                {/* Usar isAuthenticated del contexto */}
                 {isAuthenticated ? (
                   <button 
                     className="add-review-btn" 
@@ -316,13 +279,13 @@ const ProductsReview = () => {
                 )}
               </div>
 
-              {/* Formulario para agregar una nueva reseña */}
               {showReviewForm && isAuthenticated && (
                 <div className="review-form-container">
                   <form onSubmit={handleSubmitReview} className="review-form">
 
                     <div className="form-group">
-                      <label>Escribiendo como: <strong>{user?.name}</strong></label>
+                      {/*  Usar user del contexto */}
+                      <label>Escribiendo como: <strong>{user?.email || 'Usuario'}</strong></label>
                     </div>
 
                     <div className="form-group">
@@ -364,7 +327,6 @@ const ProductsReview = () => {
                 </div>
               )}
 
-              {/* Listado de reseñas */}
               <div className="reviews-grid">
                 {reviews.length > 0 ? (
                   reviews.map((review) => (
@@ -385,11 +347,10 @@ const ProductsReview = () => {
                         </div>
 
                         <div className="review-actions">
-                          {/* Mostrar estrellas fijas */}
                           <div className="review-rating">{renderStars(review.rating)}</div>
 
-                          {/* Si está autenticado y es el autor, mostrar botón para eliminar */}
-                          {isAuthenticated && user?.id === review.idClient?._id && (
+                          {/*  Usar user del contexto para comparar - probar ambas propiedades */}
+                          {isAuthenticated && (user?.id === review.idClient?._id || user?._id === review.idClient?._id) && (
                             <button 
                               className="delete-review-btn"
                               onClick={() => handleDeleteReview(review._id)}

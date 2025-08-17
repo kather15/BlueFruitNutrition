@@ -3,24 +3,20 @@ import { config } from "../config.js";
 
 const sessionController = {};
 
+//  Verifica sesión usando el middleware authenticate
 sessionController.checkSession = (req, res) => {
-  const token = req.cookies.authToken; // Cambia "token" si tu cookie se llama diferente
-
-  if (!token) {
-    return res.status(401).json({ message: "No autenticado" });
-  }
-
   try {
-    const decoded = jsonwebtoken.verify(token, config.JWT.secret);
-    const userData = {
-      id: decoded.id,
-      email: decoded.email,
-      role: decoded.role,
-      // agrega más campos si están en el token
-    };
-    res.json({ user: userData });
+    // Si llegamos aquí, el middleware authenticate ya validó el token
+    // y puso los datos del usuario en req.user
+    res.status(200).json({
+      id: req.user.id,
+      email: req.user.email,
+      role: req.user.userType || req.user.role, 
+      isAuthenticated: true
+    });
   } catch (error) {
-    return res.status(401).json({ message: "Token inválido o expirado" });
+    console.error('Error en checkSession:', error);
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 

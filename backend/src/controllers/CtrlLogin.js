@@ -41,6 +41,7 @@ loginController.login = async (req, res) => {
     let userType;
 
     console.log("Intentando iniciar sesión con:", email);
+    
     // Login de administrador
     if (
       email === config.emailAdmin.email &&
@@ -48,7 +49,11 @@ loginController.login = async (req, res) => {
     ) {
       userType = "admin";
       console.log("Login de administrador exitoso");
-      userFound = { _id: "adminId" };
+      userFound = { 
+        _id: "adminId", 
+        email: config.emailAdmin.email,
+        name: "Administrador" 
+      };
     } else {
       // Buscar en distribuidores
       userFound = await distributorsModel.findOne({ email });
@@ -83,25 +88,46 @@ loginController.login = async (req, res) => {
     // Borrar intentos si es correcto
     if (loginAttempts[email]) delete loginAttempts[email];
 
-    // Crear el token
+    // ✅ CAMBIO PRINCIPAL: Crear el token con más información
+    const tokenPayload = {
+      id: userFound._id,
+      email: userFound.email || email,
+      userType,
+      role: userType // Agregar role también
+    };
+
     const token = jsonwebtoken.sign(
-      { id: userFound._id, userType },
+      tokenPayload,
       config.JWT.secret,
-      { expiresIn: config.JWT.expiresIn },
-      (error, token) => {
-        if (error) console.log(error);
-        res.cookie("authToken", token, {
-          httpOnly: true,
-          maxAge: 24 * 60 *60 * 1000
-          /*path: "/",
-          sameSite: "lax"*/
-          
-        });
-        res.json({ message: "login successful", role: userType });
-      }
+      { expiresIn: config.JWT.expiresIn }
     );
+
+    // ✅ Establecer cookie
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production"
+    });
+
+    // ✅ CAMBIO: Responder con información del usuario
+    const userData = {
+      id: userFound._id,
+      email: userFound.email || email,
+      name: userFound.name || userFound.companyName || "Usuario",
+      role: userType,
+      isAuthenticated: true
+    };
+
+    res.json({ 
+      message: "login successful", 
+      role: userType,
+      user: userData, // ✅ Incluir datos del usuario
+      token: token // ✅ También enviar token por si se necesita
+    });
+
   } catch (error) {
-    console.error(error);
+    console.error("Error en login:", error);
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
