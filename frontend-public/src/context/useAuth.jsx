@@ -17,7 +17,62 @@ export const AuthProvider = ({ children }) => {
 
   // Verificar sesión al cargar la app
   useEffect(() => {
-    checkSession();
+    const checkAuth = async () => {
+      try {
+        // ✅ Verificar con el backend si hay sesión activa
+        const response = await fetch('https://bluefruitnutrition1.onrender.com/api/verify-session', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          setUser(userData);
+          console.log('✅ Sesión verificada con backend:', userData);
+        } else {
+          // Fallback a localStorage
+          const token = localStorage.getItem('token');
+          const userId = localStorage.getItem('userId');
+
+          if (token && userId) {
+            setUser({ 
+              id: userId, 
+              token: token,
+              isAuthenticated: true 
+            });
+            console.log('⚠️ Usando datos de localStorage como fallback');
+          } else {
+            setUser(null);
+            console.log('❌ No hay sesión activa');
+          }
+        }
+      } catch (error) {
+        console.error('Error verificando con backend:', error);
+        
+        // Fallback a localStorage en caso de error
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+
+        if (token && userId) {
+          setUser({ 
+            id: userId, 
+            token: token,
+            isAuthenticated: true 
+          });
+        } else {
+          localStorage.removeItem('token');
+          localStorage.removeItem('userId');
+          setUser(null);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
   const checkSession = async () => {
@@ -129,7 +184,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await fetch('http://localhost:4000/api/logout', {
+      await fetch('https://bluefruitnutrition1.onrender.com/api/logout', {
         method: 'POST',
         credentials: 'include',
       });

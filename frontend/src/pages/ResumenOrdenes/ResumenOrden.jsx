@@ -20,7 +20,7 @@ const ResumenOrden = () => {
   useEffect(() => {
     const fetchOrden = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/api/ordenes/${id}`);
+        const res = await fetch(`https://bluefruitnutrition1.onrender.com/api/ordenes/${id}`);
         if (!res.ok) throw new Error(`Error ${res.status}`);
         const data = await res.json();
         console.log('Orden cargada:', data);
@@ -49,7 +49,7 @@ const ResumenOrden = () => {
 
     try {
       console.log('Intentando actualizar estado a:', nuevoEstado);
-      const res = await fetch(`http://localhost:4000/api/ordenes/${id}`, {
+      const res = await fetch(`https://bluefruitnutrition1.onrender.com/api/ordenes/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

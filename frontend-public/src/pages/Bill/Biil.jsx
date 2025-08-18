@@ -77,7 +77,7 @@ export default function CompraExitosa() {
         datosCompra: JSON.stringify(datosFactura)
       });
       
-      const url = `http://localhost:4000/api/Bill/pdf?${params.toString()}`;
+      const url = `https://bluefruitnutrition1.onrender.com/api/Bill/pdf?${params.toString()}`;
       console.log('🔗 URL completa:', url);
       
       // Intentar abrir en nueva ventana
@@ -127,7 +127,7 @@ export default function CompraExitosa() {
       
       toast.loading("Enviando factura al correo...", { id: 'email' });
       
-      const response = await fetch("http://localhost:4000/api/Bill/email", {
+      const response = await fetch("https://bluefruitnutrition1.onrender.com/api/Bill/email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -154,7 +154,7 @@ export default function CompraExitosa() {
   const testBackend = async () => {
     try {
       console.log('🧪 Probando conexión con backend...');
-      const response = await fetch('http://localhost:4000/api/Bill/pdf?test=true');
+      const response = await fetch('https://bluefruitnutrition1.onrender.com/api/Bill/pdf?test=true');
       console.log('🧪 Respuesta test:', response.status);
     } catch (error) {
       console.error('🧪 Error de conexión:', error);

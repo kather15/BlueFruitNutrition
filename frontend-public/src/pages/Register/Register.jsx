@@ -30,8 +30,8 @@ function Registro() {
   const onSubmit = async (data) => {
     try {
       const endpoint = tipoUsuario === "customer"
-        ? "http://localhost:4000/api/registerCustomers"
-        : "http://localhost:4000/api/registerDistributors";
+        ? "https://bluefruitnutrition1.onrender.com/api/registerCustomers"
+        : "https://bluefruitnutrition1.onrender.com/api/registerDistributors";
 
       const res = await fetch(endpoint, {
         method: "POST",

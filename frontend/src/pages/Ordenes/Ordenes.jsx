@@ -9,7 +9,7 @@ const Ordenes = () => {
 
   const fetchOrdenes = async () => {
     try {
-      const res = await axios.get('http://localhost:4000/api/ordenes'); 
+      const res = await axios.get('https://bluefruitnutrition1.onrender.com/api/ordenes'); 
       setOrdenes(res.data);
     } catch (error) {
       console.error('Error al cargar órdenes:', error);
@@ -22,7 +22,7 @@ const Ordenes = () => {
 
   const eliminarOrden = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/ordenes/${id}`);
+      await axios.delete(`https://bluefruitnutrition1.onrender.com/api/ordenes/${id}`);
       fetchOrdenes();
     } catch (error) {
       console.error('Error al eliminar orden:', error);
