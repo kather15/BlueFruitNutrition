@@ -1,14 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import toast from 'react-hot-toast'; 
 
 const AuthContext = createContext();
+
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuthContext debe ser usado dentro de AuthProvider');
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Verificar sesión al cargar la app
   useEffect(() => {
+<<<<<<< HEAD
     const checkAuth = async () => {
       try {
         // ✅ Verificar con el backend si hay sesión activa
@@ -65,50 +74,88 @@ export const AuthProvider = ({ children }) => {
     };
 
     checkAuth();
+=======
+    checkSession();
+>>>>>>> a09778a12ccbb0f87b5db3ed41f92ffb7063334a
   }, []);
 
-  // ✅ Función de login actualizada
-  const login = (userData, token) => {
-    const userInfo = {
-      ...userData,
-      token,
-      isAuthenticated: true
-    };
-    
-    setUser(userInfo);
-    
-    // Mantener localStorage como backup
-    localStorage.setItem('token', token);
-    localStorage.setItem('userId', userData.id || userData._id || userData.userId);
-    
-    console.log('✅ Usuario logueado:', userInfo);
+  const checkSession = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:4000/api/verify-session', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+        setIsAuthenticated(true);
+        console.log('✅ Sesión activa:', data.user);
+      } else {
+        // Si hay error 401, no es necesariamente un error - solo no hay sesión
+        setUser(null);
+        setIsAuthenticated(false);
+        console.log('❌ No hay sesión activa');
+      }
+    } catch (error) {
+      console.error('Error verificando sesión:', error);
+      setUser(null);
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // ✅ Función de logout actualizada
+  const login = async (email, password) => {
+    try {
+      const response = await fetch('http://localhost:4000/api/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setUser(data.user);
+        setIsAuthenticated(true);
+        return { success: true, data };
+      } else {
+        throw new Error(data.message || 'Error al iniciar sesión');
+      }
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  };
+
   const logout = async () => {
     try {
       await fetch('https://bluefruitnutrition1.onrender.com/api/logout', {
         method: 'POST',
         credentials: 'include',
       });
-      console.log('✅ Logout en backend exitoso');
     } catch (error) {
-      console.error('Error en logout backend:', error);
+      console.error('Error al cerrar sesión:', error);
     } finally {
       setUser(null);
-      localStorage.removeItem('token');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('verificationToken');
-      console.log('✅ Datos locales limpiados');
+      setIsAuthenticated(false);
     }
   };
 
   const value = {
     user,
+    loading,
+    isAuthenticated,
     login,
     logout,
-    loading,
-    isAuthenticated: user?.isAuthenticated || false
+    checkSession,
   };
 
   return (
@@ -116,6 +163,7 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+<<<<<<< HEAD
 };
 
 export const useAuthContext = () => {
@@ -202,3 +250,6 @@ const useAuth = () => {
 };
 
 export default useAuth;
+=======
+};
+>>>>>>> a09778a12ccbb0f87b5db3ed41f92ffb7063334a

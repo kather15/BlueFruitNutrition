@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import Contacto from '../../components/Contact/Contact';
 import { FaWhatsapp } from 'react-icons/fa';
+import Maps from "../../components/Maps/Maps"
 
 
 const Home = () => {
@@ -11,11 +12,20 @@ const Home = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   const productos = [
-    { nombre: 'Carbo Upp', imagen: '/CarboUpp.png' },
-    { nombre: 'Ener Kik', imagen: '/EnerKik.png' },
-    { nombre: 'Reppo', imagen: '/Reppo.png' },
-    { nombre: 'Ener Balance', imagen: '/EnerBalance.png' },
+    { nombre: 'Carbo Upp', imagen: '/CarboUpp.png',  frase: "¡Corre hacia tus sueños!" },
+    { nombre: 'Ener Kik', imagen: '/EnerKik.png' ,  frase: "¡Nunca te rindas!"},
+    { nombre: 'Reppo', imagen: '/Reppo.png',  frase: "¡Tu tienes el control de tu meta!" },
+    { nombre: 'Ener Balance', imagen: '/EnerBalance.png' ,  frase: "¡Cuida de tu salud!"},
   ];
+
+  const [productosFlip, setProductosFlip] = useState({});
+
+  const toggleFlip = (index) => {
+    setProductosFlip((prev) => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -44,25 +54,33 @@ const Home = () => {
         </div>
       )}
 
-      <h1>Explora Nuestros Productos</h1>
+    <h1>Nuestros Productos Estrella</h1>
 
       <div className="blue-fruit-productos-scroll">
-        {(productos ?? []).map((producto, index) => (
-          <div className="blue-fruit-product" key={index}>
-            <div
-              className="blue-fruit-image-container"
-              onMouseEnter={() => setProductoActivo(index)}
-              onMouseLeave={() => setProductoActivo(null)}
-            >
-              <img src={producto.imagen} alt={producto.nombre} />
-              {productoActivo === index && (
-                <div className="blue-fruit-overlay">Agregar al carrito</div>
-              )}
+        {productos.map((producto, index) => (
+          <div
+            className={`blue-fruit-product ${productosFlip[index] ? "flipped" : ""}`}
+            key={index}
+            onClick={() => toggleFlip(index)}
+          >
+            <div className="blue-fruit-card-inner">
+              {/* Front */}
+              <div className="blue-fruit-card-front">
+                <div className="blue-fruit-image-container">
+                  <img src={producto.imagen} alt={producto.nombre} />
+                </div>
+                <p>{producto.nombre}</p>
+              </div>
+
+              {/* Back */}
+              <div className="blue-fruit-card-back">
+                <h3>{producto.frase}</h3>
+              </div>
             </div>
-            <p>{producto.nombre}</p>
           </div>
-        ))}
-      </div>
+  ))}
+</div>
+
 
       <div className="blue-fruit-boton-ver-todos-container">
         <Link to="/product" className="blue-fruit-boton-ver-todos">
@@ -136,15 +154,17 @@ const Home = () => {
         </div>
       </section>
 
-      <hr className="blue-fruit-linea-separadora" />
+       <hr className="blue-fruit-linea-separadora" />
 
       <main>
         <Contacto />
       </main>
+      <hr className="blue-fruit-linea-separadora" />
+      <Maps/>
 
 {/* Botón de WhatsApp fijo con React Icon */}
 <a
-  href="https://wa.me/50312345678" // reemplaza con tu número de WhatsApp
+  href="https://wa.me/68597103" // reemplaza con tu número de WhatsApp
   target="_blank"
   rel="noopener noreferrer"
   className="blue-fruit-whatsapp-button"
@@ -155,7 +175,7 @@ const Home = () => {
 
 <hr className="blue-fruit-linea-separadora" />
 
-     <hr className="blue-fruit-linea-separadora" />
+    
 
      <section className="blue-fruit-historia">
         <h2>¡Proximamente! 

@@ -1,27 +1,77 @@
-.add-product-wrapper {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 24px 32px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(12, 19, 63, 0.12);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+/* ==========================
+   Reset y tipografía
+========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+body, html, #root {
+  height: 100%;
+  width: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f3f4f6;
+  color: #0c133f;
+}
+
+/* ==========================
+   Contenedor principal
+   (centrado y respeta sidebar)
+========================= */
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(100% - 250px);
+  min-height: 100vh;
+  padding: 20px;
+  margin-left: 250px;
+  background: #ffffff;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* ==========================
+   Wrapper del formulario
+========================= */
+.add-product-wrapper {
+  width: 100%;
+  max-width: 950px;
+  padding: 32px 40px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(12, 19, 63, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin: 0 auto;
+}
+
+/* ==========================
+   Título
+========================= */
 .add-product-wrapper h2 {
   text-align: center;
   color: #0c133f;
   font-weight: 700;
-  font-size: 28px;
-  margin-bottom: 32px;
+  font-size: 30px;
+  margin-bottom: 10px;
 }
 
+/* ==========================
+   Formulario
+========================= */
 .add-product-form {
   display: flex;
   gap: 32px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
+/* ==========================
+   Columna izquierda (imagen)
+========================= */
 .left-column {
   flex: 1 1 280px;
   display: flex;
@@ -34,7 +84,7 @@
   width: 100%;
   max-width: 280px;
   height: 280px;
-  border: 3px dashed #ccc;
+  border: 2px dashed #bbb;
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -48,6 +98,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 12px;
 }
 
 .image-placeholder {
@@ -64,18 +115,21 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 15px;
-  user-select: none;
-  transition: background-color 0.25s;
+  transition: background-color 0.25s, transform 0.2s;
 }
 
 .file-label:hover {
   background: #0e1752;
+  transform: translateY(-2px);
 }
 
 .file-input {
   display: none;
 }
 
+/* ==========================
+   Columna derecha (inputs)
+========================= */
 .right-column {
   flex: 2 1 500px;
   display: grid;
@@ -99,13 +153,12 @@
 .right-column textarea,
 .right-column select {
   background-color: #fff;
-  border: 1.8px solid #ccc;
+  border: 1.6px solid #ccc;
   padding: 12px 14px;
   font-size: 15px;
   border-radius: 10px;
   color: #222;
   resize: none;
-  box-sizing: border-box;
   transition: border-color 0.3s, box-shadow 0.3s;
   font-family: inherit;
 }
@@ -115,13 +168,12 @@
 .right-column select:focus {
   border-color: #0c133f;
   outline: none;
-  box-shadow: 0 0 8px rgba(12, 19, 63, 0.25);
+  box-shadow: 0 0 6px rgba(12, 19, 63, 0.25);
 }
 
-.error-border {
-  border-color: #ed0000 !important;
-}
-
+/* ==========================
+   Botones
+========================= */
 .button-group {
   grid-column: span 2;
   display: flex;
@@ -138,8 +190,7 @@
   border-radius: 12px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s;
-  user-select: none;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .btn-clear {
@@ -149,6 +200,7 @@
 
 .btn-clear:hover:not(:disabled) {
   background-color: #666;
+  transform: translateY(-2px);
 }
 
 .btn-clear:disabled {
@@ -163,6 +215,7 @@
 
 .btn-submit:hover:not(:disabled) {
   background-color: #0e1752;
+  transform: translateY(-2px);
 }
 
 .btn-submit:disabled {
@@ -170,15 +223,25 @@
   cursor: not-allowed;
 }
 
-/* Responsive */
-@media (max-width: 720px) {
-  .add-product-form {
-    flex-direction: column;
+/* ==========================
+   Responsive
+========================= */
+@media (max-width: 1200px) {
+  .page-container {
+    width: calc(100% - 200px);
+    margin-left: 200px;
+  }
+}
+
+@media (max-width: 900px) {
+  .page-container {
+    width: 100%;
+    margin-left: 0;
+    padding: 16px;
   }
 
-  .left-column,
-  .right-column {
-    flex: 1 1 100%;
+  .add-product-form {
+    flex-direction: column;
   }
 
   .right-column {

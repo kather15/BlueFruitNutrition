@@ -16,8 +16,7 @@ body {
   padding: 0;
 }
 
-/* WRAPPER GENERAL: ocupa toda la pantalla y centra su contenido */
-/* Ajusta tu wrapper principal */
+/* WRAPPER GENERAL */
 .products-wrapper {
   display: flex;
   justify-content: center;
@@ -33,15 +32,15 @@ body {
 .products-container {
   display: flex;
   flex-direction: column;       
-  justify-content: center;      /* centra vertical */
-  align-items: center;          /* centra horizontal */
+  justify-content: center;
+  align-items: center;
   text-align: center;
   width: 200%;
-  max-width: 1200px;            /* ancho máximo */
+  max-width: 1200px;
   padding: 40px 20px;
 }
 
-/* HEADER con título + botón en la misma línea */
+/* HEADER */
 .products-header {
   display: flex;
   justify-content: center;
@@ -58,7 +57,7 @@ body {
   margin: 0;
 }
 
-/* BOTÓN DE AGREGAR PRODUCTO */
+/* BOTÓN AGREGAR PRODUCTO */
 .add-product-btn {
   background-color: var(--button);
   color: var(--button-text);
@@ -287,4 +286,111 @@ body {
 .modal-content .clear-btn:hover,
 .modal-content .submit-btn:hover {
   background-color: #1c1c2a;
+}
+
+/* ==========================
+   MEDIA QUERIES RESPONSIVE
+========================== */
+@media (max-width: 1200px) {
+  .products-wrapper {
+    width: calc(100% - 200px);
+    margin-left: 200px;
+  }
+}
+
+@media (max-width: 900px) {
+  .products-wrapper {
+    width: 100%;
+    margin-left: 0;
+    padding: 16px;
+    flex-direction: column;
+  }
+
+  .products-container {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .products-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .product-card {
+    padding: 16px;
+  }
+
+  .product-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .product-name {
+    font-size: 1rem;
+    min-height: 2rem;
+  }
+
+  .product-description {
+    font-size: 13px;
+  }
+
+  .product-flavor,
+  .product-price {
+    font-size: 12px;
+  }
+
+  .product-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .edit-btn,
+  .delete-btn,
+  .view-btn {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .products-header {
+    gap: 0.5rem;
+  }
+
+  .products-title {
+    font-size: 1.5rem;
+  }
+
+  .add-product-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .product-card {
+    padding: 12px;
+  }
+
+  .product-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .product-name {
+    font-size: 0.95rem;
+  }
+
+  .product-description {
+    font-size: 12px;
+  }
 }

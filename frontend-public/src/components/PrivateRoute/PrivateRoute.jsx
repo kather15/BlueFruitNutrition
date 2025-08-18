@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuthContext } from '../../context/useAuth';
 
-// Nombre cambiado para coincidir con el import en App.jsx
 function RutaPrivada({ children }) {
   const { user, loading, isAuthenticated } = useAuthContext();
   const location = useLocation();
+  const hasShownToast = useRef(false); // Para evitar múltiples toasts
 
   // Debug temporal (puedes quitarlo después)
-  console.log(' Debug PrivateRoute:');
+  console.log('Debug PrivateRoute:');
   console.log('User:', user);
   console.log('Loading:', loading);
   console.log('Is Authenticated:', isAuthenticated);
+
+  // Mover el toast a useEffect para evitar el error de React
+  useEffect(() => {
+    if (!loading && !isAuthenticated && location.pathname !== '/login' && !hasShownToast.current) {
+      toast.error("Debes iniciar sesión para acceder a esta página");
+      hasShownToast.current = true;
+    }
+    
+    // Reset el flag cuando el usuario se autentique o cambie de página
+    if (isAuthenticated || location.pathname === '/login') {
+      hasShownToast.current = false;
+    }
+  }, [isAuthenticated, loading, location.pathname]);
 
   // Loading state
   if (loading) {
@@ -37,12 +50,8 @@ function RutaPrivada({ children }) {
     );
   }
 
-  // Usar tu lógica existente de isAuthenticated del contexto
+  // Si no está autenticado, redirigir sin mostrar toast aquí
   if (!isAuthenticated) {
-    // Solo mostrar toast si no estamos ya en la página de login
-    if (location.pathname !== '/login') {
-      toast.error("Debes iniciar sesión para acceder a esta página");
-    }
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

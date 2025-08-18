@@ -57,10 +57,9 @@ const AddProduct = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Si se cambia el nombre del gel, actualizar los sabores disponibles
     if (name === "name") {
       setAvailableFlavors(gels[value] || []);
-      setFormData((prev) => ({ ...prev, flavor: "" })); // reset flavor
+      setFormData((prev) => ({ ...prev, flavor: "" })); 
     }
   };
 
@@ -80,13 +79,7 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.name.trim() ||
-      !formData.flavor.trim() ||
-      !formData.description.trim() ||
-      !formData.price || 
-      !imageFile
-    ) {
+    if (!formData.name.trim() || !formData.flavor.trim() || !formData.description.trim() || !formData.price || !imageFile) {
       toast.error("Todos los campos son obligatorios");
       return;
     }
@@ -120,114 +113,107 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="add-product-wrapper">
-      <h2>Agregar Producto</h2>
-      <form className="add-product-form" onSubmit={handleSubmit}>
-        <div className="left-column">
-          <div className={`image-preview ${!imagePreview ? "error-border" : ""}`}>
-            {imagePreview ? (
-              <img src={imagePreview} alt="Preview" />
-            ) : (
-              <span className="image-placeholder">Vista previa de la imagen</span>
-            )}
-          </div>
+    <div className="page-container">
+      <div className="add-product-wrapper">
+        <h2>Agregar Producto</h2>
+        <form className="add-product-form" onSubmit={handleSubmit}>
+          <div className="left-column">
+            <div className="image-preview">
+              {imagePreview ? (
+                <img src={imagePreview} alt="Preview" />
+              ) : (
+                <span className="image-placeholder">Vista previa de la imagen</span>
+              )}
+            </div>
 
-          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-            <button
-              type="button"
-              className="btn-upload"
-              onClick={handleUploadClick}
-              disabled={loading}
-            >
-              {imageFile ? "Cambiar imagen" : "Seleccionar imagen"}
-            </button>
-            <button type="button" className="btn-clear" onClick={handleClear} disabled={loading}>
-              Limpiar
-            </button>
-          </div>
+            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+              <button type="button" className="btn-upload" onClick={handleUploadClick} disabled={loading}>
+                {imageFile ? "Cambiar imagen" : "Seleccionar imagen"}
+              </button>
+              <button type="button" className="btn-clear" onClick={handleClear} disabled={loading}>
+                Limpiar
+              </button>
+            </div>
 
-          <input
-            type="file"
-            accept="image/jpeg, image/jpg, image/png"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-            disabled={loading}
-          />
-        </div>
-
-        <div className="right-column">
-          <div>
-            <label htmlFor="name">Nombre del producto</label>
-            <select
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className={!formData.name.trim() ? "error-border" : ""}
-              disabled={loading}
-            >
-              <option value="">Selecciona un gel</option>
-              {Object.keys(gels).map((gel) => (
-                <option key={gel} value={gel}>{gel}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="flavor">Sabor</label>
-            <select
-              id="flavor"
-              name="flavor"
-              value={formData.flavor}
-              onChange={handleChange}
-              className={!formData.flavor.trim() ? "error-border" : ""}
-              disabled={loading || !formData.name}
-            >
-              <option value="">Selecciona un sabor</option>
-              {availableFlavors.map((flavor) => (
-                <option key={flavor} value={flavor}>{flavor}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="description">Descripción</label>
-            <textarea
-              id="description"
-              name="description"
-              placeholder="Descripción del producto"
-              value={formData.description}
-              onChange={handleChange}
-              className={!formData.description.trim() ? "error-border" : ""}
-              rows={3}
-              disabled={loading}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="price">Precio</label>
             <input
-              id="price"
-              name="price"
-              type="number"
-              placeholder="Precio"
-              value={formData.price}
-              onChange={handleChange}
-              className={!formData.price ? "error-border" : ""}
-              min="0"
-              step="0.01"
+              type="file"
+              accept="image/jpeg, image/jpg, image/png"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
               disabled={loading}
             />
           </div>
 
-          <div className="button-group" style={{ marginTop: "20px" }}>
-            <button type="submit" className="btn-submit" disabled={loading}>
-              {loading ? "Subiendo..." : "Agregar Producto"}
-            </button>
+          <div className="right-column">
+            <div>
+              <label htmlFor="name">Nombre del producto</label>
+              <select
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                disabled={loading}
+              >
+                <option value="">Selecciona un gel</option>
+                {Object.keys(gels).map((gel) => (
+                  <option key={gel} value={gel}>{gel}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="flavor">Sabor</label>
+              <select
+                id="flavor"
+                name="flavor"
+                value={formData.flavor}
+                onChange={handleChange}
+                disabled={loading || !formData.name}
+              >
+                <option value="">Selecciona un sabor</option>
+                {availableFlavors.map((flavor) => (
+                  <option key={flavor} value={flavor}>{flavor}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="description">Descripción</label>
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Descripción del producto"
+                value={formData.description}
+                onChange={handleChange}
+                rows={3}
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="price">Precio</label>
+              <input
+                id="price"
+                name="price"
+                type="number"
+                placeholder="Precio"
+                value={formData.price}
+                onChange={handleChange}
+                min="0"
+                step="0.01"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="button-group" style={{ marginTop: "20px" }}>
+              <button type="submit" className="btn-submit" disabled={loading}>
+                {loading ? "Subiendo..." : "Agregar Producto"}
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

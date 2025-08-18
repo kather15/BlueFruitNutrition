@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, Package, Coffee, Droplet } from "lucide-react";
+import { Package, Coffee, Droplet, CheckCircle } from "lucide-react";
 import "./SeleccionDeGel.css";
 
-const steps = ["Seleccionar Gel", "Seleccionar Componentes", "Confirmación", "Producto Final"];
+const steps = ["Seleccionar Componentes", "Confirmación", "Producto Final"];
 
-const gels = [
-  { name: "Gel Energético A", img: "/gel1.png" },
-  { name: "Gel Energético B", img: "/gel2.png" },
-  { name: "Gel Energético C", img: "/gel3.png" },
-];
+// Mapeo de gel -> sabores
+const gelSabores = {
+  CarboUpp: ["Banano", "Mora", "Limón", "Manzana", "Piña", "Frambuesa", "Coco"],
+  EnerKik: ["Ponche de Frutas", "Maracuya", "Limón", "Banano", "Frambuesa"],
+  Enerbalance: ["Mora", "Banano", "Manzana"],
+};
 
-export default function ProductCustomizer() {
+export default function ProductCustomizer({ gel }) {
   const [step, setStep] = useState(1);
   const [selection, setSelection] = useState({
-    gel: "",
     carbohidratos: "",
     cafeina: "",
     sabor: "",
@@ -24,7 +24,6 @@ export default function ProductCustomizer() {
   const handleSelect = (key, value) => {
     setSelection({ ...selection, [key]: value });
     const labels = {
-      gel: "Gel",
       carbohidratos: "Carbohidratos",
       cafeina: "Cafeína",
       sabor: "Sabor",
@@ -50,30 +49,6 @@ export default function ProductCustomizer() {
           <h2 className="tituloPasoPersonalizar">{steps[step - 1]}</h2>
 
           {step === 1 && (
-            <>
-              <div className="gridGelPersonalizar">
-                {gels.map((gel) => (
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    key={gel.name}
-                    className={`tarjetaGelPersonalizar ${selection.gel === gel.name ? "selected" : ""}`}
-                    onClick={() => handleSelect("gel", gel.name)}
-                  >
-                    <img src={gel.img} alt={gel.name} />
-                    <p>{gel.name}</p>
-                  </motion.div>
-                ))}
-              </div>
-              <div className="botonesPersonalizar">
-                <button onClick={nextStep} disabled={!selection.gel}>
-                  Siguiente
-                </button>
-              </div>
-            </>
-          )}
-
-          {step === 2 && (
             <>
               <h4>
                 <Package size={18} /> Carbohidratos
@@ -113,7 +88,7 @@ export default function ProductCustomizer() {
                 <Droplet size={18} /> Sabor
               </h4>
               <div className="opcionesPersonalizar">
-                {["Banano", "Frambuesa", "Manzana", "Mora"].map((val) => (
+                {gelSabores[gel]?.map((val) => (
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     key={val}
@@ -127,7 +102,7 @@ export default function ProductCustomizer() {
               </div>
 
               <div className="botonesPersonalizar">
-                <button onClick={prevStep}>Regresar</button>
+                <button disabled>Regresar</button>
                 <button
                   onClick={nextStep}
                   disabled={!selection.carbohidratos || !selection.cafeina || !selection.sabor}
@@ -138,7 +113,7 @@ export default function ProductCustomizer() {
             </>
           )}
 
-          {step === 3 && (
+          {step === 2 && (
             <>
               <motion.div
                 className="tarjetaConfirmacionPersonalizar"
@@ -148,9 +123,6 @@ export default function ProductCustomizer() {
                 <CheckCircle size={40} color="#0c133f" />
                 <h3>Resumen de tu selección</h3>
                 <ul>
-                  <li>
-                    Gel: <strong>{selection.gel}</strong>
-                  </li>
                   <li>
                     Carbohidratos: <strong>{selection.carbohidratos}</strong>
                   </li>
@@ -169,13 +141,13 @@ export default function ProductCustomizer() {
             </>
           )}
 
-          {step === 4 && (
+          {step === 3 && (
             <>
               <motion.div
                 className="productoFinalPersonalizar"
                 whileHover={{ scale: 1.02 }}
               >
-                <h3>{selection.gel}</h3>
+                <h3>Gel Personalizado</h3>
                 <p>
                   <strong>Carbohidratos:</strong> {selection.carbohidratos}
                 </p>

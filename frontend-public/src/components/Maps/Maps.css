@@ -1,0 +1,321 @@
+/* STORES MAP SECTION */
+.stores-map-section {
+  padding: 4rem 2rem;
+  background: #ffffff; /* Blanco */
+  color: black; /* Asegúrate que el texto se vea bien */
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.stores-map-container h2 {
+  text-align: center;
+  color:  linear-gradient(135deg, #001a4d, #1a237e);
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  font-weight: bold;
+}
+
+.stores-map-content {
+  display: flex;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 600px;
+}
+
+/* LISTA DE TIENDAS */
+.stores-list {
+  flex: 1;
+  max-width: 500px;
+  overflow-y: auto;
+  max-height: 600px;
+  padding-right: 1rem;
+}
+
+.stores-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.stores-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.stores-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.stores-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.store-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  backdrop-filter: blur(10px);
+}
+
+.store-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.store-item.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.store-number {
+  background: linear-gradient(135deg, #001a4d, #1a237e);
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(26, 13, 150, 0.3);
+}
+
+.store-details {
+  flex: 1;
+}
+
+.store-details h3 {
+  color: "#001a4d";
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.store-address {
+  color: rgba(0, 0, 0, 0.9);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+  line-height: 1.4;
+}
+
+.store-contact {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+.store-hours {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.directions-btn {
+  background: linear-gradient(135deg, #001a4d, #1a237e);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
+}
+
+.directions-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+/* MAPA */
+.map-container {
+  flex: 1;
+  min-height: 600px;
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.map-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #f0f0f0;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.map-placeholder iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 15px;
+}
+
+/* OVERLAY DEL MAPA */
+.map-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.selected-store-info h4 {
+  color: #001a4d;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.selected-store-info p {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.store-actions {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.map-action-btn {
+  background: linear-gradient(135deg, #001a4d, #1a237e);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 26, 77, 0.2);
+}
+
+.map-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 26, 77, 0.3);
+}
+
+
+.phone-btn:hover {
+  box-shadow: 0 6px 20px rgba(135deg, #001a4d, #1a237e);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .stores-map-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .stores-list {
+    max-width: 100%;
+    max-height: 400px;
+    order: 2;
+  }
+  
+  .map-container {
+    order: 1;
+    min-height: 400px;
+  }
+  
+  .map-overlay {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .stores-map-section {
+    padding: 3rem 1rem;
+  }
+  
+  .stores-map-container h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .store-item {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.8rem;
+  }
+  
+  .store-number {
+    align-self: center;
+  }
+  
+  .map-container {
+    min-height: 350px;
+  }
+  
+  .map-overlay {
+    padding: 1rem;
+    left: 10px;
+    right: 10px;
+    top: 10px;
+  }
+  
+  .store-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .stores-map-section {
+    padding: 2rem 15px;
+  }
+  
+  .stores-map-container h2 {
+    font-size: 1.7rem;
+  }
+  
+  .store-details h3 {
+    font-size: 1.1rem;
+  }
+  
+  .map-container {
+    min-height: 300px;
+  }
+  
+  .store-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .map-action-btn {
+    text-align: center;
+    width: 100%;
+  }
+}
