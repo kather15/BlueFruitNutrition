@@ -11,11 +11,12 @@ const Error404Private = () => {
       </p>
   <img src="/MoraConfundidaPriv.png" alt="Mora confundida" className="error404-public-image" />
 
-      <div className="error404-private-buttons">
-        <a href="/homep" className="btn-primary">
-          Ir a Inicio
-        </a>
-      </div>
+  <div className="error404-private-buttons">
+  <a href="http://localhost:5173/homep" className="btn-primary">
+    Ir a Inicio
+  </a>
+</div>
+
     </div>
   );
 };

@@ -64,7 +64,7 @@ function AppContent() {
         <Routes>
           {/* Rutas públicas */}
           <Route path="/" element={<Navigate to="/homep" replace />} />
-          <Route path="/login" element={<Login />} />
+
           <Route path="/enviar-codigo" element={<RequestCode />} />
           <Route path="/verificar-codigo" element={<VerifyCode />} />
           <Route path="/nueva-contraseña" element={<NewPassword />} />
