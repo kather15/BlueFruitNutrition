@@ -75,7 +75,7 @@ function AppContent() {
           <Route path="/ordenes" element={<ProtectedRoute><Ordenes /></ProtectedRoute>} />
           <Route path="/ordenes/:id" element={<ProtectedRoute><ResumenOrden /></ProtectedRoute>} />
           <Route path="/ventas" element={<ProtectedRoute><Ventas /></ProtectedRoute>} />
-          <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
+          <Route path="/suscripcionees" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
           <Route path="/usuarios" element={<ProtectedRoute><UsersList /></ProtectedRoute>} />
           <Route path="/users/edit/:type/:id" element={<ProtectedRoute><UserForm /></ProtectedRoute>} />
           <Route path="/perfil" element={<ProtectedRoute><PerfilAdmin /></ProtectedRoute>} />

@@ -6,7 +6,7 @@ const Suscripciones = ({ usuarioId, nuevaSuscripcion }) => {
 
   const fetchSuscripciones = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/suscripciones');
+      const res = await fetch('http://localhost:5000/api/suscripcionees');
       const data = await res.json();
       setSuscripciones(data.filter(s => s.usuario === usuarioId));
     } catch (error) {

@@ -1,42 +1,35 @@
 import React from 'react';
 import './Suscripciones.css';
 
-const Beneficios = ({ usuarioId, onNuevaSuscripcion }) => {
+const Suscripcionees = ({ usuarioId, onNuevaSuscripcion }) => {
 
-  const agregarSuscripcion = async () => {
-    try {
-      const res = await fetch('http://localhost:5000/api/suscripciones', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          suscripcionId: Date.now(), // ID único
-          fechaInicio: new Date(),
-          usuario: usuarioId,
-          precio: 19.99,
-          plan: 'Única',
-          estado: 'Activo',
-          beneficios: [
-            'Descuentos exclusivos',
-            'Promociones anticipadas',
-            'Envío gratis',
-            'Descuento especial en el mes de cumpleaños',
-            'Sistema de acumulación de puntos',
-            'Promocionales (camisas, gorras, etc) por acumulación de puntos'
-          ]
-        })
-      });
+  
+    const agregarSuscripcion = async () => {
+  try {
+    const res = await fetch('http://localhost:4000/api/suscripciones', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        suscripcionId: Date.now(), // ID único
+        fechaInicio: new Date(),
+        usuario: usuarioId,
+        precio: 19.99,
+        plan: 'Única',
+        estado: 'Activo'
+      })
+    });
 
-      const nueva = await res.json();
-      alert('¡Suscripción agregada! Beneficios: ' + nueva.beneficios.join(', '));
+    const nueva = await res.json();
+    alert('¡Suscripción agregada!');
 
-      // Notificar al componente privado para actualizar la lista
-      onNuevaSuscripcion(nueva);
+    // Notificar al componente privado para actualizar la lista
+    onNuevaSuscripcion(nueva);
 
-    } catch (error) {
-      console.error(error);
-      alert('Error al agregar la suscripción');
-    }
-  };
+  } catch (error) {
+    console.error(error);
+    alert('Error al agregar la suscripción');
+  }
+};
 
   return (
     <div className="beneficios-page">
@@ -91,4 +84,4 @@ const Beneficios = ({ usuarioId, onNuevaSuscripcion }) => {
   );
 };
 
-export default Beneficios;
+export default Suscripcionees;
