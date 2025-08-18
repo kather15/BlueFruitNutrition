@@ -33,7 +33,7 @@ const PerfilAdmin = () => {
 
         // Para usar datos reales, descomenta lo siguiente:
         /*
-        const res = await fetch("http://localhost:4000/api/users/profile", {
+        const res = await fetch("https://bluefruitnutrition1.onrender.com/api/users/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -81,7 +81,7 @@ const PerfilAdmin = () => {
 
       // Para datos reales, descomenta esto:
       /*
-      const res = await fetch("http://localhost:4000/api/users/profile", {
+      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/users/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +106,7 @@ const PerfilAdmin = () => {
   const handleLogout = async () => {
     try {
       // Llama al endpoint de logout para limpiar la cookie en el backend
-      await fetch("http://localhost:4000/api/logout", {
+      await fetch("https://bluefruitnutrition1.onrender.com/api/logout", {
         method: "POST",
         credentials: "include",
       });

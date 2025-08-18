@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/auth/session", {
+        const res = await fetch("https://bluefruitnutrition1.onrender.com/api/auth/session", {
           method: "GET",
           credentials: "include", // Importante para enviar cookies httpOnly
         });
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       // Suponiendo que tienes un endpoint logout que borra la cookie JWT
-      const res = await fetch("http://localhost:4000/api/logout", {
+      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/logout", {
         method: "POST",
         credentials: "include",
       });

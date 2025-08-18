@@ -26,7 +26,7 @@ const ProductsReview = () => {
 
   // Cargar información del producto
   useEffect(() => {
-    fetch(`http://localhost:4000/api/products/${id}`)
+    fetch(`https://bluefruitnutrition1.onrender.com/api/products/${id}`)
       .then(res => res.json())
       .then(data => setProduct(data))
       .catch(err => {
@@ -41,7 +41,7 @@ const ProductsReview = () => {
   }, [id]);
 
   const loadReviews = () => {
-    fetch(`http://localhost:4000/api/reviews?idProduct=${id}`)
+    fetch(`https://bluefruitnutrition1.onrender.com/api/reviews?idProduct=${id}`)
       .then(res => res.json())
       .then(data => setReviews(data))
       .catch(err => console.error('Error al obtener reseñas:', err));
@@ -76,7 +76,7 @@ const ProductsReview = () => {
 
     try {
       //  Usar credentials: 'include' para enviar cookies en lugar de Authorization header
-      const response = await fetch(`http://localhost:4000/api/reviews`, {
+      const response = await fetch(`https://bluefruitnutrition1.onrender.com/api/reviews`, {
         method: 'POST',
         credentials: 'include', // Esto envía las cookies automáticamente
         headers: { 
@@ -112,7 +112,7 @@ const ProductsReview = () => {
     
     try {
       //  Usar credentials: 'include' en lugar de Authorization header
-      const response = await fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
+      const response = await fetch(`https://bluefruitnutrition1.onrender.com/api/reviews/${reviewId}`, {
         method: 'DELETE',
         credentials: 'include' //  Enviar cookies
       });

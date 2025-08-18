@@ -10,7 +10,7 @@ export default function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:4000/api/logout", {
+      await fetch("https://bluefruitnutrition1.onrender.com/api/logout", {
         method: "POST",
         credentials: "include",
       });
