@@ -171,17 +171,7 @@ export default function CompraExitosa() {
       <div className="card">
         <h1>¡Compra Exitosa!</h1>
         <p>Gracias por tu compra, {user?.email || 'usuario'}.</p>
-        
-        {/* Debug info */}
-        <div style={{ background: '#f0f0f0', padding: '10px', margin: '10px 0', fontSize: '12px' }}>
-          <strong>DEBUG INFO:</strong><br/>
-          Usuario ID: {user?.id || 'No encontrado'}<br/>
-          Datos compra: {datosCompra ? '✅ Cargados' : '❌ No encontrados'}<br/>
-          Datos envío: {datosEnvio ? '✅ Cargados' : '❌ No encontrados'}<br/>
-          <button onClick={() => console.log('All data:', { user, datosCompra, datosEnvio })}>
-            Ver datos en consola
-          </button>
-        </div>
+
         
         {/* Resumen de compra */}
         {datosCompra && (

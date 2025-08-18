@@ -22,7 +22,7 @@ const generarFacturaPDF = (res, datosUsuario, datosCompra = null) => {
   doc.rect(0, 0, doc.page.width, 120).fill(azulOscuro);
 
   // LOGO CON MANEJO DE ERRORES
-  doc.image('public/Logo_Blue.png', 60, 25, { width: 80, height: 100 });
+  doc.image('assets/Logo_Blue.png', 60, 25, { width: 90, height: 100 });
 
   // Título FACTURA en el header
   doc.fontSize(28)

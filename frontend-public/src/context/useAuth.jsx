@@ -23,6 +23,8 @@ export const AuthProvider = ({ children }) => {
   const checkSession = async () => {
     try {
       setLoading(true);
+      console.log('🔍 FRONTEND - Iniciando checkSession...');
+      
       const response = await fetch('http://localhost:4000/api/verify-session', {
         method: 'GET',
         credentials: 'include',
@@ -31,16 +33,57 @@ export const AuthProvider = ({ children }) => {
         },
       });
 
+      console.log('📡 FRONTEND - Respuesta status:', response.status);
+
       if (response.ok) {
         const data = await response.json();
-        setUser(data.user);
-        setIsAuthenticated(true);
-        console.log('✅ Sesión activa:', data.user);
+        
+        console.log('🔍 FRONTEND - Respuesta completa del verify-session:', data);
+        console.log('🔍 FRONTEND - Tipo de data:', typeof data);
+        console.log('🔍 FRONTEND - Keys de data:', Object.keys(data));
+        
+        // ✅ SOLUCIÓN: Manejar múltiples formatos de respuesta del backend
+        let userData = null;
+        
+        // Caso 1: Backend devuelve { user: { id, email, ... } }
+        if (data.user && data.user.id) {
+          console.log('✅ FRONTEND - Formato: { user: {...} }');
+          userData = data.user;
+        } 
+        // Caso 2: Backend devuelve { id, email, role, ... } directamente  
+        else if (data.id) {
+          console.log('✅ FRONTEND - Formato: { id, email, ... } directo');
+          userData = data;
+        }
+        // Caso 3: Backend devuelve { data: { id, email, ... } }
+        else if (data.data && data.data.id) {
+          console.log('✅ FRONTEND - Formato: { data: {...} }');
+          userData = data.data;
+        }
+        
+        console.log('👤 FRONTEND - userData extraída:', userData);
+        
+        // ✅ Verificación final más robusta
+        if (userData && userData.id && userData.email) {
+          setUser(userData);
+          setIsAuthenticated(true);
+          console.log('✅ FRONTEND - Sesión establecida correctamente:', userData);
+        } else {
+          console.warn('⚠️ FRONTEND - Datos de usuario incompletos');
+          console.warn('📋 FRONTEND - userData:', userData);
+          console.warn('📋 FRONTEND - Esperado: { id, email, role }');
+          setUser(null);
+          setIsAuthenticated(false);
+        }
       } else {
-        // Si hay error 401, no es necesariamente un error - solo no hay sesión
+        // ✅ Manejar diferentes códigos de error
+        if (response.status === 401) {
+          console.log('❌ No hay sesión activa (401)');
+        } else {
+          console.log('❌ Error verificando sesión:', response.status);
+        }
         setUser(null);
         setIsAuthenticated(false);
-        console.log('❌ No hay sesión activa');
       }
     } catch (error) {
       console.error('Error verificando sesión:', error);
@@ -65,13 +108,21 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setUser(data.user);
-        setIsAuthenticated(true);
-        return { success: true, data };
+        // ✅ CORREGIDO: Verificar que los datos del usuario sean válidos
+        if (data.user && data.user.id) {
+          setUser(data.user);
+          setIsAuthenticated(true);
+          console.log('✅ Login exitoso:', data.user);
+          return { success: true, data };
+        } else {
+          console.warn('⚠️ Login sin datos de usuario válidos:', data);
+          throw new Error('Datos de usuario incompletos');
+        }
       } else {
         throw new Error(data.message || 'Error al iniciar sesión');
       }
     } catch (error) {
+      console.error('❌ Error en login:', error);
       return { success: false, error: error.message };
     }
   };
@@ -82,12 +133,22 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         credentials: 'include',
       });
+      console.log('✅ Logout exitoso');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     } finally {
       setUser(null);
       setIsAuthenticated(false);
     }
+  };
+
+  // ✅ NUEVA FUNCIÓN: Para debug y verificación
+  const getUserData = () => {
+    console.log('📊 DATOS ACTUALES DEL CONTEXTO:');
+    console.log('User:', user);
+    console.log('Loading:', loading);
+    console.log('IsAuthenticated:', isAuthenticated);
+    return { user, loading, isAuthenticated };
   };
 
   const value = {
@@ -97,6 +158,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     checkSession,
+    getUserData, // ✅ Para debugging
   };
 
   return (
