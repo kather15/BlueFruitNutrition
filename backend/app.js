@@ -17,9 +17,14 @@ import shoppingCartRoutes from './src/routes/shoppingCart.js';
 import ordenesRoutes from './src/routes/ordenes.js'; 
 import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
+import PayRoutes from "./src/routes/pay.js"
+import TestPay from "./src/routes/testPayment.js";
+import tokenRouter from "./src/routes/token.js";
 import adminVerifyRoutes from "./src/routes/adminVerify.js";
 import sessionRouter from "./src/routes/session.js";
-import PayRoutes from "./src/routes/pay.js";
+import chatRoutes from "./src/routes/chatRoutes.js";
+import BillRoutes from "./src/routes/bill.js"; 
+
 
 const app = express();
 
@@ -46,10 +51,20 @@ app.use("/api/shoppingCart", shoppingCartRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/ordenes", ordenesRoutes);
 app.use("/api/reviews", ReviewRouters);
+app.use("/api/contact", ContactRoutes);
+app.use("/api/pay",PayRoutes);
+app.use("/api/testPay", TestPay);
+app.use("/api/token", tokenRouter);
+app.use("/api", ContactRoutes);
+app.use("/api/admin", adminVerifyRoutes);
+app.use("/api", sessionRouter);
+app.use("/api/chat", chatRoutes);
 app.use("/api", ContactRoutes);
 app.use("/api/admin", adminVerifyRoutes);
 app.use("/api", sessionRouter);
 app.use("/api/pay", PayRoutes);
+app.use("/api/Bill", BillRoutes);
+
 
 export default app;
 

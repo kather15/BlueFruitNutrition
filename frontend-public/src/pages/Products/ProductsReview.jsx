@@ -1,37 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star } from 'lucide-react';
-
+import toast from 'react-hot-toast'; 
+import { useAuthContext } from '../../context/useAuth'; 
 import './ProductsReview.css';
 
 const ProductsReview = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  
+  // Usar contexto en lugar de localStorage
+  const { user, isAuthenticated, loading } = useAuthContext();
 
+  // Estados principales:
   const [quantity, setQuantity] = useState(1);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
 
+  // Estado para nueva reseña
   const [newReview, setNewReview] = useState({
     rating: 5,
     comment: '',
   });
 
-  //  Verificar autenticación al cargar el componente
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    const userData = localStorage.getItem('userData');
-    
-    if (token && userData) {
-      setIsAuthenticated(true);
-      setUser(JSON.parse(userData));
-    }
-  }, []);
-
-  // Cargar producto
+  // Cargar información del producto
   useEffect(() => {
     fetch(`http://localhost:4000/api/products/${id}`)
       .then(res => res.json())
@@ -42,75 +35,10 @@ const ProductsReview = () => {
       });
   }, [id]);
 
-  // Cargar reseñas del producto
+  // Cargar reseñas
   useEffect(() => {
-    fetch(`http://localhost:4000/api/reviews?idProduct=${id}`)
-      .then(res => res.json())
-      .then(data => setReviews(data))
-      .catch(err => console.error('Error al obtener reseñas:', err));
+    loadReviews();
   }, [id]);
-
-  const handleQuantityChange = (change) => {
-    setQuantity(prev => Math.max(1, prev + change));
-  };
-
-  const handleSubmitReview = async (e) => {
-    e.preventDefault();
-
-    if (!isAuthenticated) {
-      alert('Debes iniciar sesión para dejar una reseña.');
-      navigate('/login'); // Redirigir al login
-      return;
-    }
-
-    if (!newReview.comment.trim()) {
-      alert('Por favor escribe un comentario.');
-      return;
-    }
-
-    const token = localStorage.getItem('authToken');
-    
-    const reviewToSend = {
-      comment: newReview.comment,
-      rating: newReview.rating,
-      idProduct: id
-      //  No enviamos idClient, viene del token en el backend
-    };
-
-    try {
-      const response = await fetch(`http://localhost:4000/api/reviews`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` //  Incluir token
-        },
-        body: JSON.stringify(reviewToSend)
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('¡Reseña agregada exitosamente!');
-        setNewReview({ rating: 5, comment: '' });
-        setShowReviewForm(false);
-        // Recargar reseñas
-        loadReviews();
-      } else {
-        if (data.requiresAuth) {
-          alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('userData');
-          setIsAuthenticated(false);
-          navigate('/login');
-        } else {
-          alert(data.message || 'Error al guardar reseña');
-        }
-      }
-    } catch (err) {
-      console.error('Error:', err);
-      alert('Error al enviar la reseña');
-    }
-  };
 
   const loadReviews = () => {
     fetch(`http://localhost:4000/api/reviews?idProduct=${id}`)
@@ -119,63 +47,113 @@ const ProductsReview = () => {
       .catch(err => console.error('Error al obtener reseñas:', err));
   };
 
-  const handleDeleteReview = async (reviewId) => {
-    if (!window.confirm('¿Estás seguro de eliminar esta reseña?')) return;
+  const handleQuantityChange = (change) => {
+    setQuantity(prev => Math.max(1, prev + change));
+  };
 
-    const token = localStorage.getItem('authToken');
-    
+  //  Función de enviar reseña usando contexto
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+
+    //  Usar isAuthenticated del contexto
+    if (!isAuthenticated) {
+      toast.error('Debes iniciar sesión para dejar una reseña.');
+      navigate('/login');
+      return;
+    }
+
+    if (!newReview.comment.trim()) {
+      toast('Por favor escribe un comentario.', { icon: '⚠️' });
+      return;
+    }
+
+    // CAMBIO: Usar token del contexto o obtener de cookies
+    const reviewToSend = {
+      comment: newReview.comment,
+      rating: newReview.rating,
+      idProduct: id
+    };
+
     try {
-      const response = await fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      //  Usar credentials: 'include' para enviar cookies en lugar de Authorization header
+      const response = await fetch(`http://localhost:4000/api/reviews`, {
+        method: 'POST',
+        credentials: 'include', // Esto envía las cookies automáticamente
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reviewToSend)
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        alert('Reseña eliminada correctamente');
+        toast.success('¡Reseña agregada exitosamente!');
+        setNewReview({ rating: 5, comment: '' });
+        setShowReviewForm(false);
         loadReviews();
       } else {
-        const data = await response.json();
-        alert(data.message || 'Error al eliminar reseña');
+        if (response.status === 401) {
+          toast.error('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+          navigate('/login');
+        } else {
+          toast.error(data.message || 'Error al guardar reseña');
+        }
       }
     } catch (err) {
       console.error('Error:', err);
-      alert('Error al eliminar la reseña');
+      toast.error('Error al enviar la reseña');
     }
   };
 
- const handleAddToCart = () => {
-  if (!product) return;
+  //  Función para eliminar reseña
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('¿Estás seguro de eliminar esta reseña?')) return;
+    
+    try {
+      //  Usar credentials: 'include' en lugar de Authorization header
+      const response = await fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
+        method: 'DELETE',
+        credentials: 'include' //  Enviar cookies
+      });
 
-  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+      if (response.ok) {
+        toast.success('Reseña eliminada correctamente');
+        loadReviews();
+      } else {
+        const data = await response.json();
+        toast.error(data.message || 'Error al eliminar reseña');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      toast.error('Error al eliminar la reseña');
+    }
+  };
 
-  const productId = product._id || product.id;
-  const existente = carrito.find(p => p.id === productId);
+  const handleAddToCart = () => {
+    if (!product) return;
 
-  if (existente) {
-    existente.cantidad += quantity;
-  } else {
-    carrito.push({
-      id: productId,
-      nombre: product.name,
-      precio: product.price,
-      cantidad: quantity,
-      imagen: product.image || '/placeholder-product.png'
-    });
-  }
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const productId = product._id || product.id;
+    const existente = carrito.find(p => p.id === productId);
 
-  // 🔹 Guardar en localStorage
-  localStorage.setItem("carrito", JSON.stringify(carrito));
+    if (existente) {
+      existente.cantidad += quantity;
+    } else {
+      carrito.push({
+        id: productId,
+        nombre: product.name,
+        precio: product.price,
+        cantidad: quantity,
+        imagen: product.image || '/placeholder-product.png'
+      });
+    }
 
-  alert(`Agregado al carrito: ${quantity} x ${product.name}`);
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    toast.success(`Agregado al carrito: ${quantity} x ${product.name}`);
+  };
 
-  // 👉 Si quieres enviar directo al carrito:
-  // navigate("/carrito");
-};
-
-
-  const handleCustomizeProduct = () => navigate('/SeleccionarGel');
+  const handleCustomizeProduct = () => navigate('/personalizar');
   const handleBackToProducts = () => navigate('/product');
 
   const renderStars = (rating) => (
@@ -194,6 +172,19 @@ const ProductsReview = () => {
       />
     ))
   );
+
+  // Mostrar loading mientras se verifica autenticación
+  if (loading) {
+    return (
+      <div className="products-review-wrapper">
+        <div className="product-detail-screen">
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            Cargando...
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (product === null) {
     return (
@@ -215,6 +206,7 @@ const ProductsReview = () => {
       <div className="product-detail-screen">
         <div className="product-detail-main">
           <div className="product-detail-container">
+
             <button className="back-button" onClick={handleBackToProducts}>
               Volver a Productos
             </button>
@@ -249,13 +241,9 @@ const ProductsReview = () => {
                 </div>
 
                 <div className="action-buttons">
-                  <button
-  className="add-to-cart-btn"
-  onClick={() => handleAddToCart(product)}
->
-  Agregar Al Carrito
-</button>
-
+                  <button className="add-to-cart-btn" onClick={() => handleAddToCart(product)}>
+                    Agregar Al Carrito
+                  </button>
                   <button className="customize-btn" onClick={handleCustomizeProduct}>
                     Personalizar Producto
                   </button>
@@ -268,12 +256,12 @@ const ProductsReview = () => {
             </div>
           </div>
 
-          {/* Reseñas */}
           <div className="reviews-section">
             <div className="reviews-container">
               <div className="reviews-header">
                 <h2>Reseñas</h2>
-                {/*  Solo mostrar botón si está autenticado */}
+
+                {/* Usar isAuthenticated del contexto */}
                 {isAuthenticated ? (
                   <button 
                     className="add-review-btn" 
@@ -294,8 +282,10 @@ const ProductsReview = () => {
               {showReviewForm && isAuthenticated && (
                 <div className="review-form-container">
                   <form onSubmit={handleSubmitReview} className="review-form">
+
                     <div className="form-group">
-                      <label>Escribiendo como: <strong>{user?.name}</strong></label>
+                      {/*  Usar user del contexto */}
+                      <label>Escribiendo como: <strong>{user?.email || 'Usuario'}</strong></label>
                     </div>
 
                     <div className="form-group">
@@ -355,16 +345,18 @@ const ProductsReview = () => {
                             </div>
                           </div>
                         </div>
+
                         <div className="review-actions">
                           <div className="review-rating">{renderStars(review.rating)}</div>
-                          {/*  Solo mostrar botón eliminar si es el autor */}
-                          {isAuthenticated && user?.id === review.idClient?._id && (
+
+                          {/*  Usar user del contexto para comparar - probar ambas propiedades */}
+                          {isAuthenticated && (user?.id === review.idClient?._id || user?._id === review.idClient?._id) && (
                             <button 
                               className="delete-review-btn"
                               onClick={() => handleDeleteReview(review._id)}
                               title="Eliminar reseña"
                             >
-                              🗑️
+                              Eliminar
                             </button>
                           )}
                         </div>

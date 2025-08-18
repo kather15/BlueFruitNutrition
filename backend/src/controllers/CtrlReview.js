@@ -29,10 +29,22 @@ reviewController.getReviews = async (req, res) => {
 // Insertar una nueva reseña (requiere autenticación)
 reviewController.insertReview = async (req, res) => {
   try {
+    console.log('🚀 INICIO insertReview');
+    console.log('Headers:', req.headers);
+    console.log('Cookies:', req.cookies);
+    console.log('req.user:', req.user);
+    console.log('req.body:', req.body);
+    
     const { comment, rating, idProduct } = req.body;
     
     // El idClient viene del token de autenticación
     const idClient = req.user.id; // Extraído del JWT por el middleware
+    
+    console.log('📝 Datos para crear reseña:');
+    console.log('- comment:', comment);
+    console.log('- rating:', rating);
+    console.log('- idProduct:', idProduct);
+    console.log('- idClient:', idClient);
 
     // Validar campos requeridos
     if (!comment || !rating || !idProduct) {
@@ -79,6 +91,7 @@ reviewController.insertReview = async (req, res) => {
       review: savedReview
     });
   } catch (error) {
+    console.error('❌ Error en insertReview:', error);
     res.status(500).json({
       message: "Error al guardar reseña",
       error: error.message
@@ -153,7 +166,7 @@ reviewController.updateReview = async (req, res) => {
   }
 };
 
-// Eliminar reseña por ID ( sin autenticación)
+// Eliminar reseña por ID (sin autenticación)
 reviewController.deleteReviewAdmin = async (req, res) => {
   try {
     const reviewId = req.params.id;

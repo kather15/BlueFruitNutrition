@@ -6,7 +6,6 @@ const Carrito = () => {
   const [productos, setProductos] = useState([]);
   const navigate = useNavigate();
 
-  // 🔹 Cargar carrito desde localStorage
   useEffect(() => {
     const carritoGuardado = JSON.parse(localStorage.getItem("carrito")) || [];
     setProductos(carritoGuardado);
@@ -59,7 +58,17 @@ const Carrito = () => {
 
       if (response.ok) {
         alert("Orden enviada correctamente");
-        localStorage.removeItem("carrito"); // 🔹 Vaciar carrito después de checkout
+        
+        //  Guardar datos para la factura
+        const datosCompra = {
+          orden,
+          productos,
+          total: parseFloat(total),
+          fecha: new Date().toISOString()
+        };
+        localStorage.setItem("datosCompra", JSON.stringify(datosCompra));
+        
+        // NO vaciar carrito aquí - se vaciará después del pago exitoso
         navigate("/metodo");
       } else {
         alert("Error al enviar la orden");

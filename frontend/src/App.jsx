@@ -6,15 +6,16 @@ import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/useAuth";
 
 // Components
-import Nav from "./components/Nav/Nav";
-import ProtectedRoute from "./components/PrivateRoute/ProtectedRoute";
-import Error404Private from "./components/NotFound/NotFoundPrivate.jsx";
+import Nav from './components/Nav/Nav';
 
-// Pages - Login / Recovery
-import Login from "./pages/Login/Login";
-import RequestCode from "./pages/RecoveryPassword/RequestCode";
-import VerifyCode from "./pages/RecoveryPassword/VerifyCode";
-import NewPassword from "./pages/RecoveryPassword/NewPasssword";
+import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
+import Error404Private from './components/NotFound/NotFoundPrivate.jsx';
+
+
+// Pages - Login (público)
+import RequestCode from './pages/RecoveryPassword/RequestCode';
+import VerifyCode from './pages/RecoveryPassword/VerifyCode';
+import NewPassword from './pages/RecoveryPassword/NewPasssword';
 
 // Pages - Admin
 import HomeP from "./pages/Home/homep";

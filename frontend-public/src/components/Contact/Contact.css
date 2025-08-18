@@ -1,5 +1,4 @@
 
-/* CONTACTO */
 .blue-fruit-contact-section {
   padding: 4rem 2rem;
   background-color: #ffffff;
@@ -104,4 +103,43 @@
 
 .blue-fruit-contact-form button:hover {
   background-color: #003366;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .blue-fruit-contact-section {
+    padding: 2rem 1rem;
+  }
+
+  .blue-fruit-contact-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .blue-fruit-contact-info,
+  .blue-fruit-contact-form {
+    max-width: 100%;
+    min-width: unset;
+  }
+
+  .blue-fruit-contact-form button {
+    width: 100%;
+    float: none;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .blue-fruit-contact-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .blue-fruit-contact-info h3 {
+    font-size: 1rem;
+  }
+
+  .blue-fruit-contact-info p,
+  .blue-fruit-contact-form input,
+  .blue-fruit-contact-form textarea {
+    font-size: 0.9rem;
+  }
 }

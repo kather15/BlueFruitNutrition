@@ -2,37 +2,64 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import toast from 'react-hot-toast'; 
 
-//  Crear el contexto de autenticación
 const AuthContext = createContext();
 
-//  Componente proveedor que envuelve toda la app y maneja el estado de autenticación
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Estado del usuario autenticado
-  const [loading, setLoading] = useState(true); // Estado de carga mientras se verifica el token
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // useEffect que se ejecuta una sola vez al cargar el componente
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Obtener token y userId del almacenamiento local
+        // ✅ Verificar con el backend si hay sesión activa
+        const response = await fetch('http://localhost:4000/api/verify-session', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          setUser(userData);
+          console.log('✅ Sesión verificada con backend:', userData);
+        } else {
+          // Fallback a localStorage
+          const token = localStorage.getItem('token');
+          const userId = localStorage.getItem('userId');
+
+          if (token && userId) {
+            setUser({ 
+              id: userId, 
+              token: token,
+              isAuthenticated: true 
+            });
+            console.log('⚠️ Usando datos de localStorage como fallback');
+          } else {
+            setUser(null);
+            console.log('❌ No hay sesión activa');
+          }
+        }
+      } catch (error) {
+        console.error('Error verificando con backend:', error);
+        
+        // Fallback a localStorage en caso de error
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
 
-        // Si existen, asumimos que el usuario está autenticado
         if (token && userId) {
           setUser({ 
             id: userId, 
             token: token,
             isAuthenticated: true 
           });
+        } else {
+          localStorage.removeItem('token');
+          localStorage.removeItem('userId');
+          setUser(null);
         }
-      } catch (error) {
-        // Si hay un error, limpiar los datos del almacenamiento local
-        console.error('Error verificando autenticación:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('userId');
       } finally {
-        // Terminar la carga sin importar el resultado
         setLoading(false);
       }
     };
@@ -40,7 +67,7 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  // Función para iniciar sesión y guardar datos del usuario
+  // ✅ Función de login actualizada
   const login = (userData, token) => {
     const userInfo = {
       ...userData,
@@ -48,22 +75,34 @@ export const AuthProvider = ({ children }) => {
       isAuthenticated: true
     };
     
-    setUser(userInfo); // Guardar en estado
-    // Guardar en localStorage
+    setUser(userInfo);
+    
+    // Mantener localStorage como backup
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userData.id || userData._id || userData.userId);
+    
+    console.log('✅ Usuario logueado:', userInfo);
   };
 
-  // Función para cerrar sesión
-  const logout = () => {
-    setUser(null); // Borrar usuario del estado
-    // Limpiar almacenamiento local
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('verificationToken');
+  // ✅ Función de logout actualizada
+  const logout = async () => {
+    try {
+      await fetch('http://localhost:4000/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      console.log('✅ Logout en backend exitoso');
+    } catch (error) {
+      console.error('Error en logout backend:', error);
+    } finally {
+      setUser(null);
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('verificationToken');
+      console.log('✅ Datos locales limpiados');
+    }
   };
 
-  // Valores disponibles para los componentes hijos
   const value = {
     user,
     login,
@@ -72,7 +111,6 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: user?.isAuthenticated || false
   };
 
-  // Proveer el contexto a los hijos
   return (
     <AuthContext.Provider value={value}>
       {children}
@@ -80,7 +118,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Hook personalizado para acceder fácilmente al contexto de autenticación
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -89,15 +126,13 @@ export const useAuthContext = () => {
   return context;
 };
 
-// Hook principal que contiene la lógica de registro, login y logout
+// Hook principal 
 const useAuth = () => {
   const navigate = useNavigate(); 
-  const { login: contextLogin, logout: contextLogout } = useAuthContext(); // Acceder a funciones del contexto
+  const { login: contextLogin, logout: contextLogout } = useAuthContext();
 
-  // Función para registrar usuario
   const register = async (data) => {
     try {
-      // Intentar registrar como cliente
       let res = await fetch("http://localhost:4000/api/registerCustomers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -106,7 +141,6 @@ const useAuth = () => {
 
       let result = await res.json();
       
-      // Si no funciona, intentar registrar como distribuidor
       if (!res.ok) {
         res = await fetch("http://localhost:4000/api/registerDistributors", {
           method: "POST",
@@ -121,65 +155,50 @@ const useAuth = () => {
         }
       }
 
-      // Registro exitoso
       toast.success("Verifica tu correo");
 
-      // Guardar token de verificación si viene en la respuesta
       if (result.token) {
         localStorage.setItem("verificationToken", result.token);
       }
 
-      // Redirigir a pantalla de verificación
       navigate("/verificar-codigo");
-
     } catch (error) {
-      toast.error(error.message); // Mostrar error
+      toast.error(error.message);
     }
   };
 
-  // Función para login
+  // ✅ Función de login actualizada para usar la respuesta del backend
   const login = async (data) => {
     try {
       const res = await fetch("http://localhost:4000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-        credentials: 'include' // Incluye cookies para iniciar sesion
+        credentials: 'include'
       });
 
       const result = await res.json();
 
       if (!res.ok) throw new Error(result.message || "Credenciales inválidas");
 
-      // Si el usuario es administrador, redirigir a su panel
-      if (result.role === 'admin') {
-        toast.success("Redirigiendo al panel de administrador");
-        setTimeout(() => {
-          window.location.href = "http://localhost:5174";
-        }, 1000);
-        return;
+      // ✅ Si hay datos de usuario en la respuesta, usar el contexto
+      if (result.user) {
+        contextLogin(result.user, result.token);
       }
 
-      // Si es usuario normal, usar el contexto para guardar su sesión
-      contextLogin(result.user || result, result.token);
-
-      toast.success("Sesión iniciada");
-      navigate("/"); // Redirigir a inicio
+      return { success: true, data: result };
     } catch (error) {
-      toast.error(error.message); // Mostrar error
+      return { success: false, message: error.message };
     }
   };
 
-  // Función para cerrar sesión
-  const logout = () => {
-    contextLogout(); // Usar función del contexto
+  const logout = async () => {
+    await contextLogout();
     toast.success("Sesión cerrada");
-    navigate("/"); // Redirigir a inicio
+    navigate("/");
   };
 
- 
   return { register, login, logout };
 };
-
 
 export default useAuth;

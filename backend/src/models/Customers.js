@@ -93,7 +93,23 @@ password: {
         type: Schema.Types.ObjectId,
         ref: "Sport",
         require: false
+    },
+
+            // Verificación
+    isVerified: { 
+        type: Boolean,
+         default: false 
+        },
+
+    //Expiración automática si no se verifica
+    expireAt: {
+        type: Date,
+        default: function () {
+            return new Date(Date.now() + 2*60*60*1000); // 2 HORAS
+        },
+        index: { expires: 0 } 
     }
+
 
     },{
         timestamps: true,
