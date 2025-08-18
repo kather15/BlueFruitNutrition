@@ -31,15 +31,8 @@
   min-height: 600px;
 }
 
-/* COLUMNA 1: Imagen del producto */
-.product-image-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .product-image-card {
-  background: #f8f9fa;
+  background-color: transparent; /* quitar fondo */
   border-radius: 12px;
   padding: 20px;
   width: 100%;
@@ -50,9 +43,15 @@
 }
 
 .product-main-image-new {
+  background-color: transparent; /* quitar fondo */
   max-width: 100%;
   max-height: 280px;
   object-fit: contain;
+  display: block; /* para evitar espacios blancos debajo */
+}
+
+.product-image-section{
+   background: transparent;
 }
 
 /* COLUMNA 2: Información del producto */
