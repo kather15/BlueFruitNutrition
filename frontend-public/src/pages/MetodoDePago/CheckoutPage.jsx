@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importa el hook para navegación entre rutas
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/useAuth"; // ✅ Importar contexto
 import "./CheckoutPage.css";
 
 // Objeto que contiene todos los departamentos y sus municipios
@@ -21,34 +22,150 @@ const departamentosMunicipios = {
 };
 
 const AddressForm = () => {
+  const { user, loading } = useAuthContext(); // ✅ Obtener datos del usuario
+  const navigate = useNavigate();
+
   // Estados para almacenar la selección del usuario
-  const [selectedDept, setSelectedDept] = useState(""); // Departamento seleccionado
-  const [selectedMunicipio, setSelectedMunicipio] = useState(""); // Municipio seleccionado
-  const [direccion, setDireccion] = useState(""); // Dirección exacta
-  const [referencia, setReferencia] = useState(""); // Punto de referencia
+  const [selectedDept, setSelectedDept] = useState("");
+  const [selectedMunicipio, setSelectedMunicipio] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [referencia, setReferencia] = useState("");
+  const [nombre, setNombre] = useState(""); // ✅ Nuevo campo para nombre
+  const [telefono, setTelefono] = useState(""); // ✅ Nuevo campo para teléfono
 
-  const navigate = useNavigate(); // Hook para navegar entre rutas
-  const municipios = selectedDept ? departamentosMunicipios[selectedDept] || [] : []; // Municipios disponibles del departamento seleccionado
+  const municipios = selectedDept ? departamentosMunicipios[selectedDept] || [] : [];
 
-  // Navega hacia /carrito
+  // ✅ Cargar datos del usuario automáticamente
+  useEffect(() => {
+    const cargarDatosUsuario = async () => {
+      if (user && user.id) {
+        try {
+          // Determinar si es cliente o distribuidor
+          const tipoUsuario = user.role === 'customer' ? 'customers' : 'distributors';
+          
+          const response = await fetch(`http://localhost:4000/api/${tipoUsuario}/${user.id}`, {
+            credentials: 'include'
+          });
+
+          if (response.ok) {
+            const userData = await response.json();
+            console.log('✅ Datos del usuario cargados:', userData);
+            
+            // ✅ Pre-llenar campos automáticamente
+            setNombre(userData.name || userData.companyName || '');
+            setTelefono(userData.phone || '');
+            setDireccion(userData.address || '');
+            
+            // ✅ Si ya tiene dirección guardada, intentar parsearla
+            if (userData.address) {
+              // Aquí podrías implementar lógica para detectar departamento/municipio
+              // desde la dirección guardada si tu BD lo maneja así
+            }
+          }
+        } catch (error) {
+          console.error('Error cargando datos del usuario:', error);
+        }
+      }
+    };
+
+    if (!loading && user) {
+      cargarDatosUsuario();
+    }
+  }, [user, loading]);
+
+  // ✅ También cargar datos guardados previamente en la sesión
+  useEffect(() => {
+    const datosGuardados = localStorage.getItem('datosEnvio');
+    if (datosGuardados) {
+      const datos = JSON.parse(datosGuardados);
+      setSelectedDept(datos.departamento || '');
+      setSelectedMunicipio(datos.municipio || '');
+      setDireccion(datos.direccion || '');
+      setReferencia(datos.referencia || '');
+    }
+  }, []);
+
   const handleBack = () => navigate("/carrito");
 
-  // Navega hacia /pay solo si los campos obligatorios están completos
-  const handlePay = () => {
-    if (selectedDept && selectedMunicipio && direccion.trim()) {
-      navigate("/pay");
+  const handleContinuar = () => {
+    if (selectedDept && selectedMunicipio && direccion.trim() && nombre.trim()) {
+      // ✅ Guardar datos de envío para usar en la factura
+      const datosEnvio = {
+        nombre,
+        telefono,
+        departamento: selectedDept,
+        municipio: selectedMunicipio,
+        direccion,
+        referencia,
+        direccionCompleta: `${direccion}, ${selectedMunicipio}, ${selectedDept.replace(/([A-Z])/g, " $1").trim()}`,
+        fechaRegistro: new Date().toISOString()
+      };
+
+      localStorage.setItem('datosEnvio', JSON.stringify(datosEnvio));
+      console.log('✅ Datos de envío guardados:', datosEnvio);
+
+      // ✅ Actualizar también los datos de compra
+      const datosCompra = JSON.parse(localStorage.getItem('datosCompra') || '{}');
+      const datosCompraActualizados = {
+        ...datosCompra,
+        datosEnvio
+      };
+      localStorage.setItem('datosCompra', JSON.stringify(datosCompraActualizados));
+
+      navigate("/pay"); // ✅ Ir directamente a pagar
     }
   };
+
+  // ✅ Mostrar loading mientras se cargan los datos
+  if (loading) {
+    return (
+      <div className="container">
+        <div className="form-card">
+          <p>Cargando datos del usuario...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
       <h2 className="title">Dirección de Envío</h2>
+      
+      {/* ✅ Mostrar información del usuario */}
+      <div className="user-info">
+        <p><strong>Usuario:</strong> {user?.email}</p>
+        <p><small>Los datos se llenarán automáticamente con tu información guardada</small></p>
+      </div>
 
       <div className="form-card">
+        {/* ✅ Campos de información personal */}
+        <div className="flex-row">
+          <div className="form-group flex-1">
+            <label>Nombre completo*</label>
+            <input
+              type="text"
+              placeholder="Nombre del destinatario"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              className="input"
+            />
+          </div>
+          <div className="form-group flex-1">
+            <label>Teléfono*</label>
+            <input
+              type="tel"
+              placeholder="Ej: 7890-1234"
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+              className="input"
+            />
+          </div>
+        </div>
+
         {/* Selección de departamento y municipio */}
         <div className="flex-row">
           <div className="form-group flex-1">
-            <label>Departamento:</label>
+            <label>Departamento*</label>
             <select
               className="input"
               value={selectedDept}
@@ -60,19 +177,19 @@ const AddressForm = () => {
               <option value="">Seleccione un departamento</option>
               {Object.keys(departamentosMunicipios).map((dept) => (
                 <option key={dept} value={dept}>
-                  {dept.replace(/([A-Z])/g, " $1").trim()} {/* Agrega espacio entre palabras */}
+                  {dept.replace(/([A-Z])/g, " $1").trim()}
                 </option>
               ))}
             </select>
           </div>
 
           <div className="form-group flex-1">
-            <label>Municipio:</label>
+            <label>Municipio*</label>
             <select
               className="input"
               value={selectedMunicipio}
               onChange={(e) => setSelectedMunicipio(e.target.value)}
-              disabled={!selectedDept} // Deshabilitado si no hay departamento seleccionado
+              disabled={!selectedDept}
             >
               <option value="">Seleccione un municipio</option>
               {municipios.map((muni) => (
@@ -108,19 +225,19 @@ const AddressForm = () => {
           />
         </div>
 
-        {/* Botones de navegación */}
+        {/* ✅ Botones de navegación actualizados */}
         <div className="button-row">
           <button onClick={handleBack} className="btn-outline">
-            Regresar
+            Regresar al Carrito
           </button>
           <button
-            onClick={handlePay}
-            disabled={!selectedDept || !selectedMunicipio || !direccion.trim()} // Solo habilitado si todo está lleno
+            onClick={handleContinuar}
+            disabled={!selectedDept || !selectedMunicipio || !direccion.trim() || !nombre.trim()}
             className={`btn-primary ${
-              !selectedDept || !selectedMunicipio || !direccion.trim() ? "disabled" : ""
+              !selectedDept || !selectedMunicipio || !direccion.trim() || !nombre.trim() ? "disabled" : ""
             }`}
           >
-            Ir a pagar
+            Continuar al Pago
           </button>
         </div>
       </div>
@@ -128,4 +245,4 @@ const AddressForm = () => {
   );
 };
 
-export default AddressForm; 
+export default AddressForm;

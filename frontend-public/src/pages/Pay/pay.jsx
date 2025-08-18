@@ -1,10 +1,13 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../context/useAuth';
+import toast from 'react-hot-toast'; // ✅ Importar toast
 import './Pay.css';
 
 const Pay = () => {
   const navigate = useNavigate();
+  const { user } = useAuthContext(); // ✅ Obtener datos del usuario
   const [showBack, setShowBack] = React.useState(false);
 
   const {
@@ -22,38 +25,131 @@ const Pay = () => {
     }
   });
 
-  // Función para obtener el token desde el backend
   const fetchToken = async () => {
     const response = await fetch('http://localhost:4000/api/token', {
       method: 'POST',
     });
     if (!response.ok) throw new Error('No se pudo obtener el token');
     const data = await response.json();
-    return data.access_token; // Ajusta esto si tu token viene con otro nombre
+    return data.access_token;
   };
 
-  // Envío de datos del formulario junto con el token
+  // ✅ CORREGIDO: Formatear datos según API de Wompi
   const onSubmitBack = async (formData) => {
     try {
-      const token = await fetchToken();  // Obtener token primero
+      console.log('🚀 Iniciando proceso de pago...');
+      console.log('Datos del formulario:', formData);
+      console.log('Usuario logueado:', user);
+
+      // ✅ Obtener datos de envío y compra
+      const datosEnvio = JSON.parse(localStorage.getItem('datosEnvio') || '{}');
+      const datosCompra = JSON.parse(localStorage.getItem('datosCompra') || '{}');
+      
+      console.log('Datos de envío:', datosEnvio);
+      console.log('Datos de compra:', datosCompra);
+
+      // ✅ OPCIÓN 1: Usar pago simulado (más simple)
+      const pagoSimulado = true; // Cambia a false para usar Wompi real
+
+      if (pagoSimulado) {
+        // ✅ Simular pago exitoso sin usar API externa
+        console.log('✅ Simulando pago exitoso...');
+        
+        // ✅ Toast de procesamiento
+        toast.loading('Procesando pago...', { id: 'payment' });
+        
+        // Simular delay de procesamiento
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // ✅ Toast de éxito en lugar de alert
+        toast.success('¡Pago procesado exitosamente!', { 
+          id: 'payment',
+          duration: 3000 
+        });
+        
+        localStorage.removeItem("carrito");
+        console.log('🗑️ Carrito limpiado');
+        
+        // ✅ CORREGIDO: Redirigir a /Bill (verificar que coincida con App.jsx)
+        navigate('/Bill');
+        return;
+      }
+
+      // ✅ OPCIÓN 2: Usar API de Wompi con datos completos
+      // ✅ Toast de procesamiento
+      toast.loading('Procesando pago...', { id: 'payment' });
+      
+      const token = await fetchToken();
+      console.log('✅ Token obtenido correctamente');
+
+      // ✅ Formatear datos según lo que espera Wompi
+      const wompiData = {
+        // Datos requeridos por Wompi
+        monto: Math.round((datosCompra.total || 100) * 100), // Convertir a centavos
+        email: user?.email || 'test@bluefruit.com',
+        nombre: datosEnvio.nombre || user?.name || 'Cliente Test',
+        token: formData.cardNumber, // Esto debería ser un token de tarjeta real
+        
+        // Datos adicionales
+        descripcion: `Compra BlueFruit - Orden ${datosCompra.orden?.numeroOrden || 'TEST'}`,
+        numeroOrden: datosCompra.orden?.numeroOrden || `ORD-${Date.now()}`,
+        
+        // Datos de la tarjeta (si Wompi los requiere)
+        numeroTarjeta: formData.cardNumber,
+        nombreTarjeta: formData.cardHolder,
+        mesVencimiento: formData.expiryDate.split('/')[0],
+        anoVencimiento: '20' + formData.expiryDate.split('/')[1],
+        codigoSeguridad: formData.securityCode,
+        
+        // Datos de envío
+        direccionEnvio: datosEnvio.direccionCompleta || 'Dirección test',
+        telefonoCliente: datosEnvio.telefono || '7890-1234'
+      };
+
+      console.log('📤 Enviando datos a Wompi:', wompiData);
 
       const response = await fetch('http://localhost:4000/api/testPay', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ token, formData })  // Envía token y datos juntos
+        body: JSON.stringify({ 
+          token, 
+          formData,
+          userData: user,
+          purchaseData: datosCompra
+        })
       });
 
       if (!response.ok) {
-        throw new Error('Error al procesar el pago');
+        const errorData = await response.json();
+        console.error('❌ Error de Wompi:', errorData);
+        throw new Error(errorData.error || 'Error al procesar el pago');
       }
 
       const result = await response.json();
-      alert('✅ Pago simulado exitoso: ' + (result.message || JSON.stringify(result)));
-      navigate('/home'); // Redirige a la pantalla deseada
+      console.log('✅ Pago procesado exitosamente:', result);
+
+      // ✅ Toast de éxito en lugar de alert
+      toast.success('¡Pago procesado exitosamente!', { 
+        id: 'payment',
+        duration: 3000 
+      });
+      
+      localStorage.removeItem("carrito");
+      console.log('🗑️ Carrito limpiado');
+
+      // ✅ CORREGIDO: Redirigir a /Bill (verificar que coincida con App.jsx)
+      navigate('/Bill');
+      
     } catch (error) {
-      alert('❌ Error en el pago: ' + error.message);
+      console.error('❌ Error en el pago:', error);
+      
+      // ✅ Toast de error en lugar de alert
+      toast.error('Error en el pago: ' + error.message, { 
+        id: 'payment',
+        duration: 5000 
+      });
     }
   };
 
