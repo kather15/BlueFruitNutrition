@@ -164,7 +164,7 @@ const Home = () => {
 
 {/* Botón de WhatsApp fijo con React Icon */}
 <a
-  href="https://wa.me/72120924" // reemplaza con tu número de WhatsApp
+  href="https://wa.me/68597103" // reemplaza con tu número de WhatsApp
   target="_blank"
   rel="noopener noreferrer"
   className="blue-fruit-whatsapp-button"

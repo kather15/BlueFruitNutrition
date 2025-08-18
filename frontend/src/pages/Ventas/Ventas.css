@@ -20,30 +20,37 @@ body, html, #root {
 
 /* =================== VENTAS =================== */
 
-/* Contenedor principal centrado */
+/* Contenedor principal */
 .ventas-container {
   display: flex;
-  justify-content: center;  /* centra horizontal */
-  align-items: flex-start;  /* empieza desde arriba */
-  min-height: 100vh;
-  justify-items: center;
-  padding: 40px;
-  background-color: #ffffff; /* fondo completamente blanco */
-  text-align: center;
-  box-sizing: border-box;
   flex-direction: column;
-  margin-left: 220px; /* deja espacio para el sidebar */
+  align-items: center;   /* centra horizontalmente todo */
+  min-height: 100vh;
+  padding: 40px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  margin-left: 220px; /* espacio para el sidebar en escritorio */
 }
 
 /* Wrapper interno */
+.ventas-wrapper {
+  width: 100%;
+  max-width: 1000px; /* ancho máximo centrado */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centra todo su contenido */
+}
+
 .ventas-wrapper h2 {
   font-size: 2.5rem;
-  margin: 0 auto 30px auto;
+  margin: 0 0 30px 0;
   color: #0a1446;
   font-weight: 700;
-  text-align: center;       /* asegura centrado */
-  width: 100%;
+  text-align: center;
   letter-spacing: 1px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Estadísticas */
@@ -153,8 +160,14 @@ body, html, #root {
 
   .ventas-wrapper {
     max-width: 100%;
-    gap: 25px;
     padding: 20px;
+  }
+
+  .ventas-wrapper h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    justify-content: center;
+    text-align: center;
   }
 
   .ventas-estadisticas {
@@ -176,10 +189,6 @@ body, html, #root {
   .ventas-tabla th,
   .ventas-tabla td {
     padding: 10px 8px;
-  }
-
-  .ventas-wrapper h2 {
-    font-size: 2rem;
   }
 }
 

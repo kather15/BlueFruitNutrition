@@ -12,6 +12,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  overflow-x: hidden; /* evita scroll lateral */
 }
 
 /* Sidebar */
@@ -27,6 +28,7 @@ body {
   flex-direction: column;
   padding: 24px 20px;
   box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+  z-index: 1000;
 }
 
 .admin-sidebar-logo {
@@ -59,6 +61,7 @@ body {
   padding: 2.5rem 3rem;
   min-height: 100vh;
   background: #f8f9fc;
+  transition: margin 0.3s ease;
 }
 
 /* Welcome */
@@ -70,12 +73,10 @@ body {
   text-align: center;
   margin-bottom: 2.5rem;
 }
-
 .admin-welcome-banner h1 {
   font-size: 2.4rem;
   margin-bottom: 0.4rem;
 }
-
 .admin-welcome-banner p {
   font-size: 1rem;
   color: #555;
@@ -97,17 +98,14 @@ body {
   text-align: center;
   transition: 0.25s ease;
 }
-
 .admin-stat-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
-
 .admin-stat-card h2 {
   font-size: 2.2rem;
   margin-bottom: 0.2rem;
 }
-
 .admin-stat-card span {
   font-size: 0.95rem;
   color: #666;
@@ -120,7 +118,6 @@ body {
   gap: 2rem;
   margin-bottom: 3rem;
 }
-
 .admin-chart-card {
   background: #fff;
   padding: 1.5rem;
@@ -134,48 +131,30 @@ body {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  overflow-x: auto; /* para móvil */
+  overflow-x: auto;
+  max-width: 100%;
 }
-
 .admin-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
+  min-width: 600px; /* asegura scroll horizontal si es necesario */
 }
-
 .admin-table thead {
   background: #0C133F;
   color: #fff;
 }
-
-.admin-table th,
-.admin-table td {
+.admin-table th, .admin-table td {
   padding: 12px 16px;
   text-align: left;
 }
-
 .admin-table tbody tr {
   border-bottom: 1px solid #eee;
 }
-
 .admin-table tbody tr:hover {
   background: #ffffff;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .admin-main-content {
-    margin-left: 0;
-    padding: 1.5rem;
-  }
-  .admin-sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    box-shadow: none;
-  }
-}
 /* --- NUEVO --- */
 
 /* Gráfica + Productos lado a lado */
@@ -201,20 +180,94 @@ body {
 .admin-users-section {
   margin-top: 2rem;
 }
-
 .admin-users-section .admin-table-container {
   width: 100%;
 }
 
-/* Evita scroll horizontal */
-.admin-table-container {
-  overflow-x: auto;
-  max-width: 100%;
-}
+/* Responsive */
 
-/* Responsive: en móvil se apila */
+/* Tablets */
 @media (max-width: 1024px) {
+  .admin-main-content {
+    margin-left: 0;
+    padding: 2rem;
+  }
+  .admin-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: none;
+    padding: 1rem;
+  }
+  .admin-sidebar-logo {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+  }
+  .admin-sidebar-menu {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .admin-sidebar-menu li a {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
   .admin-top-section {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  .admin-main-content {
+    margin-left: 0;
+    padding: 1.5rem;
+  }
+  .admin-welcome-banner h1 {
+    font-size: 1.6rem;
+  }
+  .admin-stat-card h2 {
+    font-size: 1.6rem;
+  }
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-charts-container {
+    grid-template-columns: 1fr;
+  }
+  .admin-top-section {
+    grid-template-columns: 1fr;
+  }
+  .admin-sidebar-menu {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* Extra pequeño (móviles chicos) */
+@media (max-width: 480px) {
+  .admin-main-content {
+    padding: 1rem;
+  }
+  .admin-welcome-banner {
+    padding: 1.2rem;
+  }
+  .admin-welcome-banner h1 {
+    font-size: 1.3rem;
+  }
+  .admin-sidebar {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .admin-sidebar-menu {
+    flex-direction: column;
+    width: 100%;
+  }
+  .admin-sidebar-menu li a {
+    width: 100%;
+    text-align: center;
   }
 }

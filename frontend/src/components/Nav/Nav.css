@@ -1,4 +1,3 @@
-/* src/components/Nav/Nav.css */
 .sidebar {
   position: fixed;
   left: 0;
@@ -13,6 +12,7 @@
   box-sizing: border-box;
   user-select: none;
   z-index: 1000;
+  transition: left 0.3s ease;
 }
 
 .sidebar-logo {
@@ -76,4 +76,49 @@
 
 .sidebar-footer button:hover {
   background-color: #3a3a7a;
+}
+
+/* ==========================
+   Botón hamburguesa
+========================== */
+.hamburger-btn {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1100;
+  background: #1a1a3a;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+}
+
+/* ==========================
+   Responsive
+========================== */
+@media (max-width: 900px) {
+  .hamburger-btn {
+    display: block;
+  }
+
+  .sidebar {
+    left: -250px; /* fuera de pantalla */
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  /* Overlay */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 900;
+  }
 }

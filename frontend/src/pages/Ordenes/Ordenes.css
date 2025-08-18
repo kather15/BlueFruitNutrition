@@ -1,152 +1,18 @@
-/* =================== VENTAS =================== */
-
-/* Contenedor principal centrado con sidebar en cuenta */
-.ventas-container {
-  display: flex;
-  justify-content: center; /* centra horizontal */
-  align-items: flex-start; /* empieza desde arriba para no romper el scroll */
-  min-height: 100vh;
-  padding: 60px 40px;
-  background: linear-gradient(135deg, #e3f2fd, #ffffff);
-  text-align: center;
-  box-sizing: border-box;
-  flex-direction: column;
-  margin-left: 250px; /* espacio para sidebar */
-  width: calc(100% - 250px);
-}
-
-/* Wrapper interno para limitar ancho y mantener diseño */
-.ventas-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 1200px;
-  gap: 50px;
-  padding: 20px 40px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-/* Header */
-.ventas-wrapper h2 {
-  font-size: 2.5rem;
-  margin: 0;
-  color: #0a1446;
-  font-weight: 700;
-  text-align: center;
-  width: 100%;
-  letter-spacing: 1px;
-}
-
-/* Estadísticas */
-.ventas-estadisticas {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-.estadistica-card {
-  background-color: #f8f9fa;
-  border: 2px solid #0a1446;
-  border-radius: 15px;
-  padding: 25px 30px;
-  min-width: 160px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.estadistica-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-}
-
-.estadistica-card h3 {
-  margin: 0 0 12px 0;
-  font-size: 1.1rem;
-  color: #0a1446;
-  font-weight: 600;
-}
-
-.estadistica-card p {
-  margin: 0;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #28a745;
-}
-
-/* Tabla de ventas */
-.ventas-tabla {
-  border-collapse: collapse;
-  width: 100%;
-  max-width: 1000px;
-  background-color: #ffffff;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-  border-radius: 15px;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.ventas-tabla th {
-  background-color: #0a1446;
-  color: #ffffff;
-  padding: 15px 20px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  text-align: left;
-}
-
-.ventas-tabla td {
-  padding: 15px 20px;
-  border-bottom: 1px solid #ddd;
-  color: #000;
-  font-weight: 500;
-}
-
-.ventas-tabla tr:last-child td {
-  border-bottom: none;
-}
-
-.ventas-tabla tr:nth-child(even) {
-  background-color: #f8f9fa;
-}
-
-.ventas-tabla tr:hover {
-  background-color: #e3f2fd;
-}
-
-.estado-finalizado {
-  background-color: #28a745;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: inline-block;
-}
-
 /* =================== ORDENES =================== */
 
 .ordenes-container {
   display: flex;
   flex-direction: column;
-  align-items: center;    /* centra horizontal */
+  align-items: center;
   justify-content: flex-start;
-  min-height: 100vh;
+  min-height: 90vh;
   padding: 60px 40px;
   margin-left: 250px; /* espacio para sidebar */
   width: calc(100% - 250px);
-  background: linear-gradient(135deg, #fefefe, #e3f2fd);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
   box-sizing: border-box;
 }
 
-/* Header */
 .ordenes-container h2 {
   font-size: 2.5rem;
   margin-bottom: 30px;
@@ -167,10 +33,11 @@
   cursor: pointer;
   font-weight: bold;
   align-self: flex-start;
+  transition: 0.3s;
 }
 
 .btn-agregar:hover {
-  background-color: #ffffff;
+  background-color: #0056b3;
 }
 
 /* Tabla de órdenes */
@@ -214,49 +81,94 @@
   margin: 2px;
   transition: opacity 0.3s ease;
 }
-
 .btn-accion:hover {
   opacity: 0.9;
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .ventas-container,
+
+/* Tablets */
+@media (max-width: 1024px) {
   .ordenes-container {
     margin-left: 0;
     width: 100%;
+    padding: 40px 20px;
+  }
+  .ordenes-container h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  .ordenes-container {
     padding: 20px;
   }
-
-  .ventas-wrapper {
-    max-width: 100%;
-    gap: 25px;
-    padding: 20px;
+  .btn-agregar {
+    width: 100%;
+    text-align: center;
   }
 
-  .ventas-estadisticas,
-  .ordenes-tabla {
+  /* Convertimos tabla en “cards” */
+  .ordenes-tabla,
+  .ordenes-tabla thead,
+  .ordenes-tabla tbody,
+  .ordenes-tabla th,
+  .ordenes-tabla td,
+  .ordenes-tabla tr {
+    display: block;
     width: 100%;
   }
 
-  .estadistica-card {
-    min-width: 220px;
+  .ordenes-tabla thead {
+    display: none; /* ocultamos encabezado */
   }
 
-  .ventas-tabla,
-  .ordenes-tabla {
-    font-size: 0.9rem;
+  .ordenes-tabla tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
 
-  .ventas-tabla th,
-  .ventas-tabla td,
-  .ordenes-tabla th,
   .ordenes-tabla td {
-    padding: 10px 8px;
+    border: none;
+    padding: 10px;
+    text-align: left;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
   }
 
-  .ventas-wrapper h2,
+  /* Etiquetas dinámicas con ::before */
+  .ordenes-tabla td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #0a1446;
+    flex-basis: 40%;
+    text-align: left;
+  }
+
+  .btn-accion {
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 480px) {
   .ordenes-container h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
+  }
+  .btn-agregar {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+  .btn-accion {
+    font-size: 0.85rem;
+    padding: 6px 10px;
   }
 }

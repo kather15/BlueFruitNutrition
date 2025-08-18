@@ -1,0 +1,855 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "version" : "1.0.0",
+    "title" : "BlueFruit-PTC-API",
+    "description" : "Blue Fruit Nutrición es una compañía nacional dedicada a la investigación, formulación y desarrollo de productos funcionales dirigidos a deportistas de alto rendimiento y personas activas. Somos actualmente los únicos fabricantes de geles energéticos en el país, y competimos en la región centroamericana con presencia en Costa Rica, Panamá y Guatemala, frente a productos mayoritariamente importados."
+  },
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/bluefruit/bluefruit_api/1.0.0"
+  } ],
+  "paths" : {
+    "/customers" : {
+      "get" : {
+        "summary" : "Obtener lista de clientes",
+        "tags" : [ "Clientes" ],
+        "description" : "Retorna todos los clientes registrados en el sistema.",
+        "operationId" : "get-customers",
+        "responses" : {
+          "200" : {
+            "description" : "Lista de clientes obtenida correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Crear un nuevo cliente",
+        "tags" : [ "Clientes" ],
+        "description" : "Registra un nuevo cliente en el sistema.",
+        "operationId" : "post-customers",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Rodrigo"
+                  },
+                  "lastName" : {
+                    "type" : "string",
+                    "example" : "Torres"
+                  },
+                  "email" : {
+                    "type" : "string",
+                    "example" : "rodrit0907@gmail.com"
+                  },
+                  "password" : {
+                    "type" : "string",
+                    "example" : "ptcbluefruit_"
+                  },
+                  "weight" : {
+                    "type" : "number",
+                    "minimum" : 10,
+                    "maximum" : 300,
+                    "example" : 95
+                  },
+                  "dateBirth" : {
+                    "type" : "string",
+                    "format" : "date",
+                    "example" : "2007-01-04"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Cliente creado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Actualizar cliente por ID",
+        "tags" : [ "Clientes" ],
+        "operationId" : "put-customers",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Cliente actualizado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Eliminar cliente por ID",
+        "tags" : [ "Clientes" ],
+        "operationId" : "delete-customers",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Cliente eliminado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      }
+    },
+    "/distributor" : {
+      "get" : {
+        "summary" : "Obtener lista de distribuidores",
+        "tags" : [ "Distribuidores" ],
+        "operationId" : "get-distributor",
+        "responses" : {
+          "200" : {
+            "description" : "Lista de distribuidores obtenida correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Crear un nuevo distribuidor",
+        "tags" : [ "Distribuidores" ],
+        "operationId" : "post-distributor",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "companyName" : {
+                    "type" : "string",
+                    "example" : "BlueFruit"
+                  },
+                  "email" : {
+                    "type" : "string",
+                    "example" : "masterbluefruit@gmail.com"
+                  },
+                  "password" : {
+                    "type" : "string",
+                    "example" : "ptcbluefruit_"
+                  },
+                  "address" : {
+                    "type" : "string",
+                    "example" : "Avenida Aguilares 218 San Salvador"
+                  },
+                  "phone" : {
+                    "type" : "string",
+                    "example" : "68597103"
+                  },
+                  "NIT" : {
+                    "type" : "string",
+                    "example" : "0614-290786-102-3"
+                  },
+                  "status" : {
+                    "type" : "boolean",
+                    "example" : true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Distribuidor creado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Actualizar distribuidor por ID",
+        "tags" : [ "Distribuidores" ],
+        "operationId" : "put-distributor",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Distribuidor actualizado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Eliminar distribuidor por ID",
+        "tags" : [ "Distribuidores" ],
+        "operationId" : "delete-distributor",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Distribuidor eliminado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      }
+    },
+    "/nutritionalValues" : {
+      "get" : {
+        "summary" : "Obtener lista de valores nutricionales",
+        "tags" : [ "Valores Nutricionales" ],
+        "operationId" : "get-nutritionalValues",
+        "responses" : {
+          "200" : {
+            "description" : "Lista de valores nutricionales obtenida correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Crear un nuevo valor nutricional",
+        "tags" : [ "Valores Nutricionales" ],
+        "operationId" : "post-nutritionalValues",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "calories" : {
+                    "type" : "number",
+                    "example" : 65
+                  },
+                  "protein" : {
+                    "type" : "number",
+                    "example" : 0
+                  },
+                  "carbs" : {
+                    "type" : "number",
+                    "example" : 18
+                  },
+                  "fats" : {
+                    "type" : "number",
+                    "example" : 0
+                  },
+                  "vitamins" : {
+                    "type" : "string",
+                    "example" : "Vitamina C"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Valor nutricional creado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Actualizar valor nutricional por ID",
+        "tags" : [ "Valores Nutricionales" ],
+        "operationId" : "put-nutritionalValues",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Valor nutricional actualizado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Eliminar valor nutricional por ID",
+        "tags" : [ "Valores Nutricionales" ],
+        "operationId" : "delete-nutritionalValues",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Valor nutricional eliminado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      }
+    },
+    "/products" : {
+      "get" : {
+        "summary" : "Obtener lista de productos",
+        "tags" : [ "Productos" ],
+        "operationId" : "get-products",
+        "responses" : {
+          "200" : {
+            "description" : "Lista de productos obtenida correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Crear un nuevo producto",
+        "tags" : [ "Productos" ],
+        "operationId" : "post-products",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "CarboUpp"
+                  },
+                  "description" : {
+                    "type" : "string",
+                    "example" : "Rapid and sustained energy release"
+                  },
+                  "flavor" : {
+                    "type" : "string",
+                    "example" : "Coco"
+                  },
+                  "price" : {
+                    "type" : "number",
+                    "example" : 20
+                  },
+                  "image" : {
+                    "type" : "string",
+                    "example" : "/images/carbo.png"
+                  },
+                  "idNutritionalValues" : {
+                    "type" : "string",
+                    "example" : "680b02a928b71506b236968a"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Producto creado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Actualizar producto por ID",
+        "tags" : [ "Productos" ],
+        "operationId" : "put-products",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Producto actualizado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Eliminar producto por ID",
+        "tags" : [ "Productos" ],
+        "operationId" : "delete-products",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Producto eliminado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      }
+    },
+    "/sales" : {
+      "get" : {
+        "summary" : "Obtener lista de ventas",
+        "tags" : [ "Ventas" ],
+        "operationId" : "get-sales",
+        "responses" : {
+          "200" : {
+            "description" : "Lista de ventas obtenida correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Registrar una nueva venta",
+        "tags" : [ "Ventas" ],
+        "operationId" : "post-sales",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "numeroOrden" : {
+                    "type" : "string",
+                    "example" : "1755029911724"
+                  },
+                  "fecha" : {
+                    "type" : "string",
+                    "format" : "date",
+                    "example" : "2025-08-12"
+                  },
+                  "total" : {
+                    "type" : "number",
+                    "example" : 27.5
+                  },
+                  "items" : {
+                    "type" : "number",
+                    "example" : 11
+                  },
+                  "productos" : {
+                    "type" : "string",
+                    "example" : "CarboUpp"
+                  },
+                  "estado" : {
+                    "type" : "string",
+                    "example" : "Terminado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Venta creada correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Actualizar venta por ID",
+        "tags" : [ "Ventas" ],
+        "operationId" : "put-sales",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Venta actualizada correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Eliminar venta por ID",
+        "tags" : [ "Ventas" ],
+        "operationId" : "delete-sales",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Venta eliminada correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      }
+    },
+    "/review" : {
+      "get" : {
+        "summary" : "Obtener lista de reseñas",
+        "tags" : [ "Reseñas" ],
+        "operationId" : "get-review",
+        "responses" : {
+          "200" : {
+            "description" : "Lista de reseñas obtenida correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Crear una nueva reseña",
+        "tags" : [ "Reseñas" ],
+        "operationId" : "post-review",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "comment" : {
+                    "type" : "string",
+                    "example" : "Muy buen producto"
+                  },
+                  "rating" : {
+                    "type" : "number",
+                    "minimum" : 1,
+                    "maximum" : 5,
+                    "example" : 5
+                  },
+                  "idClient" : {
+                    "type" : "string",
+                    "example" : "6893940ffe561ce9292147aa"
+                  },
+                  "idProduct" : {
+                    "type" : "string",
+                    "example" : "689ff074e87229b57811c5e5"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Reseña creada correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Actualizar reseña por ID",
+        "tags" : [ "Reseñas" ],
+        "operationId" : "put-review",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Reseña actualizada correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Eliminar reseña por ID",
+        "tags" : [ "Reseñas" ],
+        "operationId" : "delete-review",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Reseña eliminada correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      }
+    },
+    "/shoppingcarts" : {
+      "get" : {
+        "summary" : "Obtener lista de carritos de compra",
+        "tags" : [ "Carrito" ],
+        "operationId" : "get-shoppingcarts",
+        "responses" : {
+          "200" : {
+            "description" : "Lista de carritos obtenida correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Crear un nuevo carrito de compra",
+        "tags" : [ "Carrito" ],
+        "operationId" : "post-shoppingcarts",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "id_product" : {
+                    "type" : "string",
+                    "example" : "689ff074e87229b57811c5e5"
+                  },
+                  "total" : {
+                    "type" : "number",
+                    "minimum" : 0,
+                    "example" : 30
+                  },
+                  "quantityProducts" : {
+                    "type" : "number",
+                    "example" : 3
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Carrito creado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Actualizar carrito por ID",
+        "tags" : [ "Carrito" ],
+        "operationId" : "put-shoppingcarts",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Carrito actualizado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Eliminar carrito por ID",
+        "tags" : [ "Carrito" ],
+        "operationId" : "delete-shoppingcarts",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Carrito eliminado correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      }
+    },
+    "/subscriptions" : {
+      "get" : {
+        "summary" : "Obtener lista de suscripciones",
+        "tags" : [ "Suscripciones" ],
+        "operationId" : "get-subscriptions",
+        "responses" : {
+          "200" : {
+            "description" : "Lista de suscripciones obtenida correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Crear una nueva suscripción",
+        "tags" : [ "Suscripciones" ],
+        "operationId" : "post-subscriptions",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "subscriptionId" : {
+                    "type" : "string",
+                    "example" : "689ff074e87229b57811c5e5"
+                  },
+                  "startDate" : {
+                    "type" : "string",
+                    "format" : "date",
+                    "example" : "2025-08-18"
+                  },
+                  "user" : {
+                    "type" : "string",
+                    "example" : "kathe"
+                  },
+                  "price" : {
+                    "type" : "number",
+                    "example" : 25
+                  },
+                  "plan" : {
+                    "type" : "string",
+                    "example" : "Unico"
+                  },
+                  "status" : {
+                    "type" : "string",
+                    "example" : "Activo"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Suscripción creada correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Actualizar suscripción por ID",
+        "tags" : [ "Suscripciones" ],
+        "operationId" : "put-subscriptions",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Suscripción actualizada correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Eliminar suscripción por ID",
+        "tags" : [ "Suscripciones" ],
+        "operationId" : "delete-subscriptions",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Suscripción eliminada correctamente"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : { }
+  }
+}

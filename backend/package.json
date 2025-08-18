@@ -25,7 +25,9 @@
     "multer-storage-cloudinary": "^4.0.0",
     "node-fetch": "^3.3.2",
     "nodemailer": "^7.0.5",
-    "pdfkit": "^0.17.1"
+    "pdfkit": "^0.17.1",
+    "swagger-ui-express": "^5.0.1"
+
   },
 
   "devDependencies": {
