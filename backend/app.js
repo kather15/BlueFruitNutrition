@@ -2,6 +2,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
+import fs from "fs";
+import path from "path";
 
 // Rutas----------------------------------------------------------------------------------------
 import productsRoutes from "./src/routes/products.js";
@@ -29,6 +32,14 @@ app.use(
     credentials: true,
   })
 );
+
+//Traemos el archivo json
+const swaggerDocument = JSON.parse(
+  fs.readFileSync(path.resolve("./bluefruit-bluefruit_api-1.0.0-swagger.json"), "utf-8")
+);
+ 
+//Mostramos el archivo al ingresar a /api/docs
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.json());
 app.use(cookieParser());

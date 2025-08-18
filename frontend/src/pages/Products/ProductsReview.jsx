@@ -13,13 +13,12 @@ const ProductReviews = () => {
   const [deletingReview, setDeletingReview] = useState(null);
   const [editing, setEditing] = useState(false);
 
-  // Estado para editar el producto
   const [editForm, setEditForm] = useState({
     name: '',
     description: '',
     price: '',
-    image: null, // file object
-    imagePreview: '', // URL preview
+    image: null,
+    imagePreview: '',
   });
 
   // Cargar producto
@@ -87,13 +86,11 @@ const ProductReviews = () => {
     }
   };
 
-  // Manejo inputs edición
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditForm(prev => ({ ...prev, [name]: value }));
   };
 
-  // Manejo cambio de imagen
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -105,16 +102,13 @@ const ProductReviews = () => {
     }
   };
 
-  // Guardar edición
   const handleSave = async () => {
     try {
       const formData = new FormData();
-      formData.append('name', editForm.name);
+      formData.append('name', editForm.name); // Nombre no editable
       formData.append('description', editForm.description);
       formData.append('price', editForm.price);
-      if (editForm.image) {
-        formData.append('image', editForm.image);
-      }
+      if (editForm.image) formData.append('image', editForm.image);
 
       const response = await fetch(`http://localhost:4000/api/products/${id}`, {
         method: 'PUT',
@@ -124,7 +118,7 @@ const ProductReviews = () => {
       if (response.ok) {
         alert('Producto actualizado correctamente');
         setEditing(false);
-        fetchProduct(); // recargar producto actualizado
+        fetchProduct();
       } else {
         const data = await response.json();
         alert(data.message || 'Error al actualizar producto');
@@ -137,7 +131,6 @@ const ProductReviews = () => {
 
   const handleCancel = () => {
     setEditing(false);
-    // Restaurar formulario con datos actuales
     setEditForm({
       name: product.name,
       description: product.description,
@@ -147,7 +140,7 @@ const ProductReviews = () => {
     });
   };
 
-  const handleBackToProducts = () => navigate('/productos1'); // volver al panel admin
+  const handleBackToProducts = () => navigate('/productos1');
 
   const renderStars = (rating) => (
     [...Array(5)].map((_, i) => (
@@ -179,6 +172,7 @@ const ProductReviews = () => {
               Volver a Productos
             </button>
 
+            {/* Layout principal */}
             <div className="product-detail-layout">
               <div className="product-image-section">
                 <div className="product-image-container">
@@ -186,39 +180,28 @@ const ProductReviews = () => {
                     src={editing ? editForm.imagePreview : (product.image || '/placeholder-product.png')}
                     alt={product.name}
                     className="product-main-image"
-                    onError={(e) => {
-                      e.target.src = '/placeholder-product.png';
-                      console.error(`Error loading image: ${product.image}`);
-                    }}
                   />
                   {editing && (
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="image-input"
-                    />
+                    <label className="image-upload-label">
+                      Cambiar Imagen
+                      <input type="file" accept="image/*" onChange={handleImageChange} className="image-input"/>
+                    </label>
                   )}
                 </div>
               </div>
 
-              <div className="product-info-section">
+              <div className={`product-info-section ${editing ? 'editing' : ''}`}>
+                <h1 className="product-title">{product.name}</h1>
+
                 {editing ? (
                   <>
-                    <input
-                      type="text"
-                      name="name"
-                      value={editForm.name}
-                      onChange={handleInputChange}
-                      placeholder="Nombre del producto"
-                      className="edit-input"
-                    />
                     <textarea
                       name="description"
                       value={editForm.description}
                       onChange={handleInputChange}
                       placeholder="Descripción"
                       className="edit-textarea"
+                      rows={5}
                     />
                     <input
                       type="number"
@@ -233,12 +216,9 @@ const ProductReviews = () => {
                   </>
                 ) : (
                   <>
-                    <h1 className="product-title">{product.name}</h1>
                     <div className="product-price">${product.price.toFixed(2)}</div>
                     {product.flavor && <div className="product-flavor">Sabor: {product.flavor}</div>}
-                    <div className="product-description">
-                      <p>{product.description}</p>
-                    </div>
+                    <div className="product-description">{product.description}</div>
                   </>
                 )}
 
@@ -285,12 +265,8 @@ const ProductReviews = () => {
                             {review.idClient?.name?.charAt(0).toUpperCase() || '?'}
                           </div>
                           <div className="reviewer-details">
-                            <div className="reviewer-name">
-                              {review.idClient?.name || 'Usuario'}
-                            </div>
-                            <div className="review-date">
-                              {new Date(review.createdAt).toLocaleDateString()}
-                            </div>
+                            <div className="reviewer-name">{review.idClient?.name || 'Usuario'}</div>
+                            <div className="review-date">{new Date(review.createdAt).toLocaleDateString()}</div>
                           </div>
                         </div>
                         <div className="review-actions">
@@ -299,13 +275,8 @@ const ProductReviews = () => {
                             className="delete-review-btn admin-delete-btn"
                             onClick={() => handleDeleteReview(review._id)}
                             disabled={deletingReview === review._id}
-                            title="Eliminar reseña"
                           >
-                            {deletingReview === review._id ? (
-                              <span className="loading-text">...</span>
-                            ) : (
-                              <X size={18} />
-                            )}
+                            {deletingReview === review._id ? '...' : <X size={18} />}
                           </button>
                         </div>
                       </div>

@@ -4,13 +4,20 @@
 .page-container {
   min-height: 100vh;
   display: flex;
-  flex-direction: column;   /* apila header y secciones verticalmente */
-  justify-content: center;  /* centra verticalmente */
-  align-items: center;      /* centra horizontalmente */
-  background-color: #ffffff;
+  flex-direction: column;
+  background-color: #f9fafb; /* gris suave */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding-bottom: 2rem;
   box-sizing: border-box;
+  margin-left: 220px; /* espacio del sidebar */
+  transition: margin-left 0.3s ease;
+}
+
+/* Cuando el sidebar está oculto (ejemplo en móviles) */
+@media (max-width: 768px) {
+  .page-container {
+    margin-left: 0;
+  }
 }
 
 /* ==========================
@@ -18,35 +25,36 @@
 ========================== */
 .header {
   width: 100%;
-  background-color: white;
+  background-color: #ffffff;
   padding: 2rem 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid #ffffff;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid #e5e7eb;
   text-align: center;
 }
 
 .page-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #374151; /* color más legible */
+  color: #1f2937;
   margin: 0;
+  letter-spacing: 0.5px;
 }
 
 /* ==========================
    Secciones
 ========================== */
 .section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #8d4040;           /* color de título destacado */
-  margin-bottom: 1.5rem;    /* espacio debajo del título */
-  border-bottom: 2px solid #d1d5db;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #8d4040;
+  margin-bottom: 2rem;
+  border-bottom: 3px solid #d1d5db;
   padding-bottom: 0.5rem;
   text-align: center;
-  width: fit-content;        /* ancho del contenido del título */
-  max-width: 100%;           /* no exceder el contenedor */
+  width: fit-content;
+  max-width: 100%;
   margin-left: auto;
-  margin-right: auto;        /* centra horizontalmente */
+  margin-right: auto;
 }
 
 /* ==========================
@@ -54,12 +62,12 @@
 ========================== */
 .users-section {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;      /* centra los grids dentro de la sección */
+  align-items: center;
 }
 
 /* ==========================
@@ -68,11 +76,13 @@
 .users-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
-  justify-items: center;    /* centra cada tarjeta en su celda */
+  gap: 2rem;
+  justify-items: center;
+  width: 100%;
 }
 
-@media (min-width: 768px) {
+/* Adaptaciones responsive */
+@media (min-width: 640px) {
   .users-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -82,4 +92,28 @@
   .users-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+@media (min-width: 1280px) {
+  .users-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ==========================
+   Estilo para cada card
+========================== */
+.user-card {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 320px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
