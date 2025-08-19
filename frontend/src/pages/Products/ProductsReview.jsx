@@ -222,14 +222,14 @@ const ProductReviews = () => {
                   </>
                 )}
 
-                <div className="quantity-section">
+                {/*<div className="quantity-section">
                   <span>Cantidad:</span>
                   <div className="quantity-controls">
                     <button className="quantity-btn" onClick={() => handleQuantityChange(-1)}>-</button>
                     <span className="quantity-display">{quantity}</span>
                     <button className="quantity-btn" onClick={() => handleQuantityChange(1)}>+</button>
                   </div>
-                </div>
+                </div>*/}
 
                 <div className="action-buttons">
                   {editing ? (
@@ -247,7 +247,7 @@ const ProductReviews = () => {
             </div>
           </div>
 
-          {/* Sección de reseñas */}
+          {/* Sección de reseñas 
           <div className="reviews-section">
             <div className="reviews-container">
               <div className="reviews-header">
@@ -288,7 +288,7 @@ const ProductReviews = () => {
                 )}
               </div>
             </div>
-          </div>
+          </div>*/}
         </div>
       </div>
     </div>
