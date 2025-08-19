@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       console.log('🔍 FRONTEND - Iniciando checkSession...');
       
-      const response = await fetch('http://localhost:4000/api/verify-session', {
+      const response = await fetch('https://bluefruitnutrition1.onrender.com/api/verify-session', {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -151,7 +151,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch('http://localhost:4000/api/login', {
+      const response = await fetch('https://bluefruitnutrition1.onrender.com/api/login', {
         method: 'POST',
         credentials: 'include',
         headers: {
