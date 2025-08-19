@@ -31,7 +31,7 @@ export default function Sidebar() {
           <li><Link to="/productos1">Productos</Link></li>
           <li><Link to="/ordenes">Órdenes</Link></li>
           <li><Link to="/ventas">Ventas</Link></li>
-          <li><Link to="/suscripciones">Suscripciones</Link></li>
+          {/*<li><Link to="/suscripciones">Suscripciones</Link></li>*/}
           <li><Link to="/usuarios">Usuarios</Link></li>
         </ul>
  

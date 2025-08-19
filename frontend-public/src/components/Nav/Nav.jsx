@@ -18,7 +18,7 @@ const Nav = () => {
             <li><Link to="/product">Productos</Link></li>
             <li><Link to="/carrito">Carrito</Link></li>
             <li><Link to="/personalizar">Personalizar</Link></li>
-            <li><Link to="/suscripciones">Suscripciones</Link></li>
+            {/*<li><Link to="/suscripciones">Suscripciones</Link></li>*/}
           </ul>
         </div>
 
@@ -28,6 +28,8 @@ const Nav = () => {
           <Link to="/carrito" className="blue-fruit-icon-btn" aria-label="Carrito">
             <FiShoppingCart size={26} color="#fff" />
           </Link>
+
+          
         </div>
       </div>
     </nav>
