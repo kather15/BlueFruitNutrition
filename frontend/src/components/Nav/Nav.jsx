@@ -5,7 +5,7 @@ import './Nav.css';
  
 export default function Sidebar() {
   const navigate = useNavigate();
-<<<<<<< HEAD
+
 
   const handleLogout = async () => {
     try {
@@ -22,16 +22,12 @@ export default function Sidebar() {
     toast.success("Sesión cerrada");
 
     // Redirige al puerto 5173
-    window.location.href = "http://localhost:5173";
+    window.location.href = "https://blue-fruit-nutrition-kappa.vercel.app/";
     
     // Alternativamente si fuese la misma app React en ese puerto:
     // navigate("/", { replace: true });
-=======
-  const [isOpen, setIsOpen] = useState(false);
- 
-  const handleLogout = () => {
-    navigate('/');
->>>>>>> a09778a12ccbb0f87b5db3ed41f92ffb7063334a
+
+
   };
  
   return (
