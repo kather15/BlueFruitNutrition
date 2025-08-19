@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../context/useAuth';
 import toast from 'react-hot-toast'; // ✅ Importar toast
-import './pay.css';
+import './Pay.css';
 
 const Pay = () => {
   const navigate = useNavigate();
