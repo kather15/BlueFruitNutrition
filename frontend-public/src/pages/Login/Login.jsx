@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/useAuth"; 
 import toast, { Toaster } from "react-hot-toast";
 import "./Login.css";
 
@@ -14,7 +15,7 @@ const AdminCodeModal = ({ onClose, email }) => {
     }
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/api/admin/verify-code", {
+      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/admin/verify-code", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -65,13 +66,15 @@ const Login = () => {
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [adminEmail, setAdminEmail] = useState("");
   const [loadingLogin, setLoadingLogin] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Nuevo estado
+  const [showPassword, setShowPassword] = useState(false);
+  
   const navigate = useNavigate();
+  const { login, checkSession } = useAuthContext(); //  Usar el contexto
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (loadingLogin) return; // Evita múltiples envíos
+    if (loadingLogin) return;
 
     if (email.trim() === "" || password.trim() === "") {
       toast.error("Por favor completa todos los campos");
@@ -80,26 +83,20 @@ const Login = () => {
 
     setLoadingLogin(true);
     try {
-      // 1. Login normal
-      const res = await fetch("http://localhost:4000/api/login", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      //  Usar la función login del contexto
+      const result = await login(email, password);
 
-      const data = await res.json();
+      if (!result.success) {
+        throw new Error(result.error);
+      }
 
-      if (!res.ok) throw new Error(data.message || "Error al iniciar sesión");
-
-      // Toast de credenciales correctas
       toast.success("Credenciales correctas");
 
-      // 2. Si es admin, enviar código antes de mostrar modal
-      if (data.role === "admin") {
-        if (showAdminModal) return; // Si ya está abierto el modal, no volver a enviar código
+      //  Si es admin, manejar código de verificación
+      if (result.data.role === "admin") {
+        if (showAdminModal) return;
 
-        const sendCodeRes = await fetch("http://localhost:4000/api/admin/send-code", {
+        const sendCodeRes = await fetch("https://bluefruitnutrition1.onrender.com/api/admin/send-code", {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -111,17 +108,21 @@ const Login = () => {
         if (!sendCodeRes.ok) throw new Error(sendCodeData.message || "Error enviando código");
 
         toast.success("Código enviado al correo. Por favor verifica.");
-
         setAdminEmail(email);
         setShowAdminModal(true);
-        return; // Salir para que no navegue aún
+        return;
       }
 
-      // 3. Usuario normal: éxito y redirigir
+      //  Usuario normal: redirigir
       toast.success("Inicio de sesión exitoso");
+      
+      //  Refrescar la sesión para actualizar el contexto
+      await checkSession();
+      
       setTimeout(() => {
         navigate("/");
       }, 1000);
+      
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -184,13 +185,11 @@ const Login = () => {
                 aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
               >
                 {showPassword ? (
-                  // SVG de ojo abierto
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d3748" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
                     <circle cx="12" cy="12" r="3"/>
                   </svg>
                 ) : (
-                  // SVG de ojo cerrado
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d3748" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.81 21.81 0 0 1 5.06-6.06"/>
                     <path d="M1 1l22 22"/>

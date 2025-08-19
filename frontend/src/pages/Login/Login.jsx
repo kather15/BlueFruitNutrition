@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/login",
+        "https://bluefruitnutrition1.onrender.com/api/login",
         { email, password },
         { withCredentials: true }
       );
