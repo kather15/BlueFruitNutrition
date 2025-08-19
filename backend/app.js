@@ -33,7 +33,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", "https://bluefruitnutrition1.onrender.com"],
+    origin: ["http://localhost:5173", "http://localhost:5174", "https://blue-fruit-nutrition-1mel.vercel.app"],
     credentials: true,
   })
 );
