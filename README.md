@@ -410,9 +410,3 @@ npm install            # Instalar dependencias
 - **Backend**: Validaciones de seguridad y formato de datos
 - **Base de datos**: Validaciones a nivel de esquema con Mongoose
 
-### 🔄 En Desarrollo
-- [ ] **Aplicación móvil** con funcionalidades personalizadas
-- [ ] **Recomendaciones por IA** basadas en perfil deportivo
-- [ ] **Sistema de notificaciones** push
-- [ ] **Integración con wearables** para datos físicos
-- [ ] **Modo offline** para consulta de productos
