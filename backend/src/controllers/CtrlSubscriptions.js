@@ -10,39 +10,29 @@ export const getSubscriptions = async (req, res) => {
   }
 };
 
-// Crear una suscripción con beneficios predefinidos
+// Crear una suscripción desde pública
 export const createSubscription = async (req, res) => {
   try {
-    const { suscripcionId, fechaInicio, usuario, precio, plan, estado } = req.body;
+    const { usuario, plan, precio } = req.body;
 
-    if (!suscripcionId || !fechaInicio || !usuario || !precio || !plan) {
+    if (!usuario || !plan || !precio) {
       return res.status(400).json({ message: 'Faltan campos obligatorios' });
     }
 
-    // Agregar beneficios predeterminados
-    const beneficios = [
-      'Descuentos exclusivos',
-      'Promociones anticipadas',
-      'Envío gratis',
-      'Descuento especial en el mes de cumpleaños',
-      'Sistema de acumulación de puntos',
-      'Promocionales (camisas, gorras, etc) por acumulación de puntos'
-    ];
-
     const nueva = new Subscription({
-      suscripcionId,
-      fechaInicio,
+      suscripcionId: Date.now().toString(),  // Genera un ID único
+      fechaInicio: new Date().toISOString(), // Fecha actual
       usuario,
       precio,
       plan,
-      estado,
-      beneficios
+      estado: 'Activo'                        // Estado por defecto
     });
 
     await nueva.save();
-    res.status(201).json(nueva);
+    res.status(201).json(nueva);            // Devuelve la suscripción creada
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear suscripción' });
+    console.error(error);
+    res.status(500).json({ message: 'Error al crear suscripción', error: error.message });
   }
 };
 
@@ -67,3 +57,4 @@ export const updateSubscription = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar suscripción' });
   }
 };
+ 

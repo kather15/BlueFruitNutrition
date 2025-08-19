@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const suscripcionesSchema = new mongoose.Schema({
-  suscripcionId: { type: String, required: true },
+suscripcionId: { type: String, required: true },
   fechaInicio: { type: Date, required: true },
   usuario: { type: String, required: true },
   precio: { type: Number, required: true },
@@ -9,5 +9,6 @@ const suscripcionesSchema = new mongoose.Schema({
   estado: { type: String, enum: ['Activo', 'Inactivo'], default: 'Activo' }
 });
 
-const Suscripciones = mongoose.model('Suscripciones', suscripcionesSchema);
-export default Suscripciones;
+const Subscription = mongoose.model('Subscription', suscripcionesSchema);
+export default Subscription;
+

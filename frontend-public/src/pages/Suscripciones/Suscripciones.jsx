@@ -5,13 +5,15 @@ const Suscripcionees = ({ usuarioId, onNuevaSuscripcion }) => {
 
   
     const agregarSuscripcion = async () => {
+  console.log('usuarioId:', usuarioId); 
+
   try {
     const res = await fetch('http://localhost:4000/api/suscripciones', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        suscripcionId: Date.now(), // ID único
-        fechaInicio: new Date(),
+        suscripcionId: Date.now().toString(),
+        fechaInicio: new Date().toISOString(),
         usuario: usuarioId,
         precio: 19.99,
         plan: 'Única',
@@ -19,15 +21,16 @@ const Suscripcionees = ({ usuarioId, onNuevaSuscripcion }) => {
       })
     });
 
-    const nueva = await res.json();
-    alert('¡Suscripción agregada!');
+    if (!res.ok) {
+      throw new Error('Error al crear la suscripción');
+    }
 
-    // Notificar al componente privado para actualizar la lista
+     const nueva = await res.json();
+    alert("¡Suscripción agregada!");
     onNuevaSuscripcion(nueva);
-
   } catch (error) {
-    console.error(error);
-    alert('Error al agregar la suscripción');
+    console.error("Error al agregar la suscripción:", error);
+    alert("Error al agregar la suscripción");
   }
 };
 
@@ -58,15 +61,24 @@ const Suscripcionees = ({ usuarioId, onNuevaSuscripcion }) => {
                     <span className="beneficio-bullet">○</span>
                     <div className="beneficio-text">
                       <strong>Envío gratis</strong>
-                      <br />Envío sin costo en pedidos online.
+                      <br />Envío sin costo en pedidos, en compras por tienda online
+Descuento especial en el mes de cumpleaños
+                    </div>
+                    
+                  </div>
+                   <div className="beneficio-item">
+                    <span className="beneficio-bullet">○</span>
+                    <div className="beneficio-text">
+                      <br />Sistema de acumulación de puntos
                     </div>
                   </div>
+                  
                 </div>
               </div>
 
               <div className="beneficios-product">
                 <div className="product-image">
-                  <img src="./public/guineyo.png" alt="Reppo Banano" />
+                  <img src="./guineyo.png" alt="Reppo Banano" />
                 </div>
                 <div className="product-price">$19.99</div>
               </div>

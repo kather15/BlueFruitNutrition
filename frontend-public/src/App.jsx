@@ -34,6 +34,7 @@ import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
 
 function App() {
   const location = useLocation();
+  const { usuario } = useAuth();
 
   // Ocultar Nav/Footer en login y registro
   const hideNavFooterRoutes = ['/login', '/registro'];
