@@ -7,7 +7,7 @@ const ProductsC = () => {
   const [products, setProducts] = useState([]); 
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/products') 
+    fetch('https://bluefruitnutrition1.onrender.com/api/products') 
       .then(response => response.json()) 
       .then(data => {
         console.log('=== PRODUCTOS RECIBIDOS ===');

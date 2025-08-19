@@ -10,8 +10,8 @@ const VerifyCodeModal = ({ isOpen, onClose, tipoUsuario }) => {
     try {
       const endpoint =
         tipoUsuario === "distributor"
-          ? "http://localhost:4000/api/registerDistributors/verifyCodeEmail"
-          : "http://localhost:4000/api/registerCustomers/verifyCodeEmail";
+          ? "https://bluefruitnutrition1.onrender.com/api/registerDistributors/verifyCodeEmail"
+          : "https://bluefruitnutrition1.onrender.com/api/registerCustomers/verifyCodeEmail";
 
       const res = await fetch(endpoint, {
         method: "POST",

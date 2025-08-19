@@ -7,22 +7,22 @@ function UsersList() {
   const [distribuidores, setDistribuidores] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/customers")
+    fetch("https://bluefruitnutrition1.onrender.com/api/customers")
       .then(res => res.json())
       .then(setClientes);
 
-    fetch("http://localhost:4000/api/distributors")
+    fetch("https://bluefruitnutrition1.onrender.com/api/distributors")
       .then(res => res.json())
       .then(setDistribuidores);
   }, []);
 
   const handleDeleteCliente = async (id) => {
-    await fetch(`http://localhost:4000/api/customers/${id}`, { method: 'DELETE' });
+    await fetch(`https://bluefruitnutrition1.onrender.com/api/customers/${id}`, { method: 'DELETE' });
     setClientes(clientes.filter(c => c._id !== id));
   };
 
   const handleDeleteDistribuidor = async (id) => {
-    await fetch(`http://localhost:4000/api/distributors/${id}`, { method: 'DELETE' });
+    await fetch(`https://bluefruitnutrition1.onrender.com/api/distributors/${id}`, { method: 'DELETE' });
     setDistribuidores(distribuidores.filter(d => d._id !== id));
   };
 
