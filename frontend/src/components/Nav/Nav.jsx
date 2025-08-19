@@ -4,8 +4,8 @@ import { LogOut, Menu, X } from 'lucide-react';
 import './Nav.css';
  
 export default function Sidebar() {
+  const [isOpen, setIsOpen] = useState(false); // Aquí defines el estado para isOpen
   const navigate = useNavigate();
-
 
   const handleLogout = async () => {
     try {
@@ -26,16 +26,14 @@ export default function Sidebar() {
     
     // Alternativamente si fuese la misma app React en ese puerto:
     // navigate("/", { replace: true });
-
-
   };
- 
+
   return (
     <>
       {/* Botón hamburguesa visible en mobile */}
       <button
         className="hamburger-btn"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen(!isOpen)} // Toggle para abrir y cerrar el menú
       >
         {isOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
@@ -67,4 +65,3 @@ export default function Sidebar() {
     </>
   );
 }
- 

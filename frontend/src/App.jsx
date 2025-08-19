@@ -70,18 +70,19 @@ function AppContent() {
           <Route path="/nueva-contraseña" element={<NewPassword />} />
 
           {/* Rutas protegidas */}
-          <Route path="/home" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
-          <Route path="/homep" element={<ProtectedRoute><HomeP /></ProtectedRoute>} />
-          <Route path="/productos1" element={<ProtectedRoute><Products1 /></ProtectedRoute>} />
-          <Route path="/ordenes" element={<ProtectedRoute><Ordenes /></ProtectedRoute>} />
-          <Route path="/ordenes/:id" element={<ProtectedRoute><ResumenOrden /></ProtectedRoute>} />
-          <Route path="/ventas" element={<ProtectedRoute><Ventas /></ProtectedRoute>} />
-          <Route path="/suscripciones" element={<ProtectedRoute><Suscripciones /></ProtectedRoute>} />
-          <Route path="/usuarios" element={<ProtectedRoute><UsersList /></ProtectedRoute>} />
-          <Route path="/users/edit/:type/:id" element={<ProtectedRoute><UserForm /></ProtectedRoute>} />
-          <Route path="/perfil" element={<ProtectedRoute><PerfilAdmin /></ProtectedRoute>} />
-          <Route path="/addProduct" element={<ProtectedRoute><AddProducts /></ProtectedRoute>} />
-          <Route path="/product/:id" element={<ProtectedRoute><ProductsReviews /></ProtectedRoute>} />
+   <Route path="/home" element={<HomeP />} />
+<Route path="/homep" element={<HomeP />} />
+<Route path="/productos1" element={<Products1 />} />
+<Route path="/ordenes" element={<Ordenes />} />
+<Route path="/ordenes/:id" element={<ResumenOrden />} />
+<Route path="/ventas" element={<Ventas />} />
+<Route path="/suscripciones" element={<Suscripciones />} />
+<Route path="/usuarios" element={<UsersList />} />
+<Route path="/users/edit/:type/:id" element={<UserForm />} />
+<Route path="/perfil" element={<PerfilAdmin />} />
+<Route path="/addProduct" element={<AddProducts />} />
+<Route path="/product/:id" element={<ProductsReviews />} />
+
 
           {/* 404 admin */}
           <Route path="*" element={<Error404Private />} />

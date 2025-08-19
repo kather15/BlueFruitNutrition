@@ -34,11 +34,10 @@ const app = express();
 app.use(
   cors({
     origin: [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "https://blue-fruit-nutrition-kappa.vercel.app",
-  "https://blue-fruit-nutrition-3bak.vercel.app" 
-],
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://blue-fruit-nutrition-kappa.vercel.app" 
+    ],
     credentials: true,
   })
 );
