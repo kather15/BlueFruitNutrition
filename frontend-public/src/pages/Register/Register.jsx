@@ -190,8 +190,8 @@ function Registro() {
                   placeholder="Fecha de nacimiento"
                   className={`input-modern ${errors.birthDate ? "input-error" : ""}`}
                   {...register("birthDate", { required: "Fecha de nacimiento obligatoria" })}
-                  min={minBirthDate}
-                  max={maxBirthDate}
+                  max={minBirthDate}
+
                 />
                 {errors.birthDate && <span className="error-message">{errors.birthDate.message}</span>}
               </>
