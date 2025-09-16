@@ -20,7 +20,7 @@ import shoppingCartRoutes from './src/routes/shoppingCart.js';
 import ordenesRoutes from './src/routes/ordenes.js'; 
 import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
-import PayRoutes from "./src/routes/pay.js"
+import PayRoutes from "./src/routes/pay.js";
 import TestPay from "./src/routes/testPayment.js";
 import tokenRouter from "./src/routes/token.js";
 import adminVerifyRoutes from "./src/routes/adminVerify.js";
@@ -28,28 +28,33 @@ import sessionRouter from "./src/routes/session.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import BillRoutes from "./src/routes/bill.js"; 
 
-
+// Inicialización de app
 const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"], // Permite ambos puertos
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true,
   })
 );
 
-//Traemos el archivo json
-const swaggerDocument = JSON.parse(
-  fs.readFileSync(path.resolve("./bluefruit-bluefruit_api-1.0.0-swagger.json"), "utf-8")
-);
- 
-//Mostramos el archivo al ingresar a /api/docs
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 app.use(express.json());
 app.use(cookieParser());
 
-// Endpoints
+// -------------------------------------------
+// Configuración de Swagger
+// -------------------------------------------
+
+// Traemos el archivo JSON de Swagger
+const swaggerFilePath = path.resolve("./bluefruit-bluefruit_api-1.0.0-swagger.json");
+const swaggerDocument = JSON.parse(fs.readFileSync(swaggerFilePath, "utf-8"));
+
+// Endpoint para mostrar la documentación
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// -------------------------------------------
+// Endpoints API
+// -------------------------------------------
 app.use("/api/products", productsRoutes);
 app.use("/api/customers", customersRouter);
 app.use("/api/distributors", distributorsRoutes);
@@ -63,19 +68,13 @@ app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/ordenes", ordenesRoutes);
 app.use("/api/reviews", ReviewRouters);
 app.use("/api/contact", ContactRoutes);
-app.use("/api/pay",PayRoutes);
+app.use("/api/pay", PayRoutes);
 app.use("/api/testPay", TestPay);
 app.use("/api/token", tokenRouter);
-app.use("/api", ContactRoutes);
 app.use("/api/admin", adminVerifyRoutes);
-app.use("/api", sessionRouter);
+app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
-app.use("/api", ContactRoutes);
-app.use("/api/admin", adminVerifyRoutes);
-app.use("/api", sessionRouter);
-app.use("/api/pay", PayRoutes);
-app.use("/api/Bill", BillRoutes);
+app.use("/api/bill", BillRoutes);
 
-
+// Exportar app
 export default app;
-
