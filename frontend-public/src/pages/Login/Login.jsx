@@ -1,4 +1,3 @@
-// src/pages/Login/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/useAuth";
@@ -6,6 +5,7 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "./Login.css";
 
+// Modal de verificación de código admin
 const AdminCodeModal = ({ onClose, email }) => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,7 @@ const AdminCodeModal = ({ onClose, email }) => {
         text: "Por favor ingresa el código",
       });
     }
+
     setLoading(true);
     try {
       const res = await fetch("https://bluefruitnutrition1.onrender.com/api/admin/verify-code", {
@@ -26,6 +27,7 @@ const AdminCodeModal = ({ onClose, email }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
       });
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Código inválido");
 
@@ -39,7 +41,8 @@ const AdminCodeModal = ({ onClose, email }) => {
         position: "top-end",
       });
 
-      window.location.href = "http://localhost:5174";
+      // Redirigir al admin a la página principal
+      window.location.href = "https://blue-fruit-nutrition-3bak.vercel.app/homep";
     } catch (error) {
       Swal.fire({ icon: "error", title: "Error", text: error.message });
     } finally {
@@ -73,6 +76,7 @@ const AdminCodeModal = ({ onClose, email }) => {
   );
 };
 
+// Página de Login
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -87,7 +91,7 @@ const Login = () => {
     e.preventDefault();
     if (loadingLogin) return;
 
-    if (email.trim() === "" || password.trim() === "") {
+    if (!email.trim() || !password.trim()) {
       return Swal.fire({
         icon: "error",
         title: "Campos vacíos",
@@ -100,6 +104,7 @@ const Login = () => {
       const result = await login(email, password);
       if (!result.success) throw new Error(result.error);
 
+      // Si es admin, enviar código de verificación
       if (result.data.role === "admin") {
         const sendCodeRes = await fetch("https://bluefruitnutrition1.onrender.com/api/admin/send-code", {
           method: "POST",
@@ -126,6 +131,7 @@ const Login = () => {
         return;
       }
 
+      // Usuario normal, login exitoso
       Swal.fire({
         icon: "success",
         title: "Login correcto",
@@ -157,8 +163,22 @@ const Login = () => {
           <p className="form-subtitle">Ingresa tus credenciales para continuar</p>
 
           <form className="login-form" onSubmit={handleLogin}>
-            <input type="email" placeholder="Correo electrónico" className="input-modern" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            <input type="password" placeholder="Contraseña" className="input-modern" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input
+              type="email"
+              placeholder="Correo electrónico"
+              className="input-modern"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Contraseña"
+              className="input-modern"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
 
             <button type="submit" className="btn-primary" disabled={loadingLogin}>
               {loadingLogin ? "Procesando..." : "Iniciar Sesión"}
@@ -171,7 +191,9 @@ const Login = () => {
         </div>
       </div>
 
-      {showAdminModal && <AdminCodeModal email={adminEmail} onClose={() => setShowAdminModal(false)} />}
+      {showAdminModal && (
+        <AdminCodeModal email={adminEmail} onClose={() => setShowAdminModal(false)} />
+      )}
     </div>
   );
 };
