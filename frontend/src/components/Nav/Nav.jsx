@@ -5,33 +5,10 @@ import './Nav.css';
  
 export default function Sidebar() {
   const navigate = useNavigate();
-<<<<<<< HEAD
-
-  const handleLogout = async () => {
-    try {
-      await fetch("https://bluefruitnutrition1.onrender.com/api/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch (error) {
-      toast.error("Error al cerrar sesión");
-      return;
-    }
-
-    localStorage.removeItem("token");
-    toast.success("Sesión cerrada");
-
-    // Redirige al puerto 5173
-    window.location.href = "http://localhost:5173";
-    
-    // Alternativamente si fuese la misma app React en ese puerto:
-    // navigate("/", { replace: true });
-=======
   const [isOpen, setIsOpen] = useState(false);
  
   const handleLogout = () => {
     navigate('/');
->>>>>>> a09778a12ccbb0f87b5db3ed41f92ffb7063334a
   };
  
   return (
