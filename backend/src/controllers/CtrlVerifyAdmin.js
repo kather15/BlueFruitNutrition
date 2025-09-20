@@ -21,13 +21,16 @@ adminVerificationController.sendCode = async (req, res) => {
     { expiresIn: "5m" }
   );
 
-  // Guardar token en cookie
-  res.cookie("adminVerificationToken", tokenCode, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false, // Cambiar a true en producción con HTTPS
-    maxAge: 5 * 60 * 1000
-  });
+// Detectar si estamos en producción o local
+const isProduction = process.env.NODE_ENV === "production";
+
+res.cookie("adminVerificationToken", tokenCode, {
+  httpOnly: true,
+  sameSite: isProduction ? "none" : "lax", // none para cross-site prod
+  secure: isProduction,                   // true solo en prod con HTTPS
+  maxAge: 5 * 60 * 1000
+});
+
 
   // Configurar transporte de correo
   const transporter = nodemailer.createTransport({

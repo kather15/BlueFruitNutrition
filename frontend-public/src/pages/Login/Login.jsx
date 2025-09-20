@@ -16,11 +16,12 @@ const AdminCodeModal = ({ onClose, email }) => {
     setLoading(true);
     try {
       const res = await fetch("https://bluefruitnutrition1.onrender.com/api/admin/verify-code", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
+  method: "POST",
+  credentials: "include", // <- MUY importante
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ code }),
+});
+
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.message || "Código inválido");
