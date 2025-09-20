@@ -15,7 +15,7 @@ const AdminCodeModal = ({ onClose, email }) => {
     }
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/api/admin/verify-code", {
+      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/admin/verify-code", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -81,7 +81,7 @@ const Login = () => {
 
     setLoadingLogin(true);
     try {
-      const res = await fetch("http://localhost:4000/api/login", {
+      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -95,7 +95,7 @@ const Login = () => {
       if (data.role === "admin") {
         if (showAdminModal) return;
 
-        const sendCodeRes = await fetch("http://localhost:4000/api/admin/send-code", {
+        const sendCodeRes = await fetch("https://bluefruitnutrition1.onrender.com/api/admin/send-code", {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

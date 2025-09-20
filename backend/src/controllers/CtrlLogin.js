@@ -125,12 +125,13 @@ loginController.login = async (req, res) => {
      * CREAR COOKIE
      * -----------------------------
      */
-    res.cookie("authToken", token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 día
-      sameSite: "lax", // más flexible para CORS
-      secure: process.env.NODE_ENV === "production"
-    });
+   res.cookie("authToken", token, {
+  httpOnly: true,
+  secure: true,            // Render siempre usa HTTPS
+  sameSite: "none",        // Permite compartir cookie entre dominios distintos
+  maxAge: 24 * 60 * 60 * 1000 // 1 día
+});
+
 
     /**
      * -----------------------------

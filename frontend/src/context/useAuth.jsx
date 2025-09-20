@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/verify-session", {
+        const res = await fetch("https://bluefruitnutrition1.onrender.com/api/verify-session", {
           method: "GET",
           credentials: "include", // cookies httpOnly
         });
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   // Función de login
   const login = async (credentials) => {
     try {
-      const res = await fetch("http://localhost:4000/api/login", {
+      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   // Función de registro
   const register = async (data) => {
     try {
-      let res = await fetch("http://localhost:4000/api/registerCustomers", {
+      let res = await fetch("https://bluefruitnutrition1.onrender.com/api/registerCustomers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
       let result = await res.json();
 
       if (!res.ok) {
-        res = await fetch("http://localhost:4000/api/registerDistributors", {
+        res = await fetch("https://bluefruitnutrition1.onrender.com/api/registerDistributors", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
@@ -109,7 +109,7 @@ export const AuthProvider = ({ children }) => {
   // Logout
   const logout = async () => {
     try {
-      await fetch("http://localhost:4000/api/logout", {
+      await fetch("https://bluefruitnutrition1.onrender.com/api/logout", {
         method: "POST",
         credentials: "include",
       });
