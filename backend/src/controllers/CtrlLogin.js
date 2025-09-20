@@ -7,16 +7,16 @@ import { config } from "../config.js";
 
 const loginController = {};
 
-// Máximo de intentos de inicio de sesión
+// Registro de intentos fallidos por email
 const loginAttempts = {};
-const MAX_ATTEMPTS = 5; // 5 intentos
-const BLOCK_TIME_MS = 10 * 60 * 1000; // 10 minutos de espera
+const MAX_ATTEMPTS = 5; // 5 intentos permitidos
+const BLOCK_TIME_MS = 10 * 60 * 1000; // 10 minutos
 
 loginController.login = async (req, res) => {
   const { email, password } = req.body;
   const now = Date.now();
 
-  // Verificar bloqueo por intentos previos
+  // Verificar si el usuario está bloqueado por demasiados intentos fallidos
   const attemptData = loginAttempts[email];
   if (attemptData) {
     if (
@@ -26,12 +26,11 @@ loginController.login = async (req, res) => {
       const remainingTime = Math.ceil(
         (BLOCK_TIME_MS - (now - attemptData.lastAttempt)) / 60000
       );
-      return res
-        .status(429)
-        .json({
-          message: `Demasiados intentos. Intenta en ${remainingTime} minutos.`,
-        });
+      return res.status(429).json({
+        message: `Demasiados intentos. Intenta en ${remainingTime} minutos.`,
+      });
     } else if (now - attemptData.lastAttempt >= BLOCK_TIME_MS) {
+      // Reiniciar contador después de que pase el tiempo de bloqueo
       loginAttempts[email] = { attempts: 0, lastAttempt: now };
     }
   }
@@ -41,59 +40,78 @@ loginController.login = async (req, res) => {
     let userType;
 
     console.log("Intentando iniciar sesión con:", email);
-    
-    // Login de administrador
+
+    /** 
+     * -----------------------------
+     * LOGIN DE ADMINISTRADOR
+     * -----------------------------
+     * El admin se valida con las credenciales guardadas en config.js
+     */
     if (
       email === config.emailAdmin.email &&
       password === config.emailAdmin.password
     ) {
       userType = "admin";
       console.log("Login de administrador exitoso");
-      userFound = { 
-        _id: "adminId", 
+
+      // Simulamos un usuario admin con un _id fijo
+      userFound = {
+        _id: "adminId",
         email: config.emailAdmin.email,
-        name: "Administrador" 
+        name: "Administrador"
       };
     } else {
-      // Buscar en distribuidores
+      /**
+       * -----------------------------
+       * LOGIN DE DISTRIBUIDOR O CLIENTE
+       * -----------------------------
+       */
       userFound = await distributorsModel.findOne({ email });
       userType = "distributor";
 
-      // Si no está, buscar en clientes
+      // Si no es distribuidor, buscar en clientes
       if (!userFound) {
         userFound = await customersModel.findOne({ email });
         userType = "customer";
       }
     }
 
+    // Si no se encontró usuario en ninguna categoría
     if (!userFound) {
       recordFailedAttempt(email, now);
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    // Validar contraseña (excepto admin)
+    /**
+     * -----------------------------
+     * VALIDACIÓN DE CONTRASEÑA
+     * -----------------------------
+     * El admin no necesita validar contraseña contra la base de datos
+     */
     if (userType !== "admin") {
       const isMatch = await bcrypt.compare(password, userFound.password);
       if (!isMatch) {
         recordFailedAttempt(email, now);
         const remaining = MAX_ATTEMPTS - (loginAttempts[email]?.attempts || 1);
-        return res
-          .status(401)
-          .json({
-            message: `Contraseña incorrecta. Te quedan ${remaining} intentos.`,
-          });
+        return res.status(401).json({
+          message: `Contraseña incorrecta. Te quedan ${remaining} intentos.`,
+        });
       }
     }
 
-    // Borrar intentos si es correcto
+    // Si el login fue correcto, limpiar intentos fallidos
     if (loginAttempts[email]) delete loginAttempts[email];
 
-    // ✅ CAMBIO PRINCIPAL: Crear el token con más información
+    /**
+     * -----------------------------
+     * CREAR TOKEN JWT
+     * -----------------------------
+     */
     const tokenPayload = {
       id: userFound._id,
       email: userFound.email || email,
       userType,
-      role: userType // Agregar role también
+      role: userType // rol explícito para el frontend
     };
 
     const token = jsonwebtoken.sign(
@@ -102,15 +120,23 @@ loginController.login = async (req, res) => {
       { expiresIn: config.JWT.expiresIn }
     );
 
-    // ✅ Establecer cookie
+    /**
+     * -----------------------------
+     * CREAR COOKIE
+     * -----------------------------
+     */
     res.cookie("authToken", token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 1 día
+      sameSite: "lax", // más flexible para CORS
       secure: process.env.NODE_ENV === "production"
     });
 
-    // ✅ CAMBIO: Responder con información del usuario
+    /**
+     * -----------------------------
+     * RESPUESTA FINAL
+     * -----------------------------
+     */
     const userData = {
       id: userFound._id,
       email: userFound.email || email,
@@ -119,19 +145,22 @@ loginController.login = async (req, res) => {
       isAuthenticated: true
     };
 
-    res.json({ 
-      message: "login successful", 
+    return res.json({
+      message: "Login exitoso",
       role: userType,
-      user: userData, // ✅ Incluir datos del usuario
-      token: token // ✅ También enviar token por si se necesita
+      user: userData,
+      token: token
     });
 
   } catch (error) {
     console.error("Error en login:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+    return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
+/**
+ * Función auxiliar para registrar intentos fallidos
+ */
 function recordFailedAttempt(email, now) {
   if (!loginAttempts[email]) {
     loginAttempts[email] = { attempts: 1, lastAttempt: now };
