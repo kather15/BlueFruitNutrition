@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
         toast.success("Redirigiendo al panel de admin...");
         // Aquí puedes manejar modal de código si quieres
         setTimeout(() => {
-          window.location.href = "http://localhost:5174"; // o producción
+          window.location.href = "https://blue-fruit-nutrition-private.vercel.app"; // o producción
         }, 1000);
         return;
       }
