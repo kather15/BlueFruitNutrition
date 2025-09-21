@@ -7,7 +7,7 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:4000/api/passwordRecovery/requestCode", {
+    const res = await fetch("https://bluefruitnutrition1.onrender.com/api/passwordRecovery/requestCode", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),

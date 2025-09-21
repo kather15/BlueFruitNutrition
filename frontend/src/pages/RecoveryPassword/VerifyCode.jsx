@@ -8,7 +8,7 @@ export default function VerifyCode() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email = localStorage.getItem("recoveryEmail");
-    const res = await fetch("http://localhost:4000/api/passwordRecovery/verifyCode", {
+    const res = await fetch("https://bluefruitnutrition1.onrender.com/api/passwordRecovery/verifyCode", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, code }),

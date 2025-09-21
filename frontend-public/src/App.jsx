@@ -30,7 +30,7 @@ import NewPassword from './pages/RecoveryPassword/NewPasssword';
 
 // Pages - Privadas
 import Carrito from './pages/Carrito/Carrito';
-import Pay from './pages/Pay/pay';
+import Pay from './pages/Pay/pay.jsx';
 import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
 import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
 import Bill from './pages/Bill/Biil';

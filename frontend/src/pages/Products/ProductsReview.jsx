@@ -27,7 +27,7 @@ const ProductReviews = () => {
   }, [id]);
 
   const fetchProduct = () => {
-    fetch(`http://localhost:4000/api/products/${id}`)
+    fetch(`https://bluefruitnutrition1.onrender.com/api/products/${id}`)
       .then(res => res.json())
       .then(data => {
         setProduct(data);
@@ -51,7 +51,7 @@ const ProductReviews = () => {
   }, [id]);
 
   const loadReviews = () => {
-    fetch(`http://localhost:4000/api/reviews?idProduct=${id}`)
+    fetch(`https://bluefruitnutrition1.onrender.com/api/reviews?idProduct=${id}`)
       .then(res => res.json())
       .then(data => setReviews(data))
       .catch(err => console.error('Error al obtener reseñas:', err));
@@ -66,7 +66,7 @@ const ProductReviews = () => {
 
     try {
       setDeletingReview(reviewId);
-      const response = await fetch(`http://localhost:4000/api/admin/reviews/${reviewId}`, {
+      const response = await fetch(`https://bluefruitnutrition1.onrender.com/api/admin/reviews/${reviewId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -110,7 +110,7 @@ const ProductReviews = () => {
       formData.append('price', editForm.price);
       if (editForm.image) formData.append('image', editForm.image);
 
-      const response = await fetch(`http://localhost:4000/api/products/${id}`, {
+      const response = await fetch(`https://bluefruitnutrition1.onrender.com/api/products/${id}`, {
         method: 'PUT',
         body: formData,
       });
@@ -222,14 +222,14 @@ const ProductReviews = () => {
                   </>
                 )}
 
-                <div className="quantity-section">
+                {/*<div className="quantity-section">
                   <span>Cantidad:</span>
                   <div className="quantity-controls">
                     <button className="quantity-btn" onClick={() => handleQuantityChange(-1)}>-</button>
                     <span className="quantity-display">{quantity}</span>
                     <button className="quantity-btn" onClick={() => handleQuantityChange(1)}>+</button>
                   </div>
-                </div>
+                </div>*/}
 
                 <div className="action-buttons">
                   {editing ? (
@@ -247,7 +247,7 @@ const ProductReviews = () => {
             </div>
           </div>
 
-          {/* Sección de reseñas */}
+          {/* Sección de reseñas 
           <div className="reviews-section">
             <div className="reviews-container">
               <div className="reviews-header">
@@ -288,7 +288,7 @@ const ProductReviews = () => {
                 )}
               </div>
             </div>
-          </div>
+          </div>*/}
         </div>
       </div>
     </div>

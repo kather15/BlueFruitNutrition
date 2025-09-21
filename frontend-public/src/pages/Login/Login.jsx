@@ -15,18 +15,19 @@ const AdminCodeModal = ({ onClose, email }) => {
     }
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/api/admin/verify-code", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
+      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/admin/verify-code", {
+  method: "POST",
+  credentials: "include", // <- MUY importante
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ code }),
+});
+
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.message || "Código inválido");
 
       toast.success("Código verificado correctamente");
-      window.location.href = "http://localhost:5174";
+      window.location.href = "https://blue-fruit-nutrition-private.vercel.app";
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -96,7 +97,7 @@ const Login = () => {
       if (result.data.role === "admin") {
         if (showAdminModal) return;
 
-        const sendCodeRes = await fetch("http://localhost:4000/api/admin/send-code", {
+        const sendCodeRes = await fetch("https://bluefruitnutrition1.onrender.com/api/admin/send-code", {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

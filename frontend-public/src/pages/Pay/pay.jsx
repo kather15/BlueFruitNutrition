@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../context/useAuth';
 import toast from 'react-hot-toast'; // ✅ Importar toast
-import './Pay.css';
+import "./pay.css";
+
 
 const Pay = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const Pay = () => {
   });
 
   const fetchToken = async () => {
-    const response = await fetch('http://localhost:4000/api/token', {
+    const response = await fetch('https://bluefruitnutrition1.onrender.com/api/token', {
       method: 'POST',
     });
     if (!response.ok) throw new Error('No se pudo obtener el token');
@@ -108,7 +109,7 @@ const Pay = () => {
 
       console.log('📤 Enviando datos a Wompi:', wompiData);
 
-      const response = await fetch('http://localhost:4000/api/testPay', {
+      const response = await fetch('https://bluefruitnutrition1.onrender.com/api/testPay', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
