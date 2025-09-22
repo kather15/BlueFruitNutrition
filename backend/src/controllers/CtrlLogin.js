@@ -128,11 +128,11 @@ loginController.login = async (req, res) => {
    res.cookie("authToken", token, {
   httpOnly: true,
   secure: true,            // Render siempre usa HTTPS
-  sameSite: "none",        // Permite compartir cookie entre dominios distintos
+  sameSite: "lax",        // Permite compartir cookie entre dominios distintos
   maxAge: 24 * 60 * 60 * 1000 // 1 día
 });
 
-
+console.log("Cookie authToken establecida + token+:", token + " y cookie: " + req.cookies.authToken);
     /**
      * -----------------------------
      * RESPUESTA FINAL
