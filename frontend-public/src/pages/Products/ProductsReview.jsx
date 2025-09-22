@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'; 
-import { useParams, useNavigate } from 'react-router-dom';
-import { Star } from 'lucide-react';
-import toast from 'react-hot-toast';
-import ReviewForm from "../../components/Review/ReviewForm";  // Aquí importamos el formulario de reseñas
-import Review from '../../components/Review/ReviewView';  // Aquí importamos la visualización de reseñas
-import { useAuthContext } from '../../context/useAuth'; // Suponiendo que tienes un contexto de autenticación
+import { useParams, useNavigate } from 'react-router-dom'; 
+import { Star } from 'lucide-react'; 
+import toast from 'react-hot-toast'; 
+import ReviewForm from "../../components/Review/ReviewForm";  
+import Review from '../../components/Review/ReviewView';  
+import { useAuthContext } from '../../context/useAuth'; 
 import './ProductsReview.css';
 
 const ProductsReview = () => {
@@ -18,29 +18,34 @@ const ProductsReview = () => {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [showReviewForm, setShowReviewForm] = useState(false); // Estado para mostrar el formulario de reseña
+// Cargar información del producto
+useEffect(() => {
+  fetch(`http://localhost:4000/api/products/${id}`, {
+    credentials: 'include',  // <--- Agregar esta línea
+  })
+    .then(res => res.json())
+    .then(data => setProduct(data))
+    .catch(err => {
+      console.error('Error al cargar el producto:', err);
+      setProduct(null);
+    });
+}, [id]);
 
-  // Cargar información del producto
-  useEffect(() => {
-    fetch(`http://localhost:4000/api/products/${id}`)
-      .then(res => res.json())
-      .then(data => setProduct(data))
-      .catch(err => {
-        console.error('Error al cargar el producto:', err);
-        setProduct(null);
-      });
-  }, [id]);
+// Cargar reseñas
+useEffect(() => {
+  loadReviews();
+}, [id]);
 
-  // Cargar reseñas
-  useEffect(() => {
-    loadReviews();
-  }, [id]);
+const loadReviews = () => {
+  fetch(`http://localhost:4000/api/reviews?idProduct=${id}`, {
+    credentials: 'include',  // <--- Y aquí también
+  })
+    .then(res => res.json())
+    .then(data => setReviews(data))
+    .catch(err => console.error('Error al obtener reseñas:', err));
+};
 
-  const loadReviews = () => {
-    fetch(`http://localhost:4000/api/reviews?idProduct=${id}`)
-      .then(res => res.json())
-      .then(data => setReviews(data))
-      .catch(err => console.error('Error al obtener reseñas:', err));
-  };
 
   const handleQuantityChange = (change) => {
     setQuantity(prev => Math.max(1, prev + change));
@@ -160,6 +165,10 @@ const ProductsReview = () => {
                 Agregar Reseña
               </button>
             </div>
+
+            {showReviewForm && (
+              <ReviewForm productId={id} onClose={() => setShowReviewForm(false)} />
+            )}
 
             {reviews.length > 0 ? (
               reviews.map((review) => (

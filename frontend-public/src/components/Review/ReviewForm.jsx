@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
 import toast from 'react-hot-toast';
-import './ReviewForm.css';
+
 
 const ReviewForm = ({ productId, loadReviews }) => {
   const [newReview, setNewReview] = useState({

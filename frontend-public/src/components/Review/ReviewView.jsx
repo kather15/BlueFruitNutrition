@@ -1,6 +1,6 @@
 import React from 'react';
 import { Star } from 'lucide-react';
-import './ReviewView.css';
+
 
 const Review = ({ review, onDeleteReview }) => {
   const renderStars = (rating) => (

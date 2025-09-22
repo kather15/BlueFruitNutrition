@@ -1,0 +1,29 @@
+/* Estilos globales */
+body, html, #root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  .App {
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f2f5;
+  }
+  
+  /* Estilo para botones dentro del mapa */
+  .leaflet-popup-content button {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: #ff4d4d;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .leaflet-popup-content button:hover {
+    background-color: #cc0000;
+  }
+  
