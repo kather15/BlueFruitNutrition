@@ -5,12 +5,13 @@
   padding: 20px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 250px; 
+  width: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px; 
-  box-sizing: border-box; 
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
 }
 
 .product-card:hover {
@@ -21,54 +22,47 @@
 .product-image-wrapper {
   position: relative;
   width: 100%;
-  height: 200px; 
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
-.product-background-shape {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80%; 
-    height: 80%;
-    background-color: #f0f8c8; 
-    border-radius: 15%; 
-    transform: translate(-50%, -50%) rotate(25deg); 
-    z-index: 0; 
-
 .product-image {
-  max-width: 80%; 
-  max-height: 90%;
-  object-fit: contain; 
-  transform: rotate(-15deg); 
-  z-index: 1; 
-  filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.2)); 
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  z-index: 1;
+  filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.2));
 }
 
 .product-name {
   font-size: 1.5em;
   color: #333;
   margin-top: 0;
-  margin-bottom: 25px; 
+  margin-bottom: 10px;
   font-weight: bold;
 }
 
+.product-price {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #4f46e5;
+  margin-bottom: 15px;
+}
+
 .view-product-button {
-  background-color: #001a4d; 
+  background-color: #001a4d;
   color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
   text-decoration: none;
   transition: background-color 0.3s ease;
-  display: inline-block; 
 }
 
 .view-product-button:hover {
   background-color: #002a70;
-}
 }

@@ -145,12 +145,17 @@ loginController.login = async (req, res) => {
       role: userType,
       isAuthenticated: true
     };
+    
+    //nombre del usuario
+    console.log("Usuario autenticado:", userData.name);
 
     return res.json({
       message: "Login exitoso",
       role: userType,
       user: userData,
+      namek: userData.name,
       token: token
+      
     });
 
   } catch (error) {

@@ -1,188 +1,271 @@
-.registro-container {
+/* ========================================
+   REGISTRO - DISEÑO MODERNO (BOTONES AZULES, SIN toggle-password-btn)
+   ======================================== */
+
+/* Contenedor principal del registro */
+.registro-wrapper {
   display: flex;
-  height: 100vh;
-  width: 100%;
-  font-family: 'Arial', sans-serif;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  font-family: 'Inter', sans-serif;
+  padding: 20px;
 }
 
-/* Lado izquierdo: imagen */
-.imgre {
-  flex: 1;
+/* Tarjeta de registro */
+.registro-card {
   display: flex;
-  align-items: center;     /* centra verticalmente */
-  justify-content: center; /* centra horizontalmente */
+  flex-direction: row;
+  width: 100%;
+  max-width: 950px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  background: #fff;
+}
+
+/* ========================================
+   LADO IZQUIERDO - ILUSTRACIÓN
+   ======================================== */
+.registro-left {
+  flex: 1;
+  background: #0C133F;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 40px;
 }
 
-.registro-img {
-  width: 100%;
-  max-width: 800px;
+.registro-left .registro-img {
+  max-width: 100%;
   height: auto;
-  object-fit: contain;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
-/* Lado derecho: formulario */
-.registro-card {
-  flex: 1;
-  display: flex;
-  align-items: center;       /* centra verticalmente */
-  justify-content: flex-start; /* alinea el contenido a la izquierda */
-  padding: 60px 80px;
-  background-color: #ffffff;
-}
-
-/* Contenedor del formulario */
+/* ========================================
+   LADO DERECHO - FORMULARIO
+   ======================================== */
 .registro-right {
-  width: 100%;
-  max-width: 450px;
+  flex: 1;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
 }
 
-/* Títulos */
-.registro-card h1 {
-  font-size: 36px;
-  color: #0b0b2c;
-  margin-bottom: 10px;
+.welcome-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0C133F;
+  margin-bottom: 5px;
 }
 
-.registro-card h2 {
-  font-size: 16px;
-  color: #333;
+.tipo-cuenta-titulo {
+  font-size: 18px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Botones para tipo de usuario */
+.btn-switch-group {
+  display: flex;
+  gap: 15px;
   margin-bottom: 30px;
 }
 
-/* Tipo de cuenta título */
-.tipo-cuenta-titulo {
-  text-align: center;
-  margin-bottom: 24px;
-  font-size: 18px;
-  color: #0b0b2c;
+.btn-switch {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  background: #f5f5f5;
   font-weight: 600;
-  letter-spacing: 1px;
+  color: #0C133F;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Estilo de formulario */
+.btn-switch.active {
+  background: #1E40AF; /* azul activo */
+  color: #fff;
+  border-color: #1E40AF;
+  box-shadow: 0 4px 15px rgba(30,64,175,0.4);
+}
+
+.btn-switch:hover {
+  transform: translateY(-2px);
+}
+
+/* Iconos dentro de botones */
+.btn-switch-icon img {
+  width: 20px;
+  height: 20px;
+}
+
+/* ========================================
+   FORMULARIO
+   ======================================== */
 .registro-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Inputs */
-input,
-select {
-  width: 100%;
-  padding: 12px 0;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  background-color: transparent;
-  font-size: 16px;
-  outline: none;
-  color: #000;
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
-input::placeholder {
+/* Inputs modernos */
+.input-modern {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  color: #0C133F;
+  background: #f9f9f9;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.input-modern::placeholder {
   color: #aaa;
 }
 
-input:focus,
-select:focus {
-  border-bottom: 1px solid #0b0b2c;
+.input-modern:focus {
+  border-color: #1E40AF;
+  box-shadow: 0 0 8px rgba(30,64,175,0.4);
+  background: #fff;
 }
 
-/* Contraseña con ícono */
-.registro-password-container {
-  position: relative;
+/* Mensajes de error */
+.input-error {
+  border-color: #ff4d4f;
+}
+
+.error-message {
+  font-size: 12px;
+  color: #ff4d4f;
+  margin-top: -12px;
+}
+
+/* ========================================
+   BOTONES DE ACCIÓN - AZULES
+   ======================================== */
+.actions {
   display: flex;
-  align-items: center;
+  gap: 12px;
+  margin-top: 15px;
 }
 
-.toggle-password-btn {
-  position: absolute;
-  right: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  color: #0b0b2c;
-}
-
-/* Botón */
-.btn-crear {
-  background-color: #0b0b2c;
+.btn-primary {
+  flex: 1;
+  background: #1E40AF; /* azul principal */
   color: #fff;
+  padding: 14px 0;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
   border: none;
-  padding: 14px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 600;
   cursor: pointer;
-  text-transform: uppercase;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
+  transition: all 0.3s ease;
 }
 
-.btn-crear:hover {
-  background-color: #1a1a4d;
+.btn-primary:hover {
+  background: #1E3A8A; /* azul más oscuro en hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(30,64,175,0.4);
 }
 
-/* Login abajo */
+.btn-secondary {
+  flex: 1;
+  border: 2px solid #1E40AF; /* borde azul */
+  background: transparent;
+  color: #1E40AF; /* texto azul */
+  padding: 14px 0;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(30,64,175,0.1); /* fondo azul claro al pasar mouse */
+  color: #1E40AF;
+}
+
+/* ========================================
+   LOGIN LINK
+   ======================================== */
 .registro-login {
-  text-align: center;
-  margin-top: 20px;
+  margin-top: 25px;
   font-size: 14px;
-  color: #333;
+  color: #666;
+  text-align: center;
 }
 
 .registro-login a {
-  color: #0b0b2c;
-  font-weight: bold;
+  color: #1E40AF;
   text-decoration: none;
-}
-
-/*botones para cambiar el formulario*/
-.btn-switch-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  gap: 0; /* Elimina el gap para que la línea esté pegada */
-}
-
-.btn-switch-group .btn-switch {
-  padding: 10px 32px;
-  font-size: 15px;
-  border: none;
-  background: #ffffff;
-  color: #000000;
   font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
 }
 
-.btn-switch-group .btn-switch.active {
-  background: #f5f5f5;
-  color: #000000;
+.registro-login a:hover {
+  text-decoration: underline;
 }
 
-.btn-switch-group .separator {
-  width: 2px;
-  height: 32px;
-  background: #d1d1d1;
-  margin: 0 12px;
-  border-radius: 2px;
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 900px) {
+  .registro-card {
+    flex-direction: column;
+  }
+
+  .registro-left {
+    padding: 30px;
+  }
+
+  .registro-right {
+    padding: 40px 30px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.btn-switch {
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Espacio entre texto e imagen */
-}
+@media (max-width: 500px) {
+  .welcome-title {
+    font-size: 26px;
+  }
 
-.tipo-usuario-texto {
-  text-align: center;
-  margin: 18px 0 10px 0;
-  font-size: 16px;
-  color: #333;
+  .tipo-cuenta-titulo {
+    font-size: 16px;
+  }
+
+  .btn-switch {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .input-modern {
+    padding: 12px 14px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
 }

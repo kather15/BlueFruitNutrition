@@ -93,6 +93,9 @@ export const AuthProvider = ({ children }) => {
         if (data.user && data.user.id) {
           setUser(data.user);
           setIsAuthenticated(true);
+          //imprimimos el nombre del usuario en la consola
+          console.log("nombre del usuario:", data.user.name);
+
           console.log('✅ Login exitoso:', data.user);
           return { success: true, data };
         } else {

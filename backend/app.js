@@ -27,6 +27,7 @@ import adminVerifyRoutes from "./src/routes/adminVerify.js";
 import sessionRouter from "./src/routes/session.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import BillRoutes from "./src/routes/bill.js"; 
+import profileRoutes from "./src/routes/profile.js";
 
 // Inicialización de app
 const app = express();
@@ -75,6 +76,7 @@ app.use("/api/admin", adminVerifyRoutes);
 app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
+app.use("/api/profile", profileRoutes);
 
 // Exportar app
 export default app;
