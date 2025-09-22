@@ -177,6 +177,7 @@
   outline: 2px solid #66ccff;
   outline-offset: 2px;
 }
+
 /* Botones en preview del carrito */
 .cart-preview-buttons {
   display: flex;
@@ -218,6 +219,7 @@
   border-color: #1a1a3a;
   color: white;
 }
+
 .blue-fruit-icon-btn svg {
   transition: transform 0.2s ease;
 }
@@ -226,3 +228,7 @@
   transform: scale(1.15);
 }
 
+/* --- NUEVO: Separar botón de perfil del carrito --- */
+.profile-btn {
+  margin-left: 20px; /* Ajusta este valor a tu gusto */
+}

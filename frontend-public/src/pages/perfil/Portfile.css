@@ -1,0 +1,18 @@
+.profile-wrapper {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.profile-card {
+  background-color: #f9fafc;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.profile-card p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}

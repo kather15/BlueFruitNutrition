@@ -1,5 +1,5 @@
-/* Login.css - estilo unificado con Registro */
-.login-wrapper {
+/* Login.css - estilo unificado */
+.login-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,18 +8,7 @@
   padding: 20px;
 }
 
-.login-card {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 900px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-}
-
-.login-left {
+.left-side {
   flex: 1;
   background: #0C133F;
   display: flex;
@@ -28,22 +17,32 @@
   padding: 40px;
 }
 
-.login-img {
+.image-container {
+  max-width: 100%;
+}
+
+.promo-image {
   max-width: 100%;
   border-radius: 12px;
   object-fit: cover;
 }
 
-.login-right {
+.right-side {
   flex: 1;
   padding: 50px 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-.welcome-title {
+.form-wrapper {
+  width: 100%;
+}
+
+.form-title {
   font-size: 30px;
   font-weight: 800;
   color: #0C133F;
@@ -56,7 +55,7 @@
   margin-bottom: 25px;
 }
 
-.input-modern {
+.login-input {
   width: 100%;
   padding: 14px 16px;
   border-radius: 10px;
@@ -68,13 +67,13 @@
   transition: all 0.25s ease;
 }
 
-.input-modern:focus {
+.login-input:focus {
   border-color: #1E40AF;
-  box-shadow: 0 0 8px rgba(30,64,175,0.4);
+  box-shadow: 0 0 8px rgba(30, 64, 175, 0.4);
   background: #fff;
 }
 
-.btn-primary {
+.login-btn {
   width: 100%;
   background: #1E40AF;
   color: #fff;
@@ -87,53 +86,40 @@
   margin-bottom: 15px;
 }
 
-.btn-primary:hover {
+.login-btn:hover {
   background: #1E3A8A;
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(30,64,175,0.4);
+  box-shadow: 0 6px 15px rgba(30, 64, 175, 0.4);
 }
 
-.btn-secondary {
-  background: transparent;
-  border: 2px solid #1E40AF;
-  color: #1E40AF;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background: rgba(30,64,175,0.1);
-}
-
-.forgot-password {
+.forgot-password-container {
   text-align: center;
   font-size: 14px;
 }
 
-.forgot-password a {
+.forgot-password-link {
   color: #1E40AF;
   font-weight: 600;
   text-decoration: none;
 }
 
-.forgot-password a:hover {
+.forgot-password-link:hover {
   text-decoration: underline;
 }
 
-/* Modal igual al registro */
+/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(30,34,54,0.35);
+  background: rgba(30, 34, 54, 0.35);
   backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 50;
 }
 
 .modal-content {
@@ -141,7 +127,7 @@
   padding: 2rem;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   max-width: 400px;
   width: 100%;
 }
@@ -156,19 +142,32 @@
 
 .modal-content button {
   margin: 0.5rem;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-close-btn {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.modal-close-btn:hover {
+  background: #d1d5db;
 }
 
 /* Responsive */
 @media (max-width: 900px) {
-  .login-card {
+  .login-container {
     flex-direction: column;
   }
 
-  .login-left {
+  .left-side {
     padding: 30px;
   }
 
-  .login-right {
+  .right-side {
     padding: 40px 30px;
   }
 }

@@ -31,6 +31,7 @@ import Pay from './pages/Pay/pay.jsx';
 import MetodoDePago from './pages/MetodoDePago/CheckoutPage';
 import Personalizar from './pages/Personalizar/SeleccionarGel/SeleccionDeGel';
 import Bill from './pages/Bill/Biil';
+import Perfil from "./pages/perfil/Porfile.jsx";
 
 function AppContent() {
   const location = useLocation();
@@ -42,8 +43,8 @@ function AppContent() {
   useEffect(() => {
     if (location.pathname === "/" && user) {
       Swal.fire({
-        title: `🚀 Bienvenido, ${user.name}!`,
-        text: 'Explora nuestra tienda y descubre productos increíbles ✨',
+        title: ` Bienvenido, ${user}!`,
+        text: 'Explora nuestra tienda y descubre productos increíbles ',
         icon: 'success',
         showConfirmButton: false,
         timer: 3000,
@@ -81,6 +82,7 @@ function AppContent() {
         <Route path="/personalizar" element={<RutaPrivada><Personalizar /></RutaPrivada>} />
         <Route path="/bill" element={<RutaPrivada><Bill /></RutaPrivada>} />
 
+      <Route path="/perfil" element={<Perfil />} />
         {/* 404 */}
         <Route path="*" element={<Error404Public />} />
       </Routes>
