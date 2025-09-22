@@ -1,7 +1,7 @@
-const Location = require('../models/Location');
+import Location from '../models/Location.js'; 
 
 // GET all locations
-const getLocations = async (req, res) => {
+export const getLocations = async (req, res) => {
   try {
     const locations = await Location.find();
     res.json(locations);
@@ -11,7 +11,7 @@ const getLocations = async (req, res) => {
 };
 
 // POST new location
-const createLocation = async (req, res) => {
+export const createLocation = async (req, res) => {
   const { name, lat, lng } = req.body;
   try {
     const newLoc = new Location({ name, lat, lng });
@@ -23,7 +23,7 @@ const createLocation = async (req, res) => {
 };
 
 // PUT update location
-const updateLocation = async (req, res) => {
+export const updateLocation = async (req, res) => {
   const { name, lat, lng } = req.body;
   try {
     const updated = await Location.findByIdAndUpdate(
@@ -38,18 +38,11 @@ const updateLocation = async (req, res) => {
 };
 
 // DELETE location
-const deleteLocation = async (req, res) => {
+export const deleteLocation = async (req, res) => {
   try {
     await Location.findByIdAndDelete(req.params.id);
     res.json({ message: 'Ubicación eliminada' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
-
-module.exports = {
-  getLocations,
-  createLocation,
-  updateLocation,
-  deleteLocation
 };

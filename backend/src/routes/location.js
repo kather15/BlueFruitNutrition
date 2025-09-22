@@ -1,10 +1,11 @@
-const express = require('express');
+import express from "express";
+import { getLocations, createLocation, updateLocation, deleteLocation } from "../controllers/CrtlLocation.js";
+
 const router = express.Router();
-const controller = require('../controllers/CrtlLocation');
 
-router.get('/', controller.getLocations);
-router.post('/', controller.createLocation);
-router.put('/:id', controller.updateLocation);
-router.delete('/:id', controller.deleteLocation);
+router.get('/', getLocations);
+router.post('/', createLocation);
+router.put('/:id', updateLocation);
+router.delete('/:id', deleteLocation);
 
-module.exports = router;
+export default router;
