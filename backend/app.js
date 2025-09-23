@@ -28,6 +28,7 @@ import sessionRouter from "./src/routes/session.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import BillRoutes from "./src/routes/bill.js"; 
 import profileRoutes from "./src/routes/profile.js";
+import recommendationRoutes from "./src/routes/recommendation.js"
 
 // Inicialización de app
 const app = express();
@@ -86,6 +87,8 @@ app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/recommendation", recommendationRoutes);
+
 
 // Exportar app
 export default app;
