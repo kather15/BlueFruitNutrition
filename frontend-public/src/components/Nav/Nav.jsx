@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingCart, FiUser } from 'react-icons/fi'; // agregamos FiUser
 import './Nav.css';
 
 const Nav = () => {
@@ -29,7 +29,10 @@ const Nav = () => {
             <FiShoppingCart size={26} color="#fff" />
           </Link>
 
-          
+          {/* Botón Perfil 👤 */}
+          <Link to="/perfil" className="blue-fruit-icon-btn profile-btn" aria-label="Perfil">
+            <FiUser size={26} color="#fff" />
+          </Link>
         </div>
       </div>
     </nav>

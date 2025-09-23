@@ -8,23 +8,19 @@ import Maps from "../../components/Maps/Maps";
 import ChatBot from '../../pages/ChatBot/ChatBot'; // Componente ChatBot
 
 const Home = () => {
-  const [productoActivo, setProductoActivo] = useState(null);
+  const [productosFlip, setProductosFlip] = useState({});
   const [isMobile, setIsMobile] = useState(false);
-  const [chatOpen, setChatOpen] = useState(false); // Estado para el ChatBot
+  const [chatOpen, setChatOpen] = useState(false);
 
   const productos = [
     { nombre: 'Carbo Upp', imagen: '/CarboUpp.png',  frase: "¡Corre hacia tus sueños!" },
-    { nombre: 'Ener Kik', imagen: '/EnerKik.png' ,  frase: "¡Nunca te rindas!" },
+    { nombre: 'Ener Kik', imagen: '/EnerKik.png',  frase: "¡Nunca te rindas!" },
     { nombre: 'Reppo', imagen: '/Reppo.png',  frase: "¡Tu tienes el control de tu meta!" },
-    { nombre: 'Ener Balance', imagen: '/EnerBalance.png' ,  frase: "¡Cuida de tu salud!" },
+    { nombre: 'Ener Balance', imagen: '/EnerBalance.png',  frase: "¡Cuida de tu salud!" },
   ];
 
-  const [productosFlip, setProductosFlip] = useState({});
   const toggleFlip = (index) => {
-    setProductosFlip((prev) => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
+    setProductosFlip((prev) => ({ ...prev, [index]: !prev[index] }));
   };
 
   useEffect(() => {
@@ -35,7 +31,11 @@ const Home = () => {
   }, []);
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const onSubmit = (data) => { console.log("Formulario enviado:", data); alert("¡Mensaje enviado con éxito!"); reset(); };
+  const onSubmit = (data) => { 
+    console.log("Formulario enviado:", data); 
+    alert("¡Mensaje enviado con éxito!"); 
+    reset(); 
+  };
 
   return (
     <div className="blue-fruit-home">
@@ -71,14 +71,14 @@ const Home = () => {
         ))}
       </div>
 
-      {/* BOTON VER TODOS */}
+      {/* BOTÓN VER TODOS */}
       <div className="blue-fruit-boton-ver-todos-container">
         <Link to="/product" className="blue-fruit-boton-ver-todos">Ver todos los Productos</Link>
       </div>
 
       <hr className="blue-fruit-linea-separadora" />
 
-      {/* HISTORIA, ICONOS, EQUIPO, CONTACTO... */}
+      {/* HISTORIA */}
       <section className="blue-fruit-historia">
         <h2>Nuestra Historia</h2>
         <div className="blue-fruit-historia-content">
@@ -147,7 +147,7 @@ const Home = () => {
       </main>
       <Maps/>
 
-      {/* BOTÓN FLOTANTE DEL CHATBOT (ARRIBA DEL WHATSAPP) */}
+      {/* BOTÓN FLOTANTE DEL CHATBOT */}
       <button
         className="blue-fruit-chatbot-button"
         onClick={() => setChatOpen(true)}

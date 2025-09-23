@@ -29,7 +29,7 @@ reviewController.getReviews = async (req, res) => {
 // Insertar una nueva reseña (requiere autenticación)
 reviewController.insertReview = async (req, res) => {
   try {
-    console.log('🚀 INICIO insertReview');
+    console.log(' INICIO insertReview');
     console.log('Headers:', req.headers);
     console.log('Cookies:', req.cookies);
     console.log('req.user:', req.user);
@@ -40,7 +40,7 @@ reviewController.insertReview = async (req, res) => {
     // El idClient viene del token de autenticación
     const idClient = req.user.id; // Extraído del JWT por el middleware
     
-    console.log('📝 Datos para crear reseña:');
+    console.log(' Datos para crear reseña:');
     console.log('- comment:', comment);
     console.log('- rating:', rating);
     console.log('- idProduct:', idProduct);
@@ -187,4 +187,4 @@ reviewController.deleteReviewAdmin = async (req, res) => {
   }
 };
 
-export default reviewController;
+export default reviewController;  
