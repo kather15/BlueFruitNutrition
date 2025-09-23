@@ -32,9 +32,22 @@ import profileRoutes from "./src/routes/profile.js";
 // Inicialización de app
 const app = express();
 
+// -------------------------------------------
+// Configuración de CORS dinámico
+// -------------------------------------------
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",") // en .env defines separado por coma
+  : [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://blue-fruit-nutrition-1mel.vercel.app",
+      "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app",
+      "https://blue-fruit-nutrition-private.vercel.app",
+    ];
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app", "https://blue-fruit-nutrition-private.vercel.app"],
+    origin: allowedOrigins,
     credentials: true,
   })
 );
@@ -45,12 +58,8 @@ app.use(cookieParser());
 // -------------------------------------------
 // Configuración de Swagger
 // -------------------------------------------
-
-// Traemos el archivo JSON de Swagger
 const swaggerFilePath = path.resolve("./bluefruit-bluefruit_api-1.0.0-swagger.json");
 const swaggerDocument = JSON.parse(fs.readFileSync(swaggerFilePath, "utf-8"));
-
-// Endpoint para mostrar la documentación
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // -------------------------------------------
@@ -80,3 +89,4 @@ app.use("/api/profile", profileRoutes);
 
 // Exportar app
 export default app;
+
