@@ -77,6 +77,7 @@ app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/check-session", sessionRouter); // Ruta para verificar sesión
 
 // Exportar app
 export default app;

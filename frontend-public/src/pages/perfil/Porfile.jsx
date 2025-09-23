@@ -5,47 +5,26 @@ import "./Portfile.css";
 
 const Perfil = () => {
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // 🔹 Obtener token de cookies
-  const getTokenFromCookie = () => {
-    const match = document.cookie.match(new RegExp('(^| )token=([^;]+)'));
-    if (match) return match[2];
-    return null;
-  };
-
-  // 🔹 Decodificar JWT manualmente
-  const decodeToken = (token) => {
+  // 🔹 Verificar sesión en el servidor
+  const checkSession = async () => {
     try {
-      const payload = token.split('.')[1]; // parte central del JWT
-      const decoded = JSON.parse(atob(payload));
-      return decoded;
-    } catch (error) {
-      console.error("Error decodificando token:", error);
-      return null;
-    }
-  };
-
-  // 🔹 Cargar datos del usuario desde el token
-  const loadUserFromToken = () => {
-    const token = getTokenFromCookie();
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    const decoded = decodeToken(token);
-    if (!decoded) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Sesión inválida, por favor inicia sesión de nuevo",
+      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/check-session", {
+        method: "GET",
+        credentials: "include", // importante para enviar la cookie
       });
-      navigate("/login");
-      return;
-    }
 
-    setUserData(decoded);
+      if (!res.ok) throw new Error("Sesión inválida");
+
+      const data = await res.json();
+      setUserData(data); // data debería tener { id, email, name, role... }
+    } catch (error) {
+      navigate("/login"); // si no hay sesión
+    } finally {
+      setLoading(false);
+    }
   };
 
   // 🔹 Cerrar sesión
@@ -53,7 +32,7 @@ const Perfil = () => {
     try {
       const res = await fetch("https://bluefruitnutrition1.onrender.com/api/logout", {
         method: "POST",
-        credentials: "include", // necesario para borrar cookie de sesión
+        credentials: "include",
       });
 
       if (res.ok) {
@@ -65,12 +44,6 @@ const Perfil = () => {
           showConfirmButton: false,
         });
         navigate("/login");
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se pudo cerrar la sesión",
-        });
       }
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
@@ -83,10 +56,11 @@ const Perfil = () => {
   };
 
   useEffect(() => {
-    loadUserFromToken();
+    checkSession();
   }, []);
 
-  if (!userData) return <p>Cargando perfil...</p>;
+  if (loading) return <p>Cargando perfil...</p>;
+  if (!userData) return null; // si no hay datos, redirigido ya a login
 
   return (
     <div className="perfil-dashboard">
@@ -104,21 +78,6 @@ const Perfil = () => {
             <img src="/user.png" alt="Foto perfil" className="perfil-avatar" />
             <h2>{userData.name} {userData.lastName || ""}</h2>
             <p className="perfil-email">{userData.email}</p>
-
-            <div className="perfil-stats">
-              <div>
-                <span>{userData.orders || 0}</span>
-                <p>Órdenes realizadas</p>
-              </div>
-              <div>
-                <span>{userData.pending || 0}</span>
-                <p>Productos pendientes</p>
-              </div>
-              <div>
-                <span>{userData.delivered || 0}</span>
-                <p>Pedidos entregados</p>
-              </div>
-            </div>
           </div>
 
           <div className="perfil-details">
