@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
         if (response.ok) {
           const data = await response.json();
-          setUser(data.user || data); // Maneja ambos formatos
+          setUser(data.user || data); // soporta ambos formatos
           setIsAuthenticated(true);
           console.log('✅ Sesión verificada con backend:', data);
         } else {
@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+  // 🔄 Reutilizable: verificar sesión bajo demanda
   const checkSession = async () => {
     try {
       setLoading(true);
@@ -78,6 +79,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // 🔑 Login
   const login = async (email, password) => {
     try {
       const response = await fetch(`${API_URL}/login`, {
@@ -93,9 +95,7 @@ export const AuthProvider = ({ children }) => {
         if (data.user && data.user.id) {
           setUser(data.user);
           setIsAuthenticated(true);
-          //imprimimos el nombre del usuario en la consola
           console.log("nombre del usuario:", data.user.name);
-
           console.log('✅ Login exitoso:', data.user);
           return { success: true, data };
         } else {
@@ -110,6 +110,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // 🚪 Logout
   const logout = async () => {
     try {
       await fetch(`${API_URL}/logout`, {
@@ -140,3 +141,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
