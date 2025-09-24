@@ -29,11 +29,14 @@ import BillRoutes from "./src/routes/bill.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
 
+// Middleware de autenticación
+import { authenticate } from "./src/middlewares/auth.js";
+
 // Inicialización
 const app = express();
 
 // -------------------------------------------
-// CORS
+// CORS + Preflight
 // -------------------------------------------
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",")
@@ -46,19 +49,24 @@ const allowedOrigins = process.env.CORS_ORIGIN
       "https://bluefruitnutrition1.onrender.com",
     ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("No permitido por CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  }
 
+  // Responder preflight requests
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+
+  next();
+});
+
+// -------------------------------------------
+// JSON y cookies
+// -------------------------------------------
 app.use(express.json());
 app.use(cookieParser());
 
@@ -89,11 +97,13 @@ app.use("/api/pay", PayRoutes);
 app.use("/api/testPay", TestPay);
 app.use("/api/token", tokenRouter);
 app.use("/api/admin", adminVerifyRoutes);
-app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
-app.use("/api/check-session", sessionRouter); // Ruta para validar sesión
+
+// ✅ Ruta de sesión protegida
+app.use("/api/check-session", authenticate, sessionRouter);
 
 export default app;
+
