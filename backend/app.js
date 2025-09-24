@@ -43,6 +43,7 @@ const allowedOrigins = process.env.CORS_ORIGIN
       "https://blue-fruit-nutrition-private.vercel.app",
       "https://blue-fruit-nutrition-4vhs.vercel.app",
       "https://bluefruitnutrition1.onrender.com",
+     
     ];
 
 app.use(
