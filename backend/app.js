@@ -105,5 +105,9 @@ app.use("/api/recommendation", recommendationRoutes);
 // ✅ Ruta de sesión protegida
 app.use("/api/check-session", authenticate, sessionRouter);
 
+// -------------------------------------------
+// Error handling
+// -------------------------------------------
+
 export default app;
 
