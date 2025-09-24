@@ -27,6 +27,7 @@ import sessionRouter from "./src/routes/session.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import BillRoutes from "./src/routes/bill.js";
 import profileRoutes from "./src/routes/profile.js";
+import recommendationRoutes from "./src/routes/recommendation.js";
 
 // Inicialización
 const app = express();
@@ -43,7 +44,6 @@ const allowedOrigins = process.env.CORS_ORIGIN
       "https://blue-fruit-nutrition-private.vercel.app",
       "https://blue-fruit-nutrition-4vhs.vercel.app",
       "https://bluefruitnutrition1.onrender.com",
-     
     ];
 
 app.use(
@@ -55,7 +55,7 @@ app.use(
         callback(new Error("No permitido por CORS"));
       }
     },
-    credentials: true, 
+    credentials: true,
   })
 );
 
@@ -93,6 +93,7 @@ app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
 app.use("/api/profile", profileRoutes);
-app.use("/api/check-session", sessionRouter);
+app.use("/api/recommendation", recommendationRoutes);
+app.use("/api/check-session", sessionRouter); // Ruta para validar sesión
 
 export default app;
