@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
 import fs from "fs";
@@ -32,7 +31,7 @@ import profileRoutes from "./src/routes/profile.js";
 const app = express();
 
 // -------------------------------------------
-// CORS
+// CORS + Preflight
 // -------------------------------------------
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",")
@@ -43,22 +42,27 @@ const allowedOrigins = process.env.CORS_ORIGIN
       "https://blue-fruit-nutrition-private.vercel.app",
       "https://blue-fruit-nutrition-4vhs.vercel.app",
       "https://bluefruitnutrition1.onrender.com",
-     
     ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("No permitido por CORS"));
-      }
-    },
-    credentials: true, 
-  })
-);
+// Middleware para CORS y preflight
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  }
 
+  // Preflight request
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+
+  next();
+});
+
+// -------------------------------------------
+// JSON y cookies
+// -------------------------------------------
 app.use(express.json());
 app.use(cookieParser());
 
@@ -89,10 +93,12 @@ app.use("/api/pay", PayRoutes);
 app.use("/api/testPay", TestPay);
 app.use("/api/token", tokenRouter);
 app.use("/api/admin", adminVerifyRoutes);
-app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
 app.use("/api/profile", profileRoutes);
-app.use("/api/check-session", sessionRouter);
+
+// ✅ Ruta de sesión usando middleware authenticate
+import { authenticate } from "./src/middlewares/auth.js";
+app.use("/api/check-session", authenticate, sessionRouter);
 
 export default app;
