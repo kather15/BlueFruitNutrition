@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
 import fs from "fs";
@@ -26,6 +27,10 @@ import sessionRouter from "./src/routes/session.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import BillRoutes from "./src/routes/bill.js";
 import profileRoutes from "./src/routes/profile.js";
+import recommendationRoutes from "./src/routes/recommendation.js";
+
+// Middleware de autenticación
+import { authenticate } from "./src/middlewares/auth.js";
 
 // Inicialización
 const app = express();
@@ -44,7 +49,6 @@ const allowedOrigins = process.env.CORS_ORIGIN
       "https://bluefruitnutrition1.onrender.com",
     ];
 
-// Middleware para CORS y preflight
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
@@ -54,7 +58,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
   }
 
-  // Preflight request
+  // Responder preflight requests
   if (req.method === 'OPTIONS') return res.sendStatus(204);
 
   next();
@@ -96,9 +100,10 @@ app.use("/api/admin", adminVerifyRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/recommendation", recommendationRoutes);
 
-// ✅ Ruta de sesión usando middleware authenticate
-import { authenticate } from "./src/middlewares/auth.js";
+// ✅ Ruta de sesión protegida
 app.use("/api/check-session", authenticate, sessionRouter);
 
 export default app;
+
