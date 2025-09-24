@@ -4,7 +4,8 @@ import { authenticate } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-// ✅ Ruta protegida para verificar sesión actual
+// ✅ Ruta protegida
 router.get("/auth/session", authenticate, sessionController.checkSession);
 
 export default router;
+
