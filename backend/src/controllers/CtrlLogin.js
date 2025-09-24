@@ -125,12 +125,13 @@ loginController.login = async (req, res) => {
      * CREAR COOKIE
      * -----------------------------
      */
-  res.cookie("authToken", token, {
+res.cookie("authToken", token, {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production", // solo true en producción
-  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
-  maxAge: 24 * 60 * 60 * 1000
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  maxAge: 24 * 60 * 60 * 1000,
 });
+
 
 console.log("Cookie authToken establecida + token+:", token + " y cookie: " + req.cookies.authToken);
     /**
