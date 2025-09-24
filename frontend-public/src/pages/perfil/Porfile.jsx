@@ -11,10 +11,13 @@ const Perfil = () => {
   // 🔹 Verificar sesión en el servidor
   const checkSession = async () => {
     try {
-      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/check-session", {
-        method: "GET",
-        credentials: "include", // importante para enviar la cookie
-      });
+     fetch("https://bluefruitnutrition1.onrender.com/api/check-session", {
+  method: "GET",
+  credentials: "include",
+})
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.error(err));
 
       if (!res.ok) throw new Error("Sesión inválida");
 
