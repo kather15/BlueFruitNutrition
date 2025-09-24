@@ -1,4 +1,3 @@
-// Dependencias--------------------------------------------------------------------------------
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -6,7 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import fs from "fs";
 import path from "path";
 
-// Rutas----------------------------------------------------------------------------------------
+// Rutas
 import productsRoutes from "./src/routes/products.js";
 import customersRouter from "./src/routes/customers.js";
 import distributorsRoutes from "./src/routes/distributors.js";
@@ -14,10 +13,10 @@ import registerCustomersRoutes from "./src/routes/registerCustomer.js";
 import registerDistributorsRoutes from "./src/routes/registerDistributor.js";
 import passwordRecoveryRoutes from "./src/routes/passwordRecovery.js";
 import loginRoutes from "./src/routes/login.js";
-import logoutRoutes from "./src/routes/logout.js";
-import subscriptionRoutes from "./src/routes/subscriptions.js";
-import shoppingCartRoutes from "./src/routes/shoppingCart.js";
-import ordenesRoutes from "./src/routes/ordenes.js";
+import logoutRoutes from './src/routes/logout.js';
+import subscriptionRoutes from './src/routes/subscriptions.js';
+import shoppingCartRoutes from './src/routes/shoppingCart.js';
+import ordenesRoutes from './src/routes/ordenes.js';
 import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
 import PayRoutes from "./src/routes/pay.js";
@@ -29,14 +28,14 @@ import chatRoutes from "./src/routes/chatRoutes.js";
 import BillRoutes from "./src/routes/bill.js";
 import profileRoutes from "./src/routes/profile.js";
 
-// Inicialización de app
+// Inicialización
 const app = express();
 
 // -------------------------------------------
-// Configuración de CORS
+// CORS
 // -------------------------------------------
 const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(",") // en .env defines separado por coma
+  ? process.env.CORS_ORIGIN.split(",")
   : [
       "http://localhost:5173",
       "http://localhost:5174",
@@ -48,8 +47,14 @@ const allowedOrigins = process.env.CORS_ORIGIN
 
 app.use(
   cors({
-    origin: allowedOrigins,
-    credentials: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("No permitido por CORS"));
+      }
+    },
+    credentials: true, 
   })
 );
 
@@ -57,16 +62,14 @@ app.use(express.json());
 app.use(cookieParser());
 
 // -------------------------------------------
-// Configuración de Swagger
+// Swagger
 // -------------------------------------------
-const swaggerFilePath = path.resolve(
-  "./bluefruit-bluefruit_api-1.0.0-swagger.json"
-);
+const swaggerFilePath = path.resolve("./bluefruit-bluefruit_api-1.0.0-swagger.json");
 const swaggerDocument = JSON.parse(fs.readFileSync(swaggerFilePath, "utf-8"));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // -------------------------------------------
-// Endpoints API
+// Endpoints
 // -------------------------------------------
 app.use("/api/products", productsRoutes);
 app.use("/api/customers", customersRouter);
@@ -89,7 +92,6 @@ app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
 app.use("/api/profile", profileRoutes);
-app.use("/api/check-session", sessionRouter); // Ruta para verificar sesión
+app.use("/api/check-session", sessionRouter);
 
-// Exportar app
 export default app;
