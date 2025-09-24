@@ -11,20 +11,20 @@ const Perfil = () => {
   // 🔹 Verificar sesión en el servidor
   const checkSession = async () => {
     try {
-     fetch("https://bluefruitnutrition1.onrender.com/api/check-session", {
-  method: "GET",
-  credentials: "include",
-})
-  .then(res => res.json())
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+      const res = await fetch(
+        "https://bluefruitnutrition1.onrender.com/api/check-session",
+        {
+          method: "GET",
+          credentials: "include", // 🔑 enviar cookies
+        }
+      );
 
       if (!res.ok) throw new Error("Sesión inválida");
 
       const data = await res.json();
       setUserData(data); // data debería tener { id, email, name, role... }
     } catch (error) {
-      navigate("/login"); // si no hay sesión
+      navigate("/login"); // si no hay sesión activa
     } finally {
       setLoading(false);
     }
@@ -33,10 +33,10 @@ const Perfil = () => {
   // 🔹 Cerrar sesión
   const handleLogout = async () => {
     try {
-      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/logout", {
-        method: "POST",
-        credentials: "include",
-      });
+      const res = await fetch(
+        "https://bluefruitnutrition1.onrender.com/api/logout",
+        { method: "POST", credentials: "include" }
+      );
 
       if (res.ok) {
         Swal.fire({
@@ -46,7 +46,7 @@ const Perfil = () => {
           timer: 2000,
           showConfirmButton: false,
         });
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
