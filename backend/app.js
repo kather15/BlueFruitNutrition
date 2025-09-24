@@ -32,6 +32,19 @@ import profileRoutes from "./src/routes/profile.js";
 // Inicialización de app
 const app = express();
 
+<<<<<<< HEAD
+// 🔹 Configuración de CORS
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app",
+      "https://blue-fruit-nutrition-private.vercel.app",
+      "https://blue-fruit-nutrition-4vhs.vercel.app", // ✅ agregado
+      "https://bluefruitnutrition1.onrender.com"
+    ],
+=======
 // -------------------------------------------
 // Configuración de CORS dinámico
 // -------------------------------------------
@@ -48,6 +61,7 @@ const allowedOrigins = process.env.CORS_ORIGIN
 app.use(
   cors({
     origin: allowedOrigins,
+>>>>>>> ed5742c79c4a30879b6749203014aa1cbb64e799
     credentials: true,
   })
 );
@@ -86,6 +100,7 @@ app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/check-session", sessionRouter); // Ruta para verificar sesión
 
 // Exportar app
 export default app;
