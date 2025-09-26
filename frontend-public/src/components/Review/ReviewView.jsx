@@ -1,7 +1,6 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 
-
 const Review = ({ review, onDeleteReview }) => {
   const renderStars = (rating) => (
     [...Array(5)].map((_, i) => (

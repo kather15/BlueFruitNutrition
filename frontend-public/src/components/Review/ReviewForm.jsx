@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-
 const ReviewForm = ({ productId, loadReviews }) => {
   const [newReview, setNewReview] = useState({
     rating: 5,

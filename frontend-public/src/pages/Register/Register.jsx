@@ -32,22 +32,23 @@ function Registro() {
         payload = {
           name: data.name,
           lastName: data.lastName,
-          email: data.customerEmail,
-          password: data.customerPassword,
+          email: data.email,
+          password: data.password,
           phone: data.phone,
-          birthDate: data.birthDate,
+          dateBirth: data.dateBirth,
         };
       } else {
         endpoint = "https://bluefruitnutrition1.onrender.com/api/registerDistributors";
         payload = {
           companyName: data.companyName,
-          email: data.distributorEmail,
-          password: data.distributorPassword,
+          email: data.email,
+          password: data.password,
           address: data.address,
-          phone: data.distributorPhone,
-          nie: data.nie,
+          phone: data.phone,
+          nit: data.nit,
         };
       }
+      console.log("Datos enviados:", data);
 
       const res = await fetch(endpoint, {
         method: "POST",
@@ -156,17 +157,17 @@ function Registro() {
                 <input type="text" placeholder="Apellido" className={`input-modern ${errors.lastName ? "input-error" : ""}`} {...register("lastName", { required: "El apellido es obligatorio" })} />
                 {errors.lastName && <span className="error-message">{errors.lastName.message}</span>}
 
-                <input type="email" placeholder="Correo electrónico" className={`input-modern ${errors.customerEmail ? "input-error" : ""}`} {...register("customerEmail", { required: "El correo es obligatorio" })} />
-                {errors.customerEmail && <span className="error-message">{errors.customerEmail.message}</span>}
+                <input type="email" placeholder="Correo electrónico" className={`input-modern ${errors.email ? "input-error" : ""}`} {...register("email", { required: "El correo es obligatorio" })} />
+                {errors.email && <span className="error-message">{errors.email.message}</span>}
 
-                <input type="password" placeholder="Contraseña" className={`input-modern ${errors.customerPassword ? "input-error" : ""}`} {...register("customerPassword", { required: "La contraseña es obligatoria" })} />
-                {errors.customerPassword && <span className="error-message">{errors.customerPassword.message}</span>}
+                <input type="password" placeholder="Contraseña" className={`input-modern ${errors.password ? "input-error" : ""}`} {...register("password", { required: "La contraseña es obligatoria" })} />
+                {errors.password && <span className="error-message">{errors.password.message}</span>}
 
                 <input type="tel" placeholder="Número de teléfono" className={`input-modern ${errors.phone ? "input-error" : ""}`} {...register("phone", { required: "El teléfono es obligatorio" })} />
                 {errors.phone && <span className="error-message">{errors.phone.message}</span>}
 
-                <input type="date" placeholder="Fecha de nacimiento" className={`input-modern ${errors.birthDate ? "input-error" : ""}`} {...register("birthDate", { required: "Fecha de nacimiento obligatoria" })} max={minBirthDate} />
-                {errors.birthDate && <span className="error-message">{errors.birthDate.message}</span>}
+                <input type="date" placeholder="Fecha de nacimiento" className={`input-modern ${errors.dateBirth ? "input-error" : ""}`} {...register("dateBirth", { required: "Fecha de nacimiento obligatoria" })} max={minBirthDate} />
+                {errors.dateBirth && <span className="error-message">{errors.dateBirth.message}</span>}
               </>
             ) : (
               <>

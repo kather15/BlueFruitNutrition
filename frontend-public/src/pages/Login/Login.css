@@ -1,24 +1,33 @@
-/* Login.css - estilo unificado con Registro */
+/* ========================================
+   LOGIN - DISEÑO MODERNO (Misma estética que Register)
+   ======================================== */
+
+/* Contenedor principal */
 .login-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  font-family: 'Inter', sans-serif;
   padding: 20px;
 }
 
+/* Tarjeta de login */
 .login-card {
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 900px;
+  max-width: 950px;
   border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   background: #fff;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
+/* ========================================
+   LADO IZQUIERDO - ILUSTRACIÓN
+   ======================================== */
 .login-left {
   flex: 1;
   background: #0C133F;
@@ -28,12 +37,17 @@
   padding: 40px;
 }
 
-.login-img {
+.login-left .login-img {
   max-width: 100%;
+  height: auto;
   border-radius: 12px;
   object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
+/* ========================================
+   LADO DERECHO - FORMULARIO
+   ======================================== */
 .login-right {
   flex: 1;
   padding: 50px 40px;
@@ -43,122 +57,124 @@
   background: #fff;
 }
 
-.welcome-title {
-  font-size: 30px;
+.login-title {
+  font-size: 32px;
   font-weight: 800;
   color: #0C133F;
   margin-bottom: 10px;
 }
 
-.form-subtitle {
+.login-subtitle {
   font-size: 16px;
   color: #666;
   margin-bottom: 25px;
 }
 
-.input-modern {
+/* Inputs modernos */
+.login-input {
   width: 100%;
   padding: 14px 16px;
   border-radius: 10px;
   border: 1px solid #ccc;
-  margin-bottom: 20px;
   font-size: 14px;
   color: #0C133F;
   background: #f9f9f9;
+  outline: none;
   transition: all 0.25s ease;
+  margin-bottom: 20px;
 }
 
-.input-modern:focus {
+.login-input:focus {
   border-color: #1E40AF;
   box-shadow: 0 0 8px rgba(30,64,175,0.4);
   background: #fff;
 }
 
-.btn-primary {
+/* Contenedor del input + botón de contraseña */
+.password-container {
+  position: relative;
   width: 100%;
-  background: #1E40AF;
+  margin-bottom: 20px;
+}
+
+.password-container .login-input {
+  padding-right: 40px; /* espacio para el botón */
+}
+
+/* Botón mostrar/ocultar contraseña */
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  color: #666;
+}
+
+.toggle-password:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Mensajes de error */
+.input-error {
+  border-color: #ff4d4f;
+}
+
+.error-message {
+  font-size: 12px;
+  color: #ff4d4f;
+  margin-top: -12px;
+  margin-bottom: 12px;
+}
+
+/* ========================================
+   BOTONES DE ACCIÓN
+   ======================================== */
+.login-btn {
+  width: 100%;
+  background: #1E40AF; /* azul principal */
   color: #fff;
   padding: 14px 0;
   border-radius: 10px;
   font-weight: 700;
+  font-size: 15px;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 15px;
 }
 
-.btn-primary:hover {
-  background: #1E3A8A;
+.login-btn:hover {
+  background: #1E3A8A; /* azul más oscuro en hover */
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(30,64,175,0.4);
 }
 
-.btn-secondary {
-  background: transparent;
-  border: 2px solid #1E40AF;
-  color: #1E40AF;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background: rgba(30,64,175,0.1);
-}
-
-.forgot-password {
+/* Enlace de contraseña olvidada */
+.forgot-password-container {
   text-align: center;
   font-size: 14px;
+  color: #666;
 }
 
-.forgot-password a {
+.forgot-password-link {
   color: #1E40AF;
   font-weight: 600;
   text-decoration: none;
 }
 
-.forgot-password a:hover {
+.forgot-password-link:hover {
   text-decoration: underline;
 }
 
-/* Modal igual al registro */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(30,34,54,0.35);
-  backdrop-filter: blur(6px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-  max-width: 400px;
-  width: 100%;
-}
-
-.modal-content input {
-  width: 100%;
-  padding: 0.7rem;
-  margin: 1rem 0;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-.modal-content button {
-  margin: 0.5rem;
-}
-
-/* Responsive */
+/* ========================================
+   RESPONSIVE
+   ======================================== */
 @media (max-width: 900px) {
   .login-card {
     flex-direction: column;
@@ -170,5 +186,24 @@
 
   .login-right {
     padding: 40px 30px;
+  }
+}
+
+@media (max-width: 500px) {
+  .login-title {
+    font-size: 26px;
+  }
+
+  .login-subtitle {
+    font-size: 14px;
+  }
+
+  .login-input {
+    padding: 12px 14px;
+  }
+
+  .login-btn {
+    font-size: 14px;
+    padding: 12px 0;
   }
 }

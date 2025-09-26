@@ -125,14 +125,15 @@ loginController.login = async (req, res) => {
      * CREAR COOKIE
      * -----------------------------
      */
-   res.cookie("authToken", token, {
+res.cookie("authToken", token, {
   httpOnly: true,
-  secure: true,            // Render siempre usa HTTPS
-  sameSite: "none",        // Permite compartir cookie entre dominios distintos
-  maxAge: 24 * 60 * 60 * 1000 // 1 día
+  secure: process.env.NODE_ENV === "production", // solo true en producción
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  maxAge: 24 * 60 * 60 * 1000,
 });
 
 
+console.log("Cookie authToken establecida + token+:", token + " y cookie: " + req.cookies.authToken);
     /**
      * -----------------------------
      * RESPUESTA FINAL
@@ -145,12 +146,17 @@ loginController.login = async (req, res) => {
       role: userType,
       isAuthenticated: true
     };
+    
+    //nombre del usuario
+    console.log("Usuario autenticado:", userData.name);
 
     return res.json({
       message: "Login exitoso",
       role: userType,
       user: userData,
+      namek: userData.name,
       token: token
+      
     });
 
   } catch (error) {
