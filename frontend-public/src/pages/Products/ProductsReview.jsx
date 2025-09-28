@@ -1,82 +1,114 @@
-import React, { useState, useEffect } from 'react'; 
-import { useParams, useNavigate } from 'react-router-dom'; 
-import { Star } from 'lucide-react'; 
-import toast from 'react-hot-toast'; 
-import ReviewForm from "../../components/Review/ReviewForm";  
-import Review from '../../components/Review/ReviewView';  
-import { useAuthContext } from '../../context/useAuth'; 
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import ReviewForm from "../../components/Review/ReviewForm";
+import Review from '../../components/Review/ReviewView';
+import { useAuthContext } from '../../context/useAuth';
 import './ProductsReview.css';
 
 const ProductsReview = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
-  // Accedemos al contexto de autenticación
-  const { isAuthenticated, user } = useAuthContext();
 
-  // Estados principales
+  const { isAuthenticated } = useAuthContext();
+
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [showReviewForm, setShowReviewForm] = useState(false); // Estado para mostrar el formulario de reseña
-// Cargar información del producto
-useEffect(() => {
-  fetch(`http://localhost:4000/api/products/${id}`, {
-    credentials: 'include',  // <--- Agregar esta línea
-  })
-    .then(res => res.json())
-    .then(data => setProduct(data))
-    .catch(err => {
-      console.error('Error al cargar el producto:', err);
-      setProduct(null);
-    });
-}, [id]);
+  const [showReviewForm, setShowReviewForm] = useState(false);
 
-// Cargar reseñas
-useEffect(() => {
-  loadReviews();
-}, [id]);
+  const [selectedFlavor, setSelectedFlavor] = useState('');
+  const [showFlavorDrawer, setShowFlavorDrawer] = useState(false);
 
-const loadReviews = () => {
-  fetch(`http://localhost:4000/api/reviews?idProduct=${id}`, {
-    credentials: 'include',  // <--- Y aquí también
-  })
-    .then(res => res.json())
-    .then(data => setReviews(data))
-    .catch(err => console.error('Error al obtener reseñas:', err));
-};
+  // Cargar información del producto y parsear sabores correctamente
+  useEffect(() => {
+    fetch(`http://localhost:4000/api/products/${id}`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        let flavorsArray = [];
 
+        if (typeof data.flavor === 'string') {
+          try {
+            flavorsArray = JSON.parse(data.flavor);
+          } catch (error) {
+            console.error("Error parseando sabores:", error);
+            flavorsArray = [data.flavor]; // fallback a string solo
+          }
+        } else if (Array.isArray(data.flavor)) {
+          flavorsArray = data.flavor;
+        }
+
+        setProduct({ ...data, flavor: flavorsArray });
+
+        if (flavorsArray.length > 0) {
+          setSelectedFlavor(flavorsArray[0]); // primer sabor por defecto
+        }
+      })
+      .catch(err => {
+        console.error('Error al cargar el producto:', err);
+        setProduct(null);
+      });
+  }, [id]);
+
+  // Cargar reseñas
+  useEffect(() => {
+    loadReviews();
+  }, [id]);
+
+  const loadReviews = () => {
+    fetch(`http://localhost:4000/api/reviews?idProduct=${id}`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => setReviews(data))
+      .catch(err => console.error('Error al obtener reseñas:', err));
+  };
 
   const handleQuantityChange = (change) => {
     setQuantity(prev => Math.max(1, prev + change));
   };
 
+  const handleFlavorChange = (flavor) => {
+    setSelectedFlavor(flavor);
+  };
+
   const handleAddToCart = () => {
     if (!product) return;
 
+    if (product.flavor && product.flavor.length > 1 && !selectedFlavor) {
+      toast.error("Por favor selecciona un sabor");
+      return;
+    }
+
     const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     const productId = product._id || product.id;
-    const existente = carrito.find(p => p.id === productId);
+
+    const uniqueId = product.flavor && product.flavor.length > 1
+      ? `${productId}_${selectedFlavor}`
+      : productId;
+
+    const existente = carrito.find(p => p.id === uniqueId);
 
     if (existente) {
       existente.cantidad += quantity;
     } else {
       carrito.push({
-        id: productId,
+        id: uniqueId,
+        productId: productId,
         nombre: product.name,
         precio: product.price,
         cantidad: quantity,
+        sabor: selectedFlavor || (Array.isArray(product.flavor) ? product.flavor[0] : product.flavor),
         imagen: product.image || '/placeholder-product.png'
       });
     }
 
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    toast.success(`Agregado al carrito: ${quantity} x ${product.name}`);
+
+    const flavorText = selectedFlavor ? ` (${selectedFlavor})` : '';
+    toast.success(`Agregado al carrito: ${quantity} x ${product.name}${flavorText}`);
   };
 
   const handleBackToProducts = () => navigate('/product');
 
-  // Verificación de si el producto no se encuentra
   if (product === null) {
     return (
       <div className="products-review-wrapper">
@@ -92,13 +124,11 @@ const loadReviews = () => {
     );
   }
 
-  // Verificación de autenticación antes de permitir agregar reseña
   const handleAddReview = () => {
     if (!isAuthenticated) {
       toast.error("Debes iniciar sesión para agregar una reseña.");
-      navigate("/login"); // Redirige al login si no está autenticado
+      navigate("/login");
     } else {
-      // Si está autenticado, muestra el formulario de reseña
       setShowReviewForm(true);
     }
   };
@@ -121,7 +151,6 @@ const loadReviews = () => {
                     className="product-main-image"
                     onError={(e) => {
                       e.target.src = '/placeholder-product.png';
-                      console.error(`Error loading image: ${product.image}`);
                     }}
                   />
                 </div>
@@ -130,7 +159,30 @@ const loadReviews = () => {
               <div className="product-info-section">
                 <h1 className="product-title">{product.name}</h1>
                 <div className="product-price">${product.price.toFixed(2)}</div>
-                {product.flavor && <div className="product-flavor">Sabor: {product.flavor}</div>}
+
+                {product.flavor && product.flavor.length > 0 && (
+                  <div className="flavor-selector-container">
+                    <label htmlFor="flavor-select" className="flavor-label">Sabor:</label>
+                    <select
+                      id="flavor-select"
+                      value={selectedFlavor}
+                      onChange={(e) => handleFlavorChange(e.target.value)}
+                      className="flavor-dropdown"
+                    >
+                      {product.flavor.map((flavor, index) => (
+                        <option key={index} value={flavor}>
+                          {flavor}
+                        </option>
+                      ))}
+                    </select>
+
+                    {selectedFlavor && (
+                      <p className="selected-flavor">
+                        Sabor seleccionado: <strong>{selectedFlavor}</strong>
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 <div className="quantity-section">
                   <span>Cantidad:</span>
@@ -144,6 +196,7 @@ const loadReviews = () => {
                 <div className="action-buttons">
                   <button className="add-to-cart-btn" onClick={handleAddToCart}>
                     Agregar Al Carrito
+                    {selectedFlavor && ` (${selectedFlavor})`}
                   </button>
                 </div>
 
@@ -154,20 +207,21 @@ const loadReviews = () => {
             </div>
           </div>
 
-          {/* Aquí agregamos el formulario para agregar una nueva reseña */}
+          {/* Sección de reseñas */}
           <div className="reviews-section">
             <div className="reviews-header">
               <h2>Reseñas</h2>
-              <button
-                className="add-review-btn"
-                onClick={handleAddReview} // Llamar a la función de validación de login
-              >
+              <button className="add-review-btn" onClick={handleAddReview}>
                 Agregar Reseña
               </button>
             </div>
 
             {showReviewForm && (
-              <ReviewForm productId={id} onClose={() => setShowReviewForm(false)} />
+              <ReviewForm
+                productId={id}
+                onClose={() => setShowReviewForm(false)}
+                onReviewAdded={loadReviews}
+              />
             )}
 
             {reviews.length > 0 ? (

@@ -1249,3 +1249,40 @@
   font-size: 1.2rem;
   margin-bottom: 15px;
 }
+
+.flavor-selector-container {
+  margin: 10px 0;
+}
+
+.flavor-dropdown {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+
+
+.flavor-dropdown {
+  width: fit-content;
+  min-width: 120px;
+  max-width: 200px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  appearance: none;
+}
+
+.flavor-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.selected-flavor {
+  margin-top: 5px;
+  font-size: 14px;
+}

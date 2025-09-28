@@ -59,7 +59,6 @@ productsController.postProducts = async (req, res) => {
 
     console.log("📁 Archivo recibido en req.file:", req.file.path);
 
-    // Subida sin allowed_formats para evitar error firma
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "products",
     });
@@ -69,7 +68,20 @@ productsController.postProducts = async (req, res) => {
     fs.unlinkSync(req.file.path);
     console.log("🗑️ Archivo local eliminado:", req.file.path);
 
-    const { name, description, flavor, price, idNutritionalValues } = req.body;
+    let { name, description, flavor, price, idNutritionalValues } = req.body;
+
+    // Asegurar que flavor sea un array
+    if (typeof flavor === "string") {
+      try {
+        flavor = JSON.parse(flavor); // si viene como string de array
+      } catch {
+        flavor = [flavor]; // por si viene un solo string plano
+      }
+    }
+
+    if (!Array.isArray(flavor)) {
+      return res.status(400).json({ message: "El campo 'flavor' debe ser un arreglo" });
+    }
 
     const newProduct = new productsModel({
       name,
@@ -89,6 +101,7 @@ productsController.postProducts = async (req, res) => {
     res.status(500).json({ message: "Error al guardar el producto", error: error.message });
   }
 };
+
 
 // DELETE product by ID
 productsController.deleteProducts = async (req, res) => {

@@ -12,7 +12,7 @@ const productsSchema = new Schema({
   },
 
   flavor: {
-    type: String,
+    type: [String],
     required: true,
   },
 
