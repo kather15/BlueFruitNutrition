@@ -12,7 +12,7 @@ const Perfil = () => {
   const checkSession = async () => {
     try {
       const res = await fetch(
-        "https://bluefruitnutrition1.onrender.com/api/check-session",
+        "https://bluefruitnutrition-production.up.railway.app/api/check-session",
         {
           method: "GET",
           credentials: "include", // 🔑 enviar cookies
@@ -34,7 +34,7 @@ const Perfil = () => {
   const handleLogout = async () => {
     try {
       const res = await fetch(
-        "https://bluefruitnutrition1.onrender.com/api/logout",
+        "https://bluefruitnutrition-production.up.railway.app/api/logout",
         { method: "POST", credentials: "include" }
       );
 

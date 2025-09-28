@@ -11,7 +11,7 @@ export default function ResetPassword() {
     e.preventDefault();
     const email = localStorage.getItem("recoveryEmail");
 
-    const res = await fetch("https://bluefruitnutrition1.onrender.com/api/passwordRecovery/newPassword", {
+    const res = await fetch("https://bluefruitnutrition-production.up.railway.app/api/passwordRecovery/newPassword", {
       credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },

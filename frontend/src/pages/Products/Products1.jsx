@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Products1.css';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = "https://bluefruitnutrition1.onrender.com/api/products";
+const API_URL = "https://bluefruitnutrition-production.up.railway.app/api/products";
 
 function ProductCard({ product, onView, onDelete }) {
   return (

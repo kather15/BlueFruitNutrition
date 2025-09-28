@@ -7,7 +7,7 @@ const Suscripciones = () => {
   useEffect(() => {
     const fetchSuscripciones = async () => {
       try {
-        const res = await fetch("https://bluefruitnutrition1.onrender.com/api/subscriptions");
+        const res = await fetch("https://bluefruitnutrition-production.up.railway.app/api/subscriptions");
         const data = await res.json();
         setSuscripciones(data);
       } catch (error) {

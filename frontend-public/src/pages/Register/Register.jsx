@@ -28,7 +28,7 @@ function Registro() {
       let endpoint = "";
 
       if (tipoUsuario === "customer") {
-        endpoint = "bluefruitnutrition-production.up.railway.app/api/registerCustomers";
+        endpoint = "https://bluefruitnutrition-production.up.railway.app/api/registerCustomers";
         payload = {
           name: data.name,
           lastName: data.lastName,
@@ -38,7 +38,7 @@ function Registro() {
           dateBirth: data.dateBirth,
         };
       } else {
-        endpoint = "bluefruitnutrition-production.up.railway.app/api/registerDistributors";
+        endpoint = "https://bluefruitnutrition-production.up.railway.app/api/registerDistributors";
         payload = {
           companyName: data.companyName,
           email: data.email,
