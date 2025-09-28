@@ -1,5 +1,3 @@
-
-
 /* ProductsReview.css - DISEÑO EXACTO DE LA IMAGEN */
 
 /* Wrapper principal */
@@ -36,7 +34,7 @@
 
 /* COLUMNA 1: Imagen del producto */
 .product-image-card {
-  background-color: transparent; /* quitar fondo */
+  background-color: transparent; 
   border-radius: 12px;
   padding: 20px;
   width: 100%;
@@ -147,42 +145,6 @@
   line-height: 35px;
 }
 
-.action-buttons-new {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 20px 0;
-}
-
-.add-to-cart-btn-new {
-  background: #1a1a3a;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: auto;
-}
-
-.add-to-cart-btn-new:hover {
-  background: #2d2d54;
-}
-
-.customize-btn-new {
-  background: white;
-  color: #1a1a3a;
-  border: 2px solid #1a1a3a;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: auto;
-}
 
 .customize-btn-new:hover {
   background: #1a1a3a;
@@ -562,29 +524,7 @@
   min-height: 500px;
 }
 
-/* Sección de imagen */
-.product-image-section {
-  background: linear-gradient(135deg, #fff3cd 0%, #d4edda 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-}
 
-.product-image-container {
-  width: 100%;
-  max-width: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.product-main-image {
-  max-width: 100%;
-  max-height: 350px;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
-}
 
 /* Sección de información */
 .product-info-section {
@@ -666,32 +606,12 @@
   line-height: 40px;
 }
 
-.action-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 25px;
-}
 
-.add-to-cart-btn {
-  background: #1a1a3a;
-  color: white;
-  border: none;
-  padding: 15px 25px;
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.add-to-cart-btn:hover {
-  background: #2d2d54;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(26, 26, 58, 0.3);
-}
 
 .customize-btn {
+   display: inline-block;         /* Hace que funcione como botón */
+  text-decoration: none;         /* ❌ Quita subrayado */
+  text-align: center;
   background: white;
   color: #1a1a3a;
   border: 2px solid #1a1a3a;
@@ -708,11 +628,17 @@
   color: white;
 }
 
-.product-description {
-  color: #666;
-  line-height: 1.6;
-  font-size: 0.95rem;
+.customize-btn:active {
+  transform: translateY(0);
 }
+
+.action-buttons,
+.action-buttons-personalizar {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
 
 /* Sección de reseñas */
 .reviews-section {
@@ -1285,4 +1211,669 @@
 .selected-flavor {
   margin-top: 5px;
   font-size: 14px;
+}
+
+/* ProductsReview.css - RESPONSIVE MEJORADO */
+
+/* Wrapper principal */
+.products-review-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8f9fa;
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1a1a3a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Pantalla de detalle del producto */
+.product-detail-screen {
+  flex: 1;
+}
+
+.product-detail-main {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.product-detail-container {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón de volver */
+.back-button {
+  background: none;
+  border: none;
+  color: #1a1a3a;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 20px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(26, 26, 58, 0.05);
+}
+
+.back-button:hover {
+  background: rgba(26, 26, 58, 0.1);
+  transform: translateX(-2px);
+}
+
+/* Layout de dos columnas */
+.product-detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 400px; /* menos alto */
+}
+
+/* Sección de imagen */
+.product-image-section {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px; /* menos padding */
+}
+
+.product-image-container {
+  width: 100%;
+  max-width: 220px; /* más pequeño */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-main-image {
+  max-width: 100%;
+  max-height: 250px; /* más pequeño */
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+}
+
+
+/* Sección de información */
+.product-info-section {
+  padding: 40px 30px; /* un poco menos padding para que no ocupe tanto */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 15px; /* menos espacio entre elementos */
+  background: white;
+  text-align: left; /* aseguramos alineación izquierda */
+}
+
+.product-title {
+  font-size: 2rem; /* más pequeño */
+  font-weight: 800;
+  color: #1a1a3a; /* color oscuro, legible */
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+
+.product-price {
+  font-size: 2rem; /* más pequeño para que no compita */
+  font-weight: 700;
+  color: #d9534f; /* rojo suave para que contraste con el título */
+  margin: 0;
+  font-family: 'SF Pro Display', -apple-system, sans-serif;
+  text-align: left;
+}
+
+/* 🔧 SELECTOR DE SABORES RESPONSIVE */
+.flavor-selector-container {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.flavor-label {
+  font-weight: 600;
+  font-size: 13px;
+  color: #1a1a3a;
+  margin-bottom: 6px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.flavor-buttons {
+  display: flex;
+  flex-direction: column; /* 👉 Cambiado de fila a columna */
+  gap: 8px; /* espacio entre botones verticales */
+}
+
+.flavor-button {
+  background: white;
+  border: 1px solid #ced4da;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 13px;
+  color: #1a1a3a;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.flavor-button:hover {
+  background-color: #f1f3f5;
+  border-color: #1a1a3a;
+}
+
+.flavor-button.selected {
+  background-color: #1a1a3a;
+  color: white;
+  border-color: #1a1a3a;
+}
+
+
+/* Botones de acción */
+.action-buttons {
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+/* Descripción del producto */
+.product-description {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 16px;
+  border-left: 5px solid #1a1a3a;
+}
+
+.product-description h3 {
+  color: #1a1a3a;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.product-description p {
+  color: #666;
+  line-height: 1.8;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+/* Sección de reseñas */
+.reviews-section {
+  background: #f8f9fa;
+  padding: 50px 30px;
+}
+
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reviews-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a3a;
+  margin: 0;
+}
+
+.add-review-btn {
+  background: #1a1a3a;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 4px rgba(26, 26, 58, 0.2);
+  font-size: 13px;
+}
+
+.add-review-btn:hover {
+  background: #2d2d54;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(26, 26, 58, 0.25);
+}
+
+/* Container de reseñas */
+.review-form-wrapper {
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+}
+
+.reviews-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.no-reviews {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.no-reviews p {
+  color: #666;
+  font-size: 1.2rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Estados de error */
+.product-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px;
+  text-align: center;
+  min-height: 500px;
+}
+
+.product-not-found h2 {
+  color: #dc3545;
+  margin-bottom: 25px;
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.back-to-products-btn {
+  background: #1a1a3a;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(26, 26, 58, 0.2);
+}
+
+.back-to-products-btn:hover {
+  background: #2d2d54;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(26, 26, 58, 0.25);
+}
+
+/* RESPONSIVE DESIGN MEJORADO */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .product-detail-main {
+    padding: 15px;
+  }
+  
+  .product-detail-layout {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  
+  .product-image-section {
+    padding: 40px 25px;
+  }
+  
+  .product-info-section {
+    padding: 40px 30px;
+    gap: 20px;
+  }
+  
+  .product-title {
+    font-size: 2.3rem;
+  }
+  
+  .product-price {
+    font-size: 2rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .product-detail-main {
+    padding: 10px;
+  }
+  
+  .back-button {
+    margin: 20px;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  
+  .product-image-section {
+    padding: 30px 20px;
+  }
+  
+  .product-info-section {
+    padding: 30px 25px;
+    gap: 20px;
+  }
+  
+  .product-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+  
+  .product-price {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  
+  .flavor-selector-container {
+    padding: 15px;
+  }
+  
+  .flavor-label {
+    font-size: 16px;
+    text-align: center;
+  }
+.flavor-dropdown-select {
+  width: fit-content;              
+  max-width: 100%;                
+  padding: 6px 28px 6px 10px;      
+  font-size: 13px;                 
+  line-height: 1.4;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #1a1a3a;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+
+  /* Flechita custom */
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 14px;
+}
+
+
+  .quantity-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .quantity-controls {
+    margin: 0 auto;
+  }
+  
+  .add-to-cart-btn {
+    padding: 16px 30px;
+    font-size: 1rem;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .reviews-header {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+    padding: 0 15px;
+  }
+  
+  .reviews-section {
+    padding: 40px 20px;
+  }
+}
+
+/* Mobile pequeño */
+@media (max-width: 480px) {
+  .product-detail-container {
+    border-radius: 15px;
+    margin: 0 5px;
+  }
+  
+  .product-image-section,
+  .product-info-section {
+    padding: 25px 20px;
+  }
+  
+  .product-title {
+    font-size: 1.8rem;
+  }
+  
+  .product-price {
+    font-size: 1.6rem;
+  }
+  
+
+  
+  .quantity-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .quantity-display {
+    line-height: 24px;
+    font-size: 13px;
+    min-width: 30px;
+    padding: 0 10px;
+  }
+  
+  .add-to-cart-btn {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+  
+  .add-review-btn {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+  
+  .back-button {
+    margin: 15px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .product-description {
+    padding: 20px;
+  }
+  
+  .product-description h3 {
+    font-size: 1.1rem;
+  }
+  
+  .product-description p {
+    font-size: 1rem;
+  }
+  
+  .back-button {
+    margin: 15px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .reviews-section {
+    padding: 30px 15px;
+  }
+  
+  .reviews-header h2 {
+    font-size: 1.6rem;
+  }
+  
+  .add-review-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}
+
+/* Animaciones mejoradas */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.product-detail-container {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.product-image-section {
+  animation: slideInLeft 0.8s ease forwards;
+}
+
+.product-info-section {
+  animation: slideInRight 0.8s ease forwards;
+}
+
+/* Efectos hover mejorados */
+.flavor-dropdown-select:focus {
+  animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Mejoras de accesibilidad */
+.flavor-dropdown-select:focus-visible {
+  outline: 3px solid #1a1a3a;
+  outline-offset: 2px;
+}
+
+.quantity-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+
+/* Estados de loading mejorados */
+.loading-spinner p {
+  color: #666;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+
+
+.flavor-selector-container {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.quantity-section {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.product-description {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Mejoras tipográficas */
+.product-title {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.product-price {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Transiciones suaves para todos los elementos */
+* {
+  transition: all 0.2s ease;
+}
+
+/* Optimización para pantallas muy grandes */
+@media (min-width: 1400px) {
+  .product-detail-main {
+    padding: 30px;
+  }
+  
+  .product-detail-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .product-info-section {
+    padding: 60px 50px;
+  }
+  
+  .product-title {
+    font-size: 3.2rem;
+  }
+  
+  .product-price {
+    font-size: 2.8rem;
+  }
 }

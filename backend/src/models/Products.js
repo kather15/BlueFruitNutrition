@@ -1,40 +1,52 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-const productsSchema = new Schema({
+const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    trim: true
   },
-
   description: {
     type: String,
     required: true,
+    trim: true
   },
-
   flavor: {
-    type: [String],
+    type: [String], // 🔧 IMPORTANTE: Array de strings, NO String simple
     required: true,
+    validate: {
+      validator: function(v) {
+        return Array.isArray(v) && v.length > 0;
+      },
+      message: 'Debe tener al menos un sabor'
+    }
   },
-
   price: {
     type: Number,
     required: true,
-    min: 0,
+    min: 0
   },
-
   image: {
     type: String,
-    required: false,
+    required: true
   },
-
   idNutritionalValues: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "NutritionalValues",
-    required: false,
-  },
+    required: false
+  }
 }, {
-  timestamps: true,
-  strict: false,
+  timestamps: true // Agrega createdAt y updatedAt automáticamente
 });
 
-export default model("Products", productsSchema);
+// Middleware para debug
+productSchema.pre('save', function(next) {
+  console.log('🍎 Guardando producto con sabores:', this.flavor);
+  console.log('🍎 Tipo de sabores:', typeof this.flavor);
+  console.log('🍎 Es array:', Array.isArray(this.flavor));
+  next();
+});
+
+const Products = mongoose.model("Products", productSchema);
+
+export default Products;

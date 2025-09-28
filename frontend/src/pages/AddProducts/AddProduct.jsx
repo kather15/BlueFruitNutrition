@@ -22,7 +22,7 @@ const AddProduct = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    flavor: [],
+    flavor: [], // Mantener como array para múltiples sabores
     description: "",
     price: "",
   });
@@ -100,7 +100,7 @@ const AddProduct = () => {
     }, 300);
   };
 
-  // Controla los sabores seleccionados
+  // Controla los sabores seleccionados (múltiples)
   const handleFlavorToggle = (flavor) => {
     setFormData(prev => ({
       ...prev,
@@ -148,7 +148,7 @@ const AddProduct = () => {
     try {
       const data = new FormData();
       data.append("name", formData.name);
-      data.append("flavor", JSON.stringify(formData.flavor));
+      data.append("flavor", JSON.stringify(formData.flavor)); // Enviar como array JSON
       data.append("description", formData.description);
       data.append("price", formData.price);
       data.append("imagen", imageFile);
@@ -229,65 +229,58 @@ const AddProduct = () => {
               </datalist>
             </div>
 
-            <div>
+            <div className="flavor-section">
               <label>
-                {loadingFlavors ? "Cargando sabores..." : "Selecciona uno o más sabores"}
+                {loadingFlavors ? "Cargando sabores..." : "Selecciona los sabores disponibles"}
                 {showCustomFlavors && (
                   <span style={{ fontSize: "12px", color: "#666", marginLeft: "5px" }}>
-                    (Producto personalizado - todos los sabores disponibles)
+                    (Producto personalizado)
                   </span>
                 )}
               </label>
               
               {loadingFlavors ? (
-                <div style={{ padding: "20px", textAlign: "center" }}>
+                <div className="loading-spinner">
                   <div className="spinner">Cargando...</div>
                 </div>
               ) : availableFlavors.length > 0 ? (
-                <div className="flavors-grid" style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
-                  gap: "8px",
-                  marginTop: "8px",
-                  maxHeight: "200px",
-                  overflowY: "auto",
-                  padding: "10px",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px"
-                }}>
+                <div className="flavors-container">
                   {availableFlavors.map(flavor => (
-                    <label
+                    <div
                       key={flavor}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "6px",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                        padding: "4px"
-                      }}
+                      className={`flavor-option ${formData.flavor.includes(flavor) ? 'selected' : ''}`}
+                      onClick={() => handleFlavorToggle(flavor)}
                     >
-                      <input
-                        type="checkbox"
-                        checked={formData.flavor.includes(flavor)}
-                        onChange={() => handleFlavorToggle(flavor)}
-                        disabled={loadingSubmit}
-                      />
-                      {flavor}
-                    </label>
+                      <span className="flavor-name">{flavor}</span>
+                      {formData.flavor.includes(flavor) && (
+                        <span className="check-icon">✓</span>
+                      )}
+                    </div>
                   ))}
                 </div>
               ) : (
-                <div style={{ padding: "20px", textAlign: "center", color: "#666" }}>
+                <div className="no-flavors">
                   {formData.name ? "No hay sabores disponibles" : "Selecciona un producto primero"}
                 </div>
               )}
 
               {formData.flavor.length > 0 && (
-                <div style={{ marginTop: "10px" }}>
+                <div className="selected-flavors-display">
                   <strong>Sabores seleccionados ({formData.flavor.length}):</strong>
-                  <div style={{ fontSize: "14px", color: "#666", marginTop: "4px" }}>
-                    {formData.flavor.join(", ")}
+                  <div className="selected-flavors-list">
+                    {formData.flavor.map((flavor, index) => (
+                      <span key={flavor} className="selected-flavor-tag">
+                        {flavor}
+                        <button
+                          type="button"
+                          className="remove-flavor"
+                          onClick={() => handleFlavorToggle(flavor)}
+                          title="Quitar sabor"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
                   </div>
                 </div>
               )}
