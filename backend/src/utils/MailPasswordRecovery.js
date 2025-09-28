@@ -1,24 +1,22 @@
-import nodemailer from "nodemailer" //Dependencia para enviar correos
-import { config } from "../config.js"
+import nodemailer from "nodemailer"; //Dependencia para enviar correos
+import { config } from "../config.js";
 
-
-//1- Transporter = ¿Quién lo envia?
+// 1- Transporter = ¿Quién lo envía?
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    //Config
-    user: config.email.email_user, 
+    user: config.email.email_user,
     pass: config.email.email_pass,
   },
 });
 
-//2- ¿Quien lo recibe?
+// 2- Función genérica para enviar correo
 const sendMail = async (to, subject, text, html) => {
   try {
     const info = await transporter.sendMail({
-      from: '"Blue Fruit Nutrition" <itbluefruit@gmail.com>"',
+      from: '"Blue Fruit Nutrition" <itbluefruit@gmail.com>', // remitente
       to,
       subject,
       text,
@@ -26,15 +24,15 @@ const sendMail = async (to, subject, text, html) => {
     });
     return info;
   } catch (error) {
-    console.log("Error sending recovery email");//error
+    console.log("Error sending recovery email:", error);
+    return error;
   }
 };
 
-
-//3- Envio de correo
+// 3- Plantilla HTML de recuperación de contraseña
 const HTMLRecoveryEmail = (code) => {
   return `
-       <!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -56,7 +54,6 @@ const HTMLRecoveryEmail = (code) => {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       overflow: hidden;
     }
-    /* Header con gradiente */
     .header {
       background: linear-gradient(135deg, #001a4d 0%, #0056b3 100%);
       color: white;
@@ -72,7 +69,6 @@ const HTMLRecoveryEmail = (code) => {
       opacity: 0.9;
       font-weight: 500;
     }
-    /* Contenido */
     .content {
       padding: 30px;
       background: #ffffff;
@@ -102,7 +98,6 @@ const HTMLRecoveryEmail = (code) => {
       border: 2px solid #0056b3;
       user-select: all;
     }
-    /* Footer */
     .footer {
       background: #f8f9fa;
       padding: 15px;
@@ -133,8 +128,7 @@ const HTMLRecoveryEmail = (code) => {
   </div>
 </body>
 </html>
-
-    `;
+  `;
 };
 
 export { sendMail, HTMLRecoveryEmail };
