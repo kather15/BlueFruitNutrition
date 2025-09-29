@@ -29,6 +29,9 @@ import locationRoutes from "./src/routes/location.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
 
+// Middleware para autenticación (usado para proteger rutas)
+import { authenticate } from "./src/middleware/authenticate.js"; // Asegúrate de tener este middleware
+
 const app = express();
 
 // -------------------------------------------
@@ -107,7 +110,9 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
 
 // 🔹 Ruta de sesión protegida para frontend
-app.use("/api/session", sessionRouter);
+app.use("/api/session", sessionRouter); // sessionRouter debe exponer GET /auth/session
+// Ejemplo de cómo protegerlo con middleware:
+// sessionRouter.get("/auth/session", authenticate, checkSessionController);
 
 // -------------------------------------------
 // Manejo de errores simples
