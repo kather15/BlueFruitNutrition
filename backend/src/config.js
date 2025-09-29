@@ -46,5 +46,9 @@ export const config={
         client_secret: process.env.CLIENT_SECRET,
         grant_type: process.env.GRANT_TYPE,
         audience: process.env.AUDIENCE
+    },
+
+    apiKey: {
+        api_key: process.env.API_KEY // enviar correos
     }
 };

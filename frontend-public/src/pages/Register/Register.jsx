@@ -28,7 +28,7 @@ function Registro() {
       let endpoint = "";
 
       if (tipoUsuario === "customer") {
-        endpoint = "https://bluefruitnutrition1.onrender.com/api/registerCustomers";
+        endpoint = "https://bluefruitnutrition-production.up.railway.app/api/registerCustomers";
         payload = {
           name: data.name,
           lastName: data.lastName,
@@ -38,15 +38,16 @@ function Registro() {
           dateBirth: data.dateBirth,
         };
       } else {
-        endpoint = "https://bluefruitnutrition1.onrender.com/api/registerDistributors";
+        endpoint = "https://bluefruitnutrition-production.up.railway.app/api/registerDistributors";
         payload = {
           companyName: data.companyName,
           email: data.email,
           password: data.password,
           address: data.address,
           phone: data.phone,
-          nit: data.nit,
+          NIT: data.NIT,
         };
+
       }
       console.log("Datos enviados:", data);
 
@@ -174,20 +175,20 @@ function Registro() {
                 <input type="text" placeholder="Nombre de la empresa" className={`input-modern ${errors.companyName ? "input-error" : ""}`} {...register("companyName", { required: "El nombre de la empresa es obligatorio" })} />
                 {errors.companyName && <span className="error-message">{errors.companyName.message}</span>}
 
-                <input type="email" placeholder="Correo electrónico" className={`input-modern ${errors.distributorEmail ? "input-error" : ""}`} {...register("distributorEmail", { required: "El correo es obligatorio" })} />
-                {errors.distributorEmail && <span className="error-message">{errors.distributorEmail.message}</span>}
+                <input type="email" placeholder="Correo electrónico" className={`input-modern ${errors.email ? "input-error" : ""}`} {...register("email", { required: "El correo es obligatorio" })} />
+                {errors.email && <span className="error-message">{errors.email.message}</span>}
 
-                <input type="password" placeholder="Contraseña" className={`input-modern ${errors.distributorPassword ? "input-error" : ""}`} {...register("distributorPassword", { required: "La contraseña es obligatoria" })} />
-                {errors.distributorPassword && <span className="error-message">{errors.distributorPassword.message}</span>}
+                <input type="password" placeholder="Contraseña" className={`input-modern ${errors.password ? "input-error" : ""}`} {...register("password", { required: "La contraseña es obligatoria" })} />
+                {errors.password && <span className="error-message">{errors.password.message}</span>}
 
                 <input type="text" placeholder="Dirección" className={`input-modern ${errors.address ? "input-error" : ""}`} {...register("address", { required: "La dirección es obligatoria" })} />
                 {errors.address && <span className="error-message">{errors.address.message}</span>}
 
-                <input type="tel" placeholder="Teléfono" className={`input-modern ${errors.distributorPhone ? "input-error" : ""}`} {...register("distributorPhone", { required: "El teléfono es obligatorio" })} />
-                {errors.distributorPhone && <span className="error-message">{errors.distributorPhone.message}</span>}
+                <input type="tel" placeholder="Teléfono" className={`input-modern ${errors.phone ? "input-error" : ""}`} {...register("phone", { required: "El teléfono es obligatorio" })} />
+                {errors.phone && <span className="error-message">{errors.phone.message}</span>}
 
-                <input type="text" placeholder="NIE / Registro Fiscal" className={`input-modern ${errors.nie ? "input-error" : ""}`} {...register("nie", { required: "El NIE/Registro Fiscal es obligatorio" })} />
-                {errors.nie && <span className="error-message">{errors.nie.message}</span>}
+                <input type="text" placeholder="NIT / Registro Fiscal" className={`input-modern ${errors.NIT ? "input-error" : ""}`} {...register("NIT", { required: "El NIT/Registro Fiscal es obligatorio" })} />
+                {errors.NIT && <span className="error-message">{errors.NIT.message}</span>}
               </>
             )}
 

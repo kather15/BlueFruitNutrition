@@ -15,8 +15,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  //  URL base de la API
-  const API_URL = "https://bluefruitnutrition1.onrender.com/api";
+  // ✅ URL base de la API
+  const API_URL = "https://bluefruitnutrition-production.up.railway.app/api";
 
   // Verificar sesión al cargar la app
   useEffect(() => {

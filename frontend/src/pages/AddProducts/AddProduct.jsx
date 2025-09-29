@@ -153,7 +153,7 @@ const AddProduct = () => {
       data.append("price", formData.price);
       data.append("imagen", imageFile);
 
-      const res = await fetch("https://bluefruitnutrition1.onrender.com/api/products", {
+      const res = await fetch("https://bluefruitnutrition-production.up.railway.app/api/products", {
         method: "POST",
         body: data,
         credentials: "include",

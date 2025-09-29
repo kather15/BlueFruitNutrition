@@ -48,7 +48,7 @@ const allowedOrigins = process.env.CORS_ORIGIN
       "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app",
       "https://blue-fruit-nutrition-private.vercel.app",
       "https://blue-fruit-nutrition-4vhs.vercel.app",
-      "https://bluefruitnutrition1.onrender.com",
+      "https://bluefruitnutrition-production.up.railway.app",
     ];
 
 app.use((req, res, next) => {
