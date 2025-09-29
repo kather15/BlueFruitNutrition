@@ -29,8 +29,7 @@ import locationRoutes from "./src/routes/location.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
 
-// Middleware de autenticación
-import { authenticate } from "./src/middleware/authenticate.js";
+
 
 const app = express();
 

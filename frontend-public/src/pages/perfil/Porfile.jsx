@@ -13,7 +13,7 @@ const Perfil = () => {
   const checkSession = async () => {
     try {
       const res = await fetch(
-  "https://bluefruitnutrition-production.up.railway.app/api/check-session",
+  "https://bluefruitnutrition-production.up.railway.app/session/auth/session",
   {
     method: "GET",
     credentials: "include", // 🔑 manda la cookie
