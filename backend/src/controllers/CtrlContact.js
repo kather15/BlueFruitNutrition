@@ -1,4 +1,3 @@
-// backend/src/controllers/CtrlContact.js
 import { sendContactEmail } from '../utils/mailer.js';
 
 const handleContactForm = async (req, res) => {

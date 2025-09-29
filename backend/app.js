@@ -25,8 +25,13 @@ import adminVerifyRoutes from "./src/routes/adminVerify.js";
 import sessionRouter from "./src/routes/session.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import BillRoutes from "./src/routes/bill.js";
+import locationRoutes from "./src/routes/location.js"
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
+
+
+// Middleware de autenticación
+import { authenticate } from "./src/middlewares/auth.js";
 
 import { checkSession } from "./src/controllers/CtrlSession.js";
 import { authenticate } from "./src/middleware/authenticate.js";
@@ -34,7 +39,7 @@ import { authenticate } from "./src/middleware/authenticate.js";
 const app = express();
 
 // -------------------------------------------
-// CORS seguro con preflight
+// CORS
 // -------------------------------------------
 const allowedOrigins = [
   "http://localhost:5173",
@@ -45,21 +50,18 @@ const allowedOrigins = [
   "https://bluefruitnutrition-production.up.railway.app",
 ];
 
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-  }
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(204);
-  }
-
-  next();
-});
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("No permitido por CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -91,13 +93,12 @@ app.use("/api/pay", PayRoutes);
 app.use("/api/testPay", TestPay);
 app.use("/api/token", tokenRouter);
 app.use("/api/admin", adminVerifyRoutes);
-app.use("/api/session", sessionRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
+app.use("/api/location", locationRoutes)
 app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
-
-// 🔹 Ruta de sesión que espera el frontend
-app.get("/api/session/auth/session", authenticate, checkSession);
+app.use("/api/check-session", sessionRouter); // Ruta para validar sesión
 
 export default app;
+

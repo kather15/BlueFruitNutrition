@@ -17,7 +17,7 @@ const Beneficios = () => {
     };
 
 
-      const res = await fetch("https://bluefruitnutrition-production.up.railway.app/api/subscriptions", {
+      const res = await fetch("https://bluefruitnutrition-production.up.railway.app/api/subscriptions/public", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevaSuscripcion)

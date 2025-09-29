@@ -29,9 +29,11 @@ export const AuthProvider = ({ children }) => {
           const data = await res.json();
           setUser(data);
           setIsAuthenticated(true);
+          console.log("Sesión verificada con backend:", data);
         } else {
           setUser(null);
           setIsAuthenticated(false);
+          console.log("No hay sesión activa");
         }
       } catch (err) {
         console.error("Error verificando sesión:", err);
@@ -54,15 +56,19 @@ export const AuthProvider = ({ children }) => {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
       });
+
       if (res.ok) {
         const data = await res.json();
         setUser(data);
         setIsAuthenticated(true);
+        console.log("Sesión confirmada:", data);
       } else {
         setUser(null);
         setIsAuthenticated(false);
+        console.log("No hay sesión activa");
       }
     } catch (err) {
+      console.error("Error en checkSession:", err);
       setUser(null);
       setIsAuthenticated(false);
     } finally {
@@ -81,10 +87,16 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      if (res.ok && data.user) {
-        setUser(data.user);
-        setIsAuthenticated(true);
-        return { success: true, data };
+
+      if (res.ok) {
+        if (data.user && data.user.id) {
+          setUser(data.user);
+          setIsAuthenticated(true);
+          console.log("✅ Login exitoso:", data.user);
+          return { success: true, data };
+        } else {
+          throw new Error("Datos de usuario incompletos");
+        }
       } else {
         throw new Error(data.message || "Error en login");
       }
@@ -101,8 +113,9 @@ export const AuthProvider = ({ children }) => {
         method: "POST",
         credentials: "include",
       });
+      console.log("Logout exitoso");
     } catch (err) {
-      console.error("Error logout:", err);
+      console.error("Error al cerrar sesión:", err);
     } finally {
       setUser(null);
       setIsAuthenticated(false);

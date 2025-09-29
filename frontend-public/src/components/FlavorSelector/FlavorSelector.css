@@ -1,0 +1,62 @@
+.flavor-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1000;
+}
+
+.flavor-drawer {
+  width: 100%;
+  height: 50vh; /* medio de la pantalla */
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 1rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.drawer-title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.flavor-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.flavor-item {
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin: 0.3rem 0;
+  text-align: center;
+  background: #f4f4f4;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.flavor-item:hover {
+  background: #e2e2e2;
+}
+
+.flavor-item.selected {
+  background: #0077ff;
+  color: white;
+  font-weight: bold;
+}
