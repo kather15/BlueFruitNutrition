@@ -30,7 +30,7 @@ import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
 
 // Middleware y controladores
-import { authenticate } from "./src/middleware/authenticate.js";
+
 import { checkSession } from "./src/controllers/CtrlSession.js";
 
 // Inicialización
