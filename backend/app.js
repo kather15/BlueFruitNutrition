@@ -107,7 +107,7 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
 
 // 🔹 Ruta de sesión protegida para frontend
-app.use("/api/session/auth/session", sessionRouter);
+app.use("/api/session", sessionRouter);
 
 // -------------------------------------------
 // Manejo de errores simples
