@@ -93,7 +93,7 @@ app.use("/api/registerCustomers", registerCustomersRoutes);
 app.use("/api/registerDistributors", registerDistributorsRoutes);
 app.use("/api/passwordRecovery", passwordRecoveryRoutes);
 app.use("/api/login", loginRoutes);
-app.use("/api/logout", logoutRoutes);
+app.use("/api/logout", logoutR/api/check-sessionoutes);
 app.use("/api/shoppingCart", shoppingCartRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/ordenes", ordenesRoutes);
@@ -113,6 +113,7 @@ app.use("/api/recommendation", recommendationRoutes);
 app.use("/api/session", sessionRouter); // sessionRouter debe exponer GET /auth/session
 // Ejemplo de cómo protegerlo con middleware:
 // sessionRouter.get("/auth/session", authenticate, checkSessionController);
+
 
 // -------------------------------------------
 // Manejo de errores simples
