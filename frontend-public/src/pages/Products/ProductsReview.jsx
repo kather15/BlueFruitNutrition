@@ -21,7 +21,7 @@ const ProductsReview = () => {
   // Cargar producto
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:4000/api/products/${id}`, { credentials: 'include' })
+    fetch(`https://bluefruitnutrition-production.up.railway.app/api/products/${id}`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         // Procesar sabores correctamente
@@ -48,7 +48,7 @@ const ProductsReview = () => {
 
   // Cargar reseñas
   useEffect(() => {
-    fetch(`http://localhost:4000/api/reviews?idProduct=${id}`, { credentials: 'include' })
+    fetch(`https://bluefruitnutrition-production.up.railway.appapi/reviews?idProduct=${id}`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => setReviews(data))
       .catch(err => console.error(err));
@@ -142,7 +142,7 @@ const ProductsReview = () => {
 
         {showReviewForm && (
           <ReviewForm productId={id} onClose={() => setShowReviewForm(false)} onReviewAdded={() => {
-            fetch(`http://localhost:4000/api/reviews?idProduct=${id}`, { credentials: 'include' })
+            fetch(`https://bluefruitnutrition-production.up.railway.app/api/reviews?idProduct=${id}`, { credentials: 'include' })
               .then(res => res.json())
               .then(data => setReviews(data));
           }}/>

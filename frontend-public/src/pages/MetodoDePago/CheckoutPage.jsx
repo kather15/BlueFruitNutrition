@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/useAuth"; // ✅ Importar contexto
 import "./CheckoutPage.css";
 
-// Objeto que contiene todos los departamentos y sus municipios
+// Objeto con todos los departamentos y sus municipios
 const departamentosMunicipios = {
   Ahuachapán: ["Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco", "El Refugio", "Guaymango", "Jujutla", "San Francisco Menéndez", "San Lorenzo", "San Pedro Puxtla", "Tacuba", "Turín"],
   Cabañas: ["Cinquera", "Dolores", "Guacotecti", "Ilobasco", "Jutiapa", "San Isidro", "Sensuntepeque", "Tejutepeque", "Victoria"],
   Chalatenango: ["Agua Caliente", "Arcatao", "Azacualpa", "Citalá", "Comalapa", "Concepción Quezaltepeque", "Dulce Nombre de María", "El Carrizal", "El Paraíso", "La Laguna", "La Palma", "La Reina", "Las Vueltas", "Nombre de Jesús", "Nueva Concepción", "Nueva Trinidad", "Ojos de Agua", "Potonico", "San Antonio de la Cruz", "San Antonio Los Ranchos", "San Fernando", "San Francisco Lempa", "San Francisco Morazán", "San Ignacio", "San Isidro Labrador", "San Luis del Carmen", "San Miguel de Mercedes", "San Rafael", "Santa Rita", "Tejutla"],
   Cuscatlán: ["Candelaria", "Cojutepeque", "El Carmen", "El Rosario", "Monte San Juan", "Oratorio de Concepción", "San Bartolomé Perulapía", "San Cristóbal", "San José Guayabal", "San Pedro Perulapán", "San Rafael Cedros", "San Ramón", "Santa Cruz Analquito", "Santa Cruz Michapa", "Suchitoto", "Tenancingo"],
-  LaLibertad: ["Antiguo Cuscatlán", "Chiltiupán", "Ciudad Arce", "Colón", "Comasagua", "Huizúcar", "Jayaque", "Jicalapa", "La Libertad", "Nuevo Cuscatlán", "Quezaltepeque", "Sacacoyo", "San José Villanueva", "San Juan Opico", "San Matías", "San Pablo Tacachico", "Santa Tecla", "Talnique", "Tamanique", "Teotepeque", "Zaragoza"],
+  LaLibertad: ["Antiguo Cuscatlán", "Chiltiupán", "Ciudad Arce", "Colón", "Comasagua", "Huizúcar", "Jayaque", "Jicalapa", "La Libertad", "Nuevo Cuscatlán", "Quezalteque", "Sacacoyo", "San José Villanueva", "San Juan Opico", "San Matías", "San Pablo Tacachico", "Santa Tecla", "Talnique", "Tamanique", "Teotepeque", "Zaragoza"],
   LaPaz: ["Cuyultitán", "El Rosario", "Jerusalén", "Mercedes La Ceiba", "Olocuilta", "Paraíso de Osorio", "San Antonio Masahuat", "San Emigdio", "San Francisco Chinameca", "San Juan Nonualco", "San Juan Talpa", "San Juan Tepezontes", "San Luis La Herradura", "San Luis Talpa", "San Miguel Tepezontes", "San Pedro Masahuat", "San Pedro Nonualco", "San Rafael Obrajuelo", "Santa María Ostuma", "Santiago Nonualco", "Tapalhuaca", "Zacatecoluca"],
   LaUnión: ["Anamorós", "Bolívar", "Concepción de Oriente", "Conchagua", "El Carmen", "El Sauce", "Intipucá", "La Unión", "Lislique", "Meanguera del Golfo", "Nueva Esparta", "Pasaquina", "Polorós", "San Alejo", "San José", "Santa Rosa de Lima", "Yayantique", "Yucuaiquín"],
   Morazán: ["Arambala", "Cacaopera", "Chilanga", "Corinto", "Delicias de Concepción", "El Divisadero", "El Rosario", "Gualococti", "Guatajiagua", "Joateca", "Jocoaitique", "Jocoro", "Lolotiquillo", "Meanguera", "Osicala", "Perquín", "San Carlos", "San Fernando", "San Francisco Gotera", "San Isidro", "San Simón", "Sensembra", "Sociedad", "Torola", "Yamabal", "Yoloaiquín"],
@@ -22,44 +22,39 @@ const departamentosMunicipios = {
 };
 
 const AddressForm = () => {
-  const { user, loading } = useAuthContext(); // ✅ Obtener datos del usuario
+  const { user, loading } = useAuthContext();
   const navigate = useNavigate();
 
-  // Estados para almacenar la selección del usuario
   const [selectedDept, setSelectedDept] = useState("");
   const [selectedMunicipio, setSelectedMunicipio] = useState("");
   const [direccion, setDireccion] = useState("");
   const [referencia, setReferencia] = useState("");
-  const [nombre, setNombre] = useState(""); // ✅ Nuevo campo para nombre
-  const [telefono, setTelefono] = useState(""); // ✅ Nuevo campo para teléfono
+  const [nombre, setNombre] = useState("");
+  const [telefono, setTelefono] = useState("");
 
   const municipios = selectedDept ? departamentosMunicipios[selectedDept] || [] : [];
 
-  // ✅ Cargar datos del usuario automáticamente
+  // Cargar datos del usuario automáticamente
   useEffect(() => {
     const cargarDatosUsuario = async () => {
       if (user && user.id) {
         try {
-          // Determinar si es cliente o distribuidor
           const tipoUsuario = user.role === 'customer' ? 'customers' : 'distributors';
-          
           const response = await fetch(`https://bluefruitnutrition-production.up.railway.app/api/${tipoUsuario}/${user.id}`, {
             credentials: 'include'
           });
-
           if (response.ok) {
             const userData = await response.json();
-            console.log('✅ Datos del usuario cargados:', userData);
-            
-            // ✅ Pre-llenar campos automáticamente
             setNombre(userData.name || userData.companyName || '');
             setTelefono(userData.phone || '');
             setDireccion(userData.address || '');
             
-            // ✅ Si ya tiene dirección guardada, intentar parsearla
-            if (userData.address) {
-              // Aquí podrías implementar lógica para detectar departamento/municipio
-              // desde la dirección guardada si tu BD lo maneja así
+            // Si ya hay direccion guardada en formato completo
+            if (userData.direccionCompleta) {
+              const partes = userData.direccionCompleta.split(",").map(p => p.trim());
+              setDireccion(partes[0] || "");
+              setSelectedMunicipio(partes[1] || "");
+              setSelectedDept(partes[2] || "");
             }
           }
         } catch (error) {
@@ -67,13 +62,10 @@ const AddressForm = () => {
         }
       }
     };
-
-    if (!loading && user) {
-      cargarDatosUsuario();
-    }
+    if (!loading && user) cargarDatosUsuario();
   }, [user, loading]);
 
-  // ✅ También cargar datos guardados previamente en la sesión
+  // Cargar datos guardados en localStorage
   useEffect(() => {
     const datosGuardados = localStorage.getItem('datosEnvio');
     if (datosGuardados) {
@@ -82,6 +74,8 @@ const AddressForm = () => {
       setSelectedMunicipio(datos.municipio || '');
       setDireccion(datos.direccion || '');
       setReferencia(datos.referencia || '');
+      setNombre(datos.nombre || '');
+      setTelefono(datos.telefono || '');
     }
   }, []);
 
@@ -89,7 +83,6 @@ const AddressForm = () => {
 
   const handleContinuar = () => {
     if (selectedDept && selectedMunicipio && direccion.trim() && nombre.trim()) {
-      // ✅ Guardar datos de envío para usar en la factura
       const datosEnvio = {
         nombre,
         telefono,
@@ -97,26 +90,20 @@ const AddressForm = () => {
         municipio: selectedMunicipio,
         direccion,
         referencia,
-        direccionCompleta: `${direccion}, ${selectedMunicipio}, ${selectedDept.replace(/([A-Z])/g, " $1").trim()}`,
+        direccionCompleta: `${direccion}, ${selectedMunicipio}, ${selectedDept}`,
         fechaRegistro: new Date().toISOString()
       };
 
       localStorage.setItem('datosEnvio', JSON.stringify(datosEnvio));
-      console.log('✅ Datos de envío guardados:', datosEnvio);
 
-      // ✅ Actualizar también los datos de compra
       const datosCompra = JSON.parse(localStorage.getItem('datosCompra') || '{}');
-      const datosCompraActualizados = {
-        ...datosCompra,
-        datosEnvio
-      };
+      const datosCompraActualizados = { ...datosCompra, datosEnvio };
       localStorage.setItem('datosCompra', JSON.stringify(datosCompraActualizados));
 
-      navigate("/pay"); // ✅ Ir directamente a pagar
+      navigate("/pay");
     }
   };
 
-  // ✅ Mostrar loading mientras se cargan los datos
   if (loading) {
     return (
       <div className="container">
@@ -130,15 +117,13 @@ const AddressForm = () => {
   return (
     <div className="container">
       <h2 className="title">Dirección de Envío</h2>
-      
-      {/* ✅ Mostrar información del usuario */}
+
       <div className="user-info">
         <p><strong>Usuario:</strong> {user?.email}</p>
         <p><small>Los datos se llenarán automáticamente con tu información guardada</small></p>
       </div>
 
       <div className="form-card">
-        {/* ✅ Campos de información personal */}
         <div className="flex-row">
           <div className="form-group flex-1">
             <label>Nombre completo*</label>
@@ -162,7 +147,6 @@ const AddressForm = () => {
           </div>
         </div>
 
-        {/* Selección de departamento y municipio */}
         <div className="flex-row">
           <div className="form-group flex-1">
             <label>Departamento*</label>
@@ -171,14 +155,12 @@ const AddressForm = () => {
               value={selectedDept}
               onChange={(e) => {
                 setSelectedDept(e.target.value);
-                setSelectedMunicipio(""); // Reinicia el municipio al cambiar departamento
+                setSelectedMunicipio("");
               }}
             >
               <option value="">Seleccione un departamento</option>
               {Object.keys(departamentosMunicipios).map((dept) => (
-                <option key={dept} value={dept}>
-                  {dept.replace(/([A-Z])/g, " $1").trim()}
-                </option>
+                <option key={dept} value={dept}>{dept}</option>
               ))}
             </select>
           </div>
@@ -193,15 +175,12 @@ const AddressForm = () => {
             >
               <option value="">Seleccione un municipio</option>
               {municipios.map((muni) => (
-                <option key={muni} value={muni}>
-                  {muni}
-                </option>
+                <option key={muni} value={muni}>{muni}</option>
               ))}
             </select>
           </div>
         </div>
 
-        {/* Campo para dirección completa */}
         <div className="form-group">
           <label>Dirección Completa*</label>
           <input
@@ -213,7 +192,6 @@ const AddressForm = () => {
           />
         </div>
 
-        {/* Campo para puntos de referencia */}
         <div className="form-group">
           <label>Puntos de referencia</label>
           <input
@@ -225,7 +203,6 @@ const AddressForm = () => {
           />
         </div>
 
-        {/* ✅ Botones de navegación actualizados */}
         <div className="button-row">
           <button onClick={handleBack} className="btn-outline">
             Regresar al Carrito
@@ -233,9 +210,7 @@ const AddressForm = () => {
           <button
             onClick={handleContinuar}
             disabled={!selectedDept || !selectedMunicipio || !direccion.trim() || !nombre.trim()}
-            className={`btn-primary ${
-              !selectedDept || !selectedMunicipio || !direccion.trim() || !nombre.trim() ? "disabled" : ""
-            }`}
+            className={`btn-primary ${!selectedDept || !selectedMunicipio || !direccion.trim() || !nombre.trim() ? "disabled" : ""}`}
           >
             Continuar al Pago
           </button>

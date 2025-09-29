@@ -8,25 +8,20 @@ import {
   FiUser,
   FiMail,
   FiPhone,
-  FiMapPin,
   FiPackage,
-  FiHome,
-  FiTrash2,
 } from "react-icons/fi";
 import "./Portfile.css";
 
 const Perfil = () => {
   const [userData, setUserData] = useState(null);
   const [orders, setOrders] = useState([]);
-  const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(false);
+  const [editingProfile, setEditingProfile] = useState(false);
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
-
   const API_URL = "https://bluefruitnutrition-production.up.railway.app/api";
 
-  // ✅ Verifica sesión activa
+  // ✅ Cargar sesión y datos
   const checkSession = async () => {
     try {
       const res = await fetch(`${API_URL}/session/auth/session`, {
@@ -40,10 +35,8 @@ const Perfil = () => {
         name: data.name,
         email: data.email,
         phone: data.phone || "",
-        address: data.address || "",
       });
       fetchOrders(data.id);
-      fetchAddresses(data.id);
     } catch {
       navigate("/login");
     } finally {
@@ -51,7 +44,7 @@ const Perfil = () => {
     }
   };
 
-  // ✅ Trae historial de órdenes
+  // ✅ Traer órdenes del usuario
   const fetchOrders = async (userId) => {
     try {
       const res = await fetch(`${API_URL}/ordenes/user/${userId}`, {
@@ -65,31 +58,11 @@ const Perfil = () => {
     }
   };
 
-  // ✅ Trae direcciones guardadas
-  const fetchAddresses = async (userId) => {
-    try {
-      const res = await fetch(`${API_URL}/direcciones/user/${userId}`, {
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("No se pudieron cargar direcciones");
-      const data = await res.json();
-      setAddresses(data);
-    } catch (error) {
-      console.error("Error cargando direcciones:", error);
-    }
-  };
+  const handleInputChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  // ✅ Guardar perfil editado
+  // ✅ Guardar perfil
   const handleSaveProfile = async () => {
-    const confirm = await Swal.fire({
-      title: "¿Guardar cambios?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Sí",
-      cancelButtonText: "Cancelar",
-    });
-    if (!confirm.isConfirmed) return;
-
     try {
       const res = await fetch(`${API_URL}/users/${userData.id}`, {
         method: "PUT",
@@ -100,14 +73,14 @@ const Perfil = () => {
       if (!res.ok) throw new Error("Error al actualizar perfil");
       const updated = await res.json();
       setUserData(updated);
-      setEditing(false);
+      setEditingProfile(false);
       Swal.fire({ icon: "success", title: "Perfil actualizado", timer: 1500 });
     } catch (error) {
       Swal.fire({ icon: "error", title: error.message });
     }
   };
 
-  // ✅ Logout
+  // ✅ Cerrar sesión
   const handleLogout = async () => {
     const confirm = await Swal.fire({
       title: "¿Cerrar sesión?",
@@ -133,9 +106,6 @@ const Perfil = () => {
     }
   };
 
-  const handleInputChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
   useEffect(() => {
     checkSession();
   }, []);
@@ -159,7 +129,7 @@ const Perfil = () => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              disabled={!editing}
+              disabled={!editingProfile}
             />
 
             <label>
@@ -174,17 +144,17 @@ const Perfil = () => {
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              disabled={!editing}
+              disabled={!editingProfile}
             />
           </div>
 
           <div className="perfil-actions">
-            {editing ? (
+            {editingProfile ? (
               <button className="btn-save" onClick={handleSaveProfile}>
                 <FiSave /> Guardar
               </button>
             ) : (
-              <button className="btn-edit" onClick={() => setEditing(true)}>
+              <button className="btn-edit" onClick={() => setEditingProfile(true)}>
                 <FiEdit /> Editar
               </button>
             )}
@@ -192,28 +162,6 @@ const Perfil = () => {
               <FiLogOut /> Cerrar sesión
             </button>
           </div>
-        </div>
-
-        {/* 🏠 Direcciones guardadas */}
-        <div className="perfil-card">
-          <h2>
-            <FiHome /> Mis Direcciones
-          </h2>
-          {addresses.length === 0 ? (
-            <p className="empty-orders">No tienes direcciones guardadas aún</p>
-          ) : (
-            addresses.map((dir) => (
-              <div key={dir._id} className="address-item">
-                <div>
-                  <strong>{dir.alias || "Dirección guardada"}</strong>
-                  <p>{dir.direccionCompleta}</p>
-                  <small>
-                    {dir.departamento}, {dir.municipio}
-                  </small>
-                </div>
-              </div>
-            ))
-          )}
         </div>
       </div>
 
@@ -234,9 +182,7 @@ const Perfil = () => {
                 </div>
                 <div className="order-info">
                   <span>Total: ${order.total.toFixed(2)}</span>
-                  <span
-                    className={`order-status ${order.status.toLowerCase()}`}
-                  >
+                  <span className={`order-status ${order.status.toLowerCase()}`}>
                     {order.status}
                   </span>
                 </div>
