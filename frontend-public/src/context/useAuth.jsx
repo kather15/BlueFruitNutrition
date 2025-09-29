@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch(`${API_URL}/session/auth/session`, {
+        const response = await fetch(`${API_URL}/check-session`, {
           method: 'GET',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
   const checkSession = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/session/auth/session`, {
+      const response = await fetch(`${API_URL}/check-session`, {
         method: 'GET',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

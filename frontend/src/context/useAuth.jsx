@@ -115,7 +115,7 @@ export const AuthProvider = ({ children }) => {
   const checkSession = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_URL}/session/auth/session`, {
+      const res = await fetch(`${API_URL}/check-session`, {
         method: "GET",
         credentials: "include",
       });

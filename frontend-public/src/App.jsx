@@ -35,57 +35,54 @@ import Perfil from "./pages/perfil/Porfile.jsx";
 
 function AppContent() {
   const location = useLocation();
-  const { user } = useAuthContext(); // obtenemos datos del usuario
+  const { user } = useAuthContext();
 
   const hideNavFooterRoutes = ['/login', '/registro'];
   const hideNavFooter = hideNavFooterRoutes.includes(location.pathname);
 
+  // 🔹 Ajustar margen superior del main según altura del navbar
   useEffect(() => {
-    if (location.pathname === "/" && user) {
-      Swal.fire({
-        title: ` Bienvenido, ${user}!`,
-        text: 'Explora nuestra tienda y descubre productos increíbles ',
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        toast: true,
-        position: 'top-end',
-      });
+    const nav = document.querySelector(".inwood-navbar");
+    const main = document.querySelector(".app-main");
+
+    if (nav && main) {
+      main.style.marginTop = `${nav.offsetHeight}px`;
     }
-  }, [location, user]);
+  }, [location]);
 
   return (
     <>
       {!hideNavFooter && <Nav />}
-      <Routes>
-        {/* RUTAS PÚBLICAS */}
-        <Route path="/" element={<Home />} />
-        <Route path="/product" element={<ProductsMenu />} />
-        <Route path="/producto/:id" element={<ProductsReview />} />
-        <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/suscripciones" element={<Suscripciones />} />
-        <Route path="/chatbot" element={<ChatBot />} />
+      <main className="app-main">
+        <Routes>
+          {/* RUTAS PÚBLICAS */}
+          <Route path="/" element={<Home />} />
+          <Route path="/product" element={<ProductsMenu />} />
+          <Route path="/producto/:id" element={<ProductsReview />} />
+          <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/suscripciones" element={<Suscripciones />} />
+          <Route path="/chatbot" element={<ChatBot />} />
 
-        {/* RUTAS DE AUTENTICACIÓN */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Register />} />
-        <Route path="/enviar-codigo" element={<RequestCode />} />
-        <Route path="/verificar-codigo" element={<VerifyCode />} />
-        <Route path="/nueva-contraseña" element={<NewPassword />} />
+          {/* RUTAS DE AUTENTICACIÓN */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Register />} />
+          <Route path="/enviar-codigo" element={<RequestCode />} />
+          <Route path="/verificar-codigo" element={<VerifyCode />} />
+          <Route path="/nueva-contraseña" element={<NewPassword />} />
 
-        {/* RUTAS PRIVADAS */}
-        <Route path="/carrito" element={<RutaPrivada><Carrito /></RutaPrivada>} />
-        <Route path="/pay" element={<RutaPrivada><Pay /></RutaPrivada>} />
-        <Route path="/Metodo" element={<RutaPrivada><MetodoDePago /></RutaPrivada>} />
-        <Route path="/personalizar" element={<RutaPrivada><Personalizar /></RutaPrivada>} />
-        <Route path="/bill" element={<RutaPrivada><Bill /></RutaPrivada>} />
+          {/* RUTAS PRIVADAS */}
+          <Route path="/carrito" element={<RutaPrivada><Carrito /></RutaPrivada>} />
+          <Route path="/pay" element={<RutaPrivada><Pay /></RutaPrivada>} />
+          <Route path="/Metodo" element={<RutaPrivada><MetodoDePago /></RutaPrivada>} />
+          <Route path="/personalizar" element={<RutaPrivada><Personalizar /></RutaPrivada>} />
+          <Route path="/bill" element={<RutaPrivada><Bill /></RutaPrivada>} />
+          <Route path="/perfil" element={<Perfil />} />
 
-      <Route path="/perfil" element={<Perfil />} />
-        {/* 404 */}
-        <Route path="*" element={<Error404Public />} />
-      </Routes>
+          {/* 404 */}
+          <Route path="*" element={<Error404Public />} />
+        </Routes>
+      </main>
       {!hideNavFooter && <Footer />}
     </>
   );
@@ -102,5 +99,3 @@ function App() {
 }
 
 export default App;
-
-//ok
