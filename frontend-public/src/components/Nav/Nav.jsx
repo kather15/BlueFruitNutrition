@@ -1,60 +1,78 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FiShoppingCart, FiUser } from 'react-icons/fi';
-import { useAuthContext } from '../../context/useAuth'; // 👈 contexto de sesión
-import './Nav.css';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { FiShoppingCart, FiUser } from "react-icons/fi";
+import { useAuthContext } from "../../context/useAuth";
+import "./Nav.css";
 
 const Nav = () => {
   const { isAuthenticated } = useAuthContext();
   const [showMenu, setShowMenu] = useState(false);
-
   const toggleMenu = () => setShowMenu((prev) => !prev);
   const closeMenu = () => setShowMenu(false);
 
+  const location = useLocation(); // 👉 para saber qué ruta está activa
+
   return (
-    <nav className="blue-fruit-main-navbar">
-      <div className="blue-fruit-navbar-container">
-        {/* --- Lado izquierdo --- */}
-        <div className="blue-fruit-navbar-left">
-          <div className="blue-fruit-logo">
-            <img src="/Logo_Blue_Fruit.png" alt="Blue Fruit" />
-          </div>
-          <ul className="blue-fruit-nav-menu">
-            <li><Link to="/">Inicio</Link></li>
-            <li><Link to="/sobre-nosotros">Sobre Nosotros</Link></li>
-            <li><Link to="/product">Productos</Link></li>
-            <li><Link to="/carrito">Carrito</Link></li>
-            <li><Link to="/personalizar">Personalizar</Link></li>
-          </ul>
+    <nav className="inwood-navbar">
+      <div className="inwood-container">
+        <div className="inwood-logo">
+          <img src="/Logo_Blue_Fruit.png" alt="Blue Fruit" />
         </div>
 
-        {/* --- Lado derecho --- */}
-        <div className="blue-fruit-navbar-right">
-          {/* Botón Carrito */}
-          <Link to="/carrito" className="blue-fruit-icon-btn" aria-label="Carrito">
-            <FiShoppingCart size={26} color="#fff" />
+        {/* --- Menú central --- */}
+        <ul className="inwood-menu">
+          <li>
+            <Link to="/" className={location.pathname === "/" ? "active" : ""}>
+              Inicio
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/sobre-nosotros"
+              className={location.pathname === "/sobre-nosotros" ? "active" : ""}
+            >
+              Sobre Nosotros
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/product"
+              className={location.pathname === "/product" ? "active" : ""}
+            >
+              Productos
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/carrito"
+              className={location.pathname === "/carrito" ? "active" : ""}
+            >
+              Carrito
+            </Link>
+          </li>
+        </ul>
+
+        {/* --- Íconos derecha --- */}
+        <div className="inwood-icons">
+          {/* --- Carrito --- */}
+          <Link to="/carrito" className="icon-btn" aria-label="Carrito">
+            <FiShoppingCart size={20} />
           </Link>
 
-          {/* Botón / Menú de Perfil */}
-          <div className="blue-fruit-profile-wrapper">
+          {/* --- Perfil --- */}
+          <div className="profile-wrapper">
             {isAuthenticated ? (
-              // Si hay sesión → icono lleva directo al perfil
-              <Link
-                to="/perfil"
-                className="blue-fruit-icon-btn profile-btn"
-                aria-label="Perfil"
-              >
-                <FiUser size={26} color="#fff" />
+              <Link to="/perfil" className="icon-btn" aria-label="Perfil">
+                <FiUser size={20} />
               </Link>
             ) : (
-              // Si NO hay sesión → desplegable
               <>
                 <button
                   onClick={toggleMenu}
-                  className="blue-fruit-icon-btn profile-btn"
-                  aria-label="Menú de perfil"
+                  className="icon-btn"
+                  aria-label="Menú perfil"
                 >
-                  <FiUser size={26} color="#fff" />
+                  <FiUser size={20} />
                 </button>
 
                 {showMenu && (

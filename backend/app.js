@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
 import fs from "fs";
@@ -13,10 +12,10 @@ import registerCustomersRoutes from "./src/routes/registerCustomer.js";
 import registerDistributorsRoutes from "./src/routes/registerDistributor.js";
 import passwordRecoveryRoutes from "./src/routes/passwordRecovery.js";
 import loginRoutes from "./src/routes/login.js";
-import logoutRoutes from './src/routes/logout.js';
-import subscriptionRoutes from './src/routes/subscriptions.js';
-import shoppingCartRoutes from './src/routes/shoppingCart.js';
-import ordenesRoutes from './src/routes/ordenes.js';
+import logoutRoutes from "./src/routes/logout.js";
+import subscriptionRoutes from "./src/routes/subscriptions.js";
+import shoppingCartRoutes from "./src/routes/shoppingCart.js";
+import ordenesRoutes from "./src/routes/ordenes.js";
 import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
 import PayRoutes from "./src/routes/pay.js";
@@ -26,40 +25,42 @@ import adminVerifyRoutes from "./src/routes/adminVerify.js";
 import sessionRouter from "./src/routes/session.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import BillRoutes from "./src/routes/bill.js";
+import locationRoutes from "./src/routes/location.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
 
-// Middleware de autenticación
-import { authenticate } from "./src/middlewares/auth.js";
-
-// Inicialización
 const app = express();
 
 // -------------------------------------------
-// CORS + Preflight
+// CORS seguro con cookies
 // -------------------------------------------
-const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(",")
-  : [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app",
-      "https://blue-fruit-nutrition-private.vercel.app",
-      "https://blue-fruit-nutrition-4vhs.vercel.app",
-      "https://bluefruitnutrition1.onrender.com",
-    ];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://bluefruitnutrition-production.up.railway.app",
+  "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app",
+  "https://blue-fruit-nutrition-private.vercel.app",
+  "https://blue-fruit-nutrition-4vhs.vercel.app",
+];
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,POST,PUT,DELETE,OPTIONS"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
   }
 
-  // Responder preflight requests
-  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
 
   next();
 });
@@ -73,7 +74,9 @@ app.use(cookieParser());
 // -------------------------------------------
 // Swagger
 // -------------------------------------------
-const swaggerFilePath = path.resolve("./bluefruit-bluefruit_api-1.0.0-swagger.json");
+const swaggerFilePath = path.resolve(
+  "./bluefruit-bluefruit_api-1.0.0-swagger.json"
+);
 const swaggerDocument = JSON.parse(fs.readFileSync(swaggerFilePath, "utf-8"));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -87,7 +90,7 @@ app.use("/api/registerCustomers", registerCustomersRoutes);
 app.use("/api/registerDistributors", registerDistributorsRoutes);
 app.use("/api/passwordRecovery", passwordRecoveryRoutes);
 app.use("/api/login", loginRoutes);
-app.use("/api/logout", logoutRoutes);
+app.use("/api/logout", logoutR/api/check-sessionoutes);
 app.use("/api/shoppingCart", shoppingCartRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/ordenes", ordenesRoutes);
@@ -99,17 +102,24 @@ app.use("/api/token", tokenRouter);
 app.use("/api/admin", adminVerifyRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
+app.use("/api/location", locationRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
 
-// ✅ Ruta de sesión protegida
-app.use("/api/check-session", authenticate, sessionRouter);
+// 🔹 Ruta de sesión protegida para frontend
+app.use("/api/session", sessionRouter);
+
 
 // -------------------------------------------
-// Error handling
+// Manejo de errores simples
 // -------------------------------------------
-//si
-//sigular
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Ruta no encontrada" });
+});
+
+app.use((err, req, res, next) => {
+  console.error("Error interno:", err);
+  res.status(500).json({ message: "Error interno del servidor" });
+});
 
 export default app;
-

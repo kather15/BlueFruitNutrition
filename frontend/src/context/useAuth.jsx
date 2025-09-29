@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const API_URL = "https://bluefruitnutrition1.onrender.com/api";
+  const API_URL = "https://bluefruitnutrition-production.up.railway.app/api";
 
   // Verificar sesión al cargar la app
   useEffect(() => {
@@ -115,7 +115,7 @@ export const AuthProvider = ({ children }) => {
   const checkSession = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_URL}/session/auth/session`, {
+      const res = await fetch(`${API_URL}/check-session`, {
         method: "GET",
         credentials: "include",
       });

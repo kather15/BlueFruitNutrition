@@ -107,24 +107,45 @@ body, html, #root {
   font-style: italic;
 }
 
-.file-label {
-  background: #0c133f;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
-  cursor: pointer;
+.btn-upload,
+.btn-clear {
   font-weight: 600;
   font-size: 15px;
-  transition: background-color 0.25s, transform 0.2s;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-.file-label:hover {
+.btn-upload {
+  background: #0c133f;
+  color: white;
+}
+
+.btn-upload:hover:not(:disabled) {
   background: #0e1752;
   transform: translateY(-2px);
 }
 
-.file-input {
-  display: none;
+.btn-upload:disabled {
+  background: #555a88;
+  cursor: not-allowed;
+}
+
+.btn-clear {
+  background-color: #444;
+  color: white;
+}
+
+.btn-clear:hover:not(:disabled) {
+  background-color: #666;
+  transform: translateY(-2px);
+}
+
+.btn-clear:disabled {
+  background-color: #999;
+  cursor: not-allowed;
 }
 
 /* ==========================
@@ -172,6 +193,193 @@ body, html, #root {
 }
 
 /* ==========================
+   Sección de sabores - NUEVA
+========================= */
+.flavor-section {
+  grid-column: span 2; /* Ocupa las dos columnas */
+  display: flex;
+  flex-direction: column;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  min-height: 120px;
+}
+
+.spinner {
+  color: #0c133f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.flavors-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  margin-top: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.flavor-option {
+  background: #ffffff;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 14px;
+  color: #495057;
+  user-select: none;
+}
+
+.flavor-option:hover {
+  border-color: #0c133f;
+  background: #f8f9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(12, 19, 63, 0.15);
+}
+
+.flavor-option.selected {
+  background: #0c133f;
+  border-color: #0c133f;
+  color: white;
+  font-weight: 600;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(12, 19, 63, 0.3);
+}
+
+.flavor-option.selected:hover {
+  background: #0e1752;
+  border-color: #0e1752;
+}
+
+.no-flavors {
+  padding: 30px;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #dee2e6;
+  margin-top: 8px;
+}
+
+.flavor-option {
+  background: #ffffff;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 14px;
+  color: #495057;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}
+
+.flavor-option:hover {
+  border-color: #0c133f;
+  background: #f8f9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(12, 19, 63, 0.15);
+}
+
+.flavor-option.selected {
+  background: #0c133f;
+  border-color: #0c133f;
+  color: white;
+  font-weight: 600;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(12, 19, 63, 0.3);
+}
+
+.flavor-option.selected:hover {
+  background: #0e1752;
+  border-color: #0e1752;
+}
+
+.check-icon {
+  font-size: 16px;
+  font-weight: bold;
+  color: #28a745;
+  background: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.flavor-option.selected .check-icon {
+  color: #0c133f;
+}
+
+.selected-flavors-display {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.selected-flavors-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.selected-flavor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #0c133f;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.remove-flavor {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.remove-flavor:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================
    Botones
 ========================= */
 .button-group {
@@ -182,7 +390,6 @@ body, html, #root {
   margin-top: 20px;
 }
 
-.btn-clear,
 .btn-submit {
   font-weight: 600;
   font-size: 15px;
@@ -191,24 +398,6 @@ body, html, #root {
   border: none;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
-}
-
-.btn-clear {
-  background-color: #444;
-  color: white;
-}
-
-.btn-clear:hover:not(:disabled) {
-  background-color: #666;
-  transform: translateY(-2px);
-}
-
-.btn-clear:disabled {
-  background-color: #999;
-  cursor: not-allowed;
-}
-
-.btn-submit {
   background-color: #0c133f;
   color: white;
 }
@@ -221,6 +410,27 @@ body, html, #root {
 .btn-submit:disabled {
   background-color: #555a88;
   cursor: not-allowed;
+}
+
+/* ==========================
+   Scrollbar personalizado para sabores
+========================= */
+.flavors-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.flavors-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.flavors-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.flavors-container::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 
 /* ==========================
@@ -248,7 +458,30 @@ body, html, #root {
     grid-template-columns: 1fr;
   }
 
+  .flavor-section {
+    grid-column: span 1;
+  }
+
+  .flavors-container {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    padding: 15px;
+  }
+
   .button-group {
     justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .flavors-container {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .flavor-option {
+    padding: 10px 12px;
+    font-size: 13px;
   }
 }

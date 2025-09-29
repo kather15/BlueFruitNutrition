@@ -1,176 +1,103 @@
-/* --- NAVBAR GENERAL --- */
-.blue-fruit-main-navbar {
-  background-color: #1a1a3a;
-  padding: 12px 0;
+/* --- NAV COLOR --- */
+.inwood-navbar {
+  background: #0C133F;  /* color solicitado */
   width: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  z-index: 10000;
 }
 
-.blue-fruit-navbar-container {
+.inwood-container {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 25px;
 }
 
-.blue-fruit-navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-
-.blue-fruit-logo img {
-  height: 45px;
+/* --- Logo --- */
+.inwood-logo img {
+  height: 40px;
   width: auto;
 }
 
-.blue-fruit-nav-menu {
+/* --- Menú central --- */
+.inwood-menu {
   display: flex;
   list-style: none;
+  gap: 30px;
   margin: 0;
   padding: 0;
-  gap: 30px;
 }
 
-.blue-fruit-nav-menu li a {
-  color: #ffffff;
+.inwood-menu li a {
+  color: #ffffff; /* texto blanco para contraste */
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  padding: 8px 0;
-  transition: color 0.3s ease;
+  position: relative;
+  padding-bottom: 4px;
 }
 
-.blue-fruit-nav-menu li a:hover {
-  color: #66ccff;
+/* Activo con subrayado */
+.inwood-menu li a.active {
+  font-weight: 600;
 }
 
-/* --- ICONOS DERECHA --- */
-.blue-fruit-navbar-right {
+.inwood-menu li a.active::after,
+.inwood-menu li a:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: #ffffff; /* subrayado blanco */
+}
+
+/* --- Íconos derecha --- */
+.inwood-icons {
   display: flex;
   align-items: center;
+  gap: 20px;
 }
 
-.blue-fruit-icon-btn {
+.icon-btn {
   background: none;
-  border: none;
+  border: none;     
+  outline: none;    
   cursor: pointer;
-  padding: 0;
+  color: #ffffff;
   display: flex;
   align-items: center;
+  padding: 0;
   transition: transform 0.2s ease;
 }
 
-.blue-fruit-icon-btn:hover {
+.icon-btn:hover {
   transform: scale(1.15);
 }
 
-.blue-fruit-icon-btn:focus {
-  outline: 2px solid #66ccff;
-  outline-offset: 2px;
-}
 
-/* --- CARRITO PREVIEW --- */
-.cart-preview {
-  position: absolute;
-  top: 36px;
-  right: 0;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 12px;
-  width: 260px;
-  z-index: 100;
-}
-
-.cart-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.cart-item img {
-  width: 45px;
-  height: 45px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.cart-item span {
-  font-size: 14px;
-  color: #333;
-}
-
-.cart-preview p {
-  color: #666;
-  font-size: 14px;
-  text-align: center;
-  margin: 0;
-}
-
-.cart-preview-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  justify-content: center;
-}
-
-.cart-btn {
-  flex: 1;
-  text-align: center;
-  padding: 8px 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1a1a3a;
-  background-color: #e0e0e0;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.25s ease, color 0.25s ease;
-  border: 1px solid transparent;
-  cursor: pointer;
-  user-select: none;
-}
-
-.cart-btn:hover {
-  background-color: #c7c7c7;
-  color: #000;
-}
-
-.cart-btn.primary {
-  background-color: #1a1a3a;
-  color: white;
-  font-weight: 700;
-  border: 1px solid #1a1a3a;
-}
-
-.cart-btn.primary:hover {
-  background-color: #33335a;
-  border-color: #1a1a3a;
-  color: white;
-}
-
-/* --- PERFIL (dropdown oscuro independiente) --- */
-.blue-fruit-profile-wrapper {
+/* --- Dropdown perfil --- */
+.profile-wrapper {
   position: relative;
-  margin-left: 20px; /* separa perfil del carrito */
 }
 
 .profile-dropdown {
   position: absolute;
-  top: 40px;
+  top: 36px;
   right: 0;
-  background: #1e1e2f;
-  border-radius: 8px;
+  background: #fff;
+  border-radius: 6px;
   list-style: none;
   padding: 8px 0;
   margin: 0;
   min-width: 160px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .profile-dropdown li {
@@ -178,32 +105,12 @@
 }
 
 .profile-dropdown li a {
-  color: #fff;
+  color: #0C133F;
   text-decoration: none;
   display: block;
   font-size: 14px;
 }
 
 .profile-dropdown li a:hover {
-  background: #2b2b40;
-}
-
-/* --- RESPONSIVE --- */
-@media (max-width: 768px) {
-  .blue-fruit-navbar-container {
-    flex-direction: column;
-    gap: 20px;
-    padding: 0 15px;
-  }
-
-  .blue-fruit-navbar-left {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .blue-fruit-nav-menu {
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  background: #f0f0f0;
 }

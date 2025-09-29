@@ -4,10 +4,10 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import toast from "react-hot-toast";
 import "./home.css";
 
-const API_PRODUCTS = "https://bluefruitnutrition1.onrender.com/api/products";
-const API_CUSTOMERS = "https://bluefruitnutrition1.onrender.com/api/customers";
-const API_DISTRIBUTORS = "https://bluefruitnutrition1.onrender.com/api/distributors";
-const API_ORDERS_IN_PROCESS = "https://bluefruitnutrition1.onrender.com/api/ordenes/enProceso/total";
+const API_PRODUCTS = "https://bluefruitnutrition-production.up.railway.app/api/products";
+const API_CUSTOMERS = "https://bluefruitnutrition-production.up.railway.app/api/customers";
+const API_DISTRIBUTORS = "https://bluefruitnutrition-production.up.railway.app/api/distributors";
+const API_ORDERS_IN_PROCESS = "https://bluefruitnutrition-production.up.railway.app/api/ordenes/enProceso/total";
 
 const COLORS = ["#0C133F", "#1a265f", "#394a85", "#5260a3", "#6878bf"];
 

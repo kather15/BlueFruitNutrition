@@ -26,7 +26,8 @@ export const config={
     email: {
         email_user: process.env.EMAIL_USER,     //Correo y contraseña de desarrollador para mandar emails de recuperación de contraseña o verificación
         email_pass: process.env.EMAIL_PASS,
-        to: process.env.EMAIL_USER //Para el fromulario de contactos, manda los datos llenados en el formulario a el propio gmail
+        to: process.env.EMAIL_USER, //Para el fromulario de contactos, manda los datos llenados en el formulario a el propio gmail
+        apiKey: process.env.APIKEY_BREVO
     },
 
     emailverification:{
@@ -45,5 +46,9 @@ export const config={
         client_secret: process.env.CLIENT_SECRET,
         grant_type: process.env.GRANT_TYPE,
         audience: process.env.AUDIENCE
+    },
+
+    apiKey: {
+        api_key: process.env.API_KEY // enviar correos
     }
 };

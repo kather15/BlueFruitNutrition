@@ -8,7 +8,7 @@ const Ventas = () => {
   // Cargar las órdenes y filtrar solo las completadas
   const fetchVentas = async () => {
     try {
-      const res = await fetch('https://bluefruitnutrition1.onrender.com/api/ordenes');
+      const res = await fetch('https://bluefruitnutrition-production.up.railway.app/api/ordenes');
       const data = await res.json();
 
       // Filtrar las que tienen estado "Completada"
