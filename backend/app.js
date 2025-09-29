@@ -28,7 +28,7 @@ import BillRoutes from "./src/routes/bill.js";
 import locationRoutes from "./src/routes/location.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
-import authRoutes from "./routes/authRoutes.js";
+import authRoutes from "./src/routes/authRoutes.js";
 
 
 const app = express();
