@@ -1,19 +1,13 @@
-// src/controllers/CtrlSession.js
-export const checkSession = (req, res) => {
-  try {
-    if (!req.user) {
-      return res.status(401).json({ message: "No autenticado", isAuthenticated: false });
-    }
+import jwt from "jsonwebtoken";
 
-    res.status(200).json({
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user.email,
-      role: req.user.userType || req.user.role,
-      isAuthenticated: true
-    });
-  } catch (error) {
-    console.error("Error en checkSession:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+export const checkSession = (req, res) => {
+  const token = req.cookies?.authToken;
+  if (!token) return res.status(401).json({ message: "No autenticado" });
+
+  try {
+    const data = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ id: data.id, name: data.name, email: data.email });
+  } catch (err) {
+    res.status(401).json({ message: "Sesión inválida" });
   }
 };

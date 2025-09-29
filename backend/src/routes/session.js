@@ -1,9 +1,9 @@
-// src/routes/session.js
 import express from "express";
 import { checkSession } from "../controllers/CtrlSession.js";
 
 const router = express.Router();
 
-router.get("/", checkSession);
+// GET /api/session/auth/session
+router.get("/auth/session", checkSession);
 
 export default router;
