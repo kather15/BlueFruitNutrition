@@ -32,15 +32,15 @@ const SobreNosotros = () => {
     { img: "/Group 10.png", titulo: "Salud Óptima", texto: "No produce caries, seguro para todas las edades" }
   ];
 
-  // Variants para animaciones repetidas
+  // Variants para animaciones rápidas
   const containerVariants = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: 20 },
     visible: (i = 1) => ({
       opacity: 1,
       y: 0,
       transition: {
-        delay: i * 0.3,
-        duration: 0.7,
+        delay: i * 0.15,
+        duration: 0.4,
         ease: "easeOut"
       }
     }),
@@ -50,49 +50,32 @@ const SobreNosotros = () => {
     <div className="sobre-container">
 
       {/* Historia */}
-      <motion.section 
-        className="historia"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        custom={1}
-        variants={containerVariants}
-      >
+      <motion.section className="historia" initial="hidden" whileInView="visible" viewport={{ once: true }} custom={1} variants={containerVariants}>
         <h2>Nuestra Historia</h2>
         <div className="historia-content">
-
           <motion.div className="historia-text" custom={1.2} variants={containerVariants}>
             <p>{historiaText}</p>
             <ul>
-              {beneficios.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
+              {beneficios.map((item, i) => <li key={i}>{item}</li>)}
             </ul>
           </motion.div>
-
           <motion.figure className="historia-img" custom={1.4} variants={containerVariants}>
             <img src="/image 5.png" alt="Atleta" />
           </motion.figure>
-
         </div>
       </motion.section>
 
       {/* Estadísticas */}
-      <motion.section
-        className="estadisticas"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
+      <motion.section className="estadisticas" initial="hidden" whileInView="visible" viewport={{ once: true }}>
         {estadisticas.map((item, idx) => (
           <motion.div
             className="card"
             key={idx}
             custom={idx + 2}
             variants={containerVariants}
-            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
           >
-            <img src={item.img} alt={item.texto} className="img-white" />
+            <img src={item.img} alt={item.texto} />
             <h3>{item.valor}</h3>
             <p>{item.texto}</p>
           </motion.div>
@@ -100,14 +83,7 @@ const SobreNosotros = () => {
       </motion.section>
 
       {/* Equipo */}
-      <motion.section
-        className="equipo"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        custom={6}
-        variants={containerVariants}
-      >
+      <motion.section className="equipo" initial="hidden" whileInView="visible" viewport={{ once: true }} custom={6} variants={containerVariants}>
         <h2>Nuestro Equipo</h2>
         <div className="miembros">
           {equipo.map((persona, idx) => (
@@ -116,7 +92,7 @@ const SobreNosotros = () => {
               key={idx}
               custom={idx + 6.1}
               variants={containerVariants}
-              whileHover={{ scale: 1.08, transition: { duration: 0.3 } }}
+              whileHover={{ scale: 1.08, transition: { duration: 0.2 } }}
             >
               <img src={persona.img} alt={persona.nombre} />
               <h4>{persona.nombre}</h4>
@@ -127,21 +103,14 @@ const SobreNosotros = () => {
       </motion.section>
 
       {/* Iconos */}
-      <motion.section
-        className="iconos"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        custom={10}
-        variants={containerVariants}
-      >
+      <motion.section className="iconos" initial="hidden" whileInView="visible" viewport={{ once: true }} custom={10} variants={containerVariants}>
         {iconos.map((icono, idx) => (
           <motion.div
             className="icono"
             key={idx}
             custom={idx + 10.1}
             variants={containerVariants}
-            whileHover={{ scale: 1.07, transition: { duration: 0.3 } }}
+            whileHover={{ scale: 1.08, y: -4, transition: { duration: 0.25 } }}
           >
             <img src={icono.img} alt={icono.titulo} />
             <h2>{icono.titulo}</h2>
