@@ -37,12 +37,13 @@ const app = express();
 // CORS seguro con cookies
 // -------------------------------------------
 const allowedOrigins = [
-  "http://localhost:5173",
+"http://localhost:5173",
   "http://localhost:5174",
   "https://bluefruitnutrition-production.up.railway.app",
   "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app",
   "https://blue-fruit-nutrition-private.vercel.app",
   "https://blue-fruit-nutrition-4vhs.vercel.app",
+  "https://blue-fruit-nutrition-bluefruitnutrition.vercel.app", // 🔹 Agregado
 ];
 
 app.use((req, res, next) => {
