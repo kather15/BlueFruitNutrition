@@ -1,4 +1,3 @@
-// app.js
 import express from "express";
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
@@ -30,23 +29,21 @@ import locationRoutes from "./src/routes/location.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
 
-// Controllers / Middlewares
-import { checkSession } from "./src/controllers/CtrlSession.js";
+// Middleware de autenticación
 import { authenticate } from "./src/middleware/authenticate.js";
 
-// Inicialización de Express
 const app = express();
 
-// --------------------
-// CORS + Preflight
-// --------------------
+// -------------------------------------------
+// CORS seguro con cookies
+// -------------------------------------------
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
+  "https://bluefruitnutrition-production.up.railway.app",
   "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app",
   "https://blue-fruit-nutrition-private.vercel.app",
   "https://blue-fruit-nutrition-4vhs.vercel.app",
-  "https://bluefruitnutrition-production.up.railway.app",
 ];
 
 app.use((req, res, next) => {
@@ -56,7 +53,7 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader(
       "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS"
+      "GET,POST,PUT,DELETE,OPTIONS"
     );
     res.setHeader(
       "Access-Control-Allow-Headers",
@@ -64,30 +61,31 @@ app.use((req, res, next) => {
     );
   }
 
-  // Manejar preflight
-  if (req.method === "OPTIONS") return res.sendStatus(204);
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
 
   next();
 });
 
-// --------------------
+// -------------------------------------------
 // JSON y cookies
-// --------------------
+// -------------------------------------------
 app.use(express.json());
 app.use(cookieParser());
 
-// --------------------
+// -------------------------------------------
 // Swagger
-// --------------------
+// -------------------------------------------
 const swaggerFilePath = path.resolve(
   "./bluefruit-bluefruit_api-1.0.0-swagger.json"
 );
 const swaggerDocument = JSON.parse(fs.readFileSync(swaggerFilePath, "utf-8"));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// --------------------
+// -------------------------------------------
 // Endpoints
-// --------------------
+// -------------------------------------------
 app.use("/api/products", productsRoutes);
 app.use("/api/customers", customersRouter);
 app.use("/api/distributors", distributorsRoutes);
@@ -111,14 +109,18 @@ app.use("/api/location", locationRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
 
-// 🔹 Ruta de sesión protegida
-app.get("/api/session/auth/session", authenticate, checkSession);
+// 🔹 Ruta de sesión protegida para frontend
+app.get("/api/session/auth/session", authenticate, sessionRouter);
 
-// --------------------
-// Error Handling
-// --------------------
+// -------------------------------------------
+// Manejo de errores simples
+// -------------------------------------------
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Ruta no encontrada" });
+});
+
 app.use((err, req, res, next) => {
-  console.error("Error en backend:", err);
+  console.error("Error interno:", err);
   res.status(500).json({ message: "Error interno del servidor" });
 });
 
