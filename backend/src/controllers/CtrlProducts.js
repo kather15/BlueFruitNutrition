@@ -153,5 +153,20 @@ productsController.putProducts = async (req, res) => {
   }
 };
 
+productsController.getRandom = async (req, res) => {
+  try {
+    const count = await productsModel.countDocuments();
+    if (count === 0) return res.status(404).json({ message: "No hay productos disponibles" });
+
+    const randomIndex = Math.floor(Math.random() * count);
+    const randomProduct = await productsModel.findOne().skip(randomIndex);
+
+    res.json(randomProduct);
+  } catch (error) {
+    console.error("Error obteniendo producto aleatorio:", error);
+    res.status(500).json({ message: "internal server error" });
+  }
+};
+
 export default productsController;
 
