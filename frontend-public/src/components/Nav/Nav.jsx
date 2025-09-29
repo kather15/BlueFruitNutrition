@@ -50,6 +50,14 @@ const Nav = () => {
               Carrito
             </Link>
           </li>
+          <li>
+            <Link
+              to="/suscripciones"
+              className={location.pathname === "/suscripciones" ? "active" : ""}
+            >
+              Suscripciones
+            </Link>
+            </li>
         </ul>
 
         {/* --- Íconos derecha --- */}
