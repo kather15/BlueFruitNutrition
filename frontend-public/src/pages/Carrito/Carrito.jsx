@@ -1,26 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../context/useAuth"; // hook de sesión
 import "./Carrito.css";
 
 const Carrito = () => {
   const [productos, setProductos] = useState([]);
   const navigate = useNavigate();
-  const { user, checkSession } = useAuthContext(); // obtenemos el usuario
 
-  // Verificar sesión al abrir el carrito
-  useEffect(() => {
-    const verificarSesion = async () => {
-      await checkSession(); // actualiza estado de sesión
-      if (!user) {
-        alert("Debes iniciar sesión para ver el carrito");
-        navigate("/login");
-      }
-    };
-    verificarSesion();
-  }, [user, navigate, checkSession]);
-
-  // Cargar carrito desde localStorage
   useEffect(() => {
     const carritoGuardado = JSON.parse(localStorage.getItem("carrito")) || [];
     setProductos(carritoGuardado);
@@ -56,36 +41,34 @@ const Carrito = () => {
       total: parseFloat(total),
       items: productos.reduce((acc, p) => acc + p.cantidad, 0),
       estado: "En proceso",
-      productos: productos.map((p) => ({
+      productos: productos.map(p => ({
         id: p.id.toString(),
         nombre: p.nombre,
         precio: p.precio,
-        cantidad: p.cantidad,
-      })),
+        cantidad: p.cantidad
+      }))
     };
 
     try {
-      const response = await fetch(
-        "https://bluefruitnutrition-production.up.railway.app/api/ordenes",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(orden),
-        }
-      );
+      const response = await fetch("https://bluefruitnutrition-production.up.railway.app/api/ordenes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orden),
+      });
 
       if (response.ok) {
         alert("Orden enviada correctamente");
-
-        // Guardar datos para la factura
+        
+        //  Guardar datos para la factura
         const datosCompra = {
           orden,
           productos,
           total: parseFloat(total),
-          fecha: new Date().toISOString(),
+          fecha: new Date().toISOString()
         };
         localStorage.setItem("datosCompra", JSON.stringify(datosCompra));
-
+        
+        // NO vaciar carrito aquí - se vaciará después del pago exitoso
         navigate("/metodo");
       } else {
         alert("Error al enviar la orden");
@@ -95,9 +78,6 @@ const Carrito = () => {
       alert("Hubo un problema al conectar con el servidor.");
     }
   };
-
-  // No renderizar carrito si no hay usuario
-  if (!user) return null;
 
   return (
     <div className="carrito-container">
