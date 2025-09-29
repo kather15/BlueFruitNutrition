@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/useAuth";
 import "./Carrito.css";
 
 const Carrito = () => {
