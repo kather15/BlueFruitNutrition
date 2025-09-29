@@ -25,21 +25,19 @@ import adminVerifyRoutes from "./src/routes/adminVerify.js";
 import sessionRouter from "./src/routes/session.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import BillRoutes from "./src/routes/bill.js";
-import locationRoutes from "./src/routes/location.js"
+import locationRoutes from "./src/routes/location.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
 
-
-// Middleware de autenticación
-import { authenticate } from "./src/middlewares/auth.js";
-
-import { checkSession } from "./src/controllers/CtrlSession.js";
+// Middleware y controladores
 import { authenticate } from "./src/middleware/authenticate.js";
+import { checkSession } from "./src/controllers/CtrlSession.js";
 
+// Inicialización
 const app = express();
 
 // -------------------------------------------
-// CORS
+// CORS + Preflight
 // -------------------------------------------
 const allowedOrigins = [
   "http://localhost:5173",
@@ -50,19 +48,23 @@ const allowedOrigins = [
   "https://bluefruitnutrition-production.up.railway.app",
 ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("No permitido por CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  }
 
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+
+  next();
+});
+
+// -------------------------------------------
+// JSON y cookies
+// -------------------------------------------
 app.use(express.json());
 app.use(cookieParser());
 
@@ -95,10 +97,19 @@ app.use("/api/token", tokenRouter);
 app.use("/api/admin", adminVerifyRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
-app.use("/api/location", locationRoutes)
+app.use("/api/location", locationRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
-app.use("/api/check-session", sessionRouter); // Ruta para validar sesión
+
+// 🔹 Ruta protegida de sesión
+app.get("/api/session/auth/session", authenticate, checkSession);
+
+// -------------------------------------------
+// Error handling básico
+// -------------------------------------------
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Error interno del servidor" });
+});
 
 export default app;
-
