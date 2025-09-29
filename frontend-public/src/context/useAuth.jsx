@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
         } else {
           setUser(null);
           setIsAuthenticated(false);
-          console.log("No hay sesión activa");
         }
       } catch (err) {
         console.error("Error verificando sesión:", err);
@@ -43,11 +42,9 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     };
-
     checkAuth();
   }, []);
 
-  // Reutilizable: checkSession bajo demanda
   const checkSession = async () => {
     setLoading(true);
     try {
@@ -56,19 +53,15 @@ export const AuthProvider = ({ children }) => {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
       });
-
       if (res.ok) {
         const data = await res.json();
         setUser(data);
         setIsAuthenticated(true);
-        console.log("Sesión confirmada:", data);
       } else {
         setUser(null);
         setIsAuthenticated(false);
-        console.log("No hay sesión activa");
       }
     } catch (err) {
-      console.error("Error en checkSession:", err);
       setUser(null);
       setIsAuthenticated(false);
     } finally {
@@ -76,7 +69,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Login
   const login = async (email, password) => {
     try {
       const res = await fetch(`${API_URL}/login`, {
@@ -85,37 +77,24 @@ export const AuthProvider = ({ children }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await res.json();
-
-      if (res.ok) {
-        if (data.user && data.user.id) {
-          setUser(data.user);
-          setIsAuthenticated(true);
-          console.log("✅ Login exitoso:", data.user);
-          return { success: true, data };
-        } else {
-          throw new Error("Datos de usuario incompletos");
-        }
+      if (res.ok && data.user) {
+        setUser(data.user);
+        setIsAuthenticated(true);
+        return { success: true, data };
       } else {
         throw new Error(data.message || "Error en login");
       }
     } catch (err) {
-      console.error("Error en login:", err);
       return { success: false, error: err.message };
     }
   };
 
-  // Logout
   const logout = async () => {
     try {
-      await fetch(`${API_URL}/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-      console.log("Logout exitoso");
+      await fetch(`${API_URL}/logout`, { method: "POST", credentials: "include" });
     } catch (err) {
-      console.error("Error al cerrar sesión:", err);
+      console.error(err);
     } finally {
       setUser(null);
       setIsAuthenticated(false);
@@ -128,4 +107,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-

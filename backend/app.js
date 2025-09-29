@@ -58,10 +58,7 @@ app.use((req, res, next) => {
     );
   }
 
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(204);
-  }
-
+  if (req.method === "OPTIONS") return res.sendStatus(204);
   next();
 });
 
@@ -90,7 +87,7 @@ app.use("/api/registerCustomers", registerCustomersRoutes);
 app.use("/api/registerDistributors", registerDistributorsRoutes);
 app.use("/api/passwordRecovery", passwordRecoveryRoutes);
 app.use("/api/login", loginRoutes);
-app.use("/api/logout", logoutR/api/check-sessionoutes);
+app.use("/api/logout", logoutRoutes);
 app.use("/api/shoppingCart", shoppingCartRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/ordenes", ordenesRoutes);
@@ -106,9 +103,8 @@ app.use("/api/location", locationRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
 
-// 🔹 Ruta de sesión protegida para frontend
-app.use("/api/session", sessionRouter);
-
+// 🔹 Ruta de sesión protegida
+app.use("/api/session", sessionRouter); // router define GET /auth/session
 
 // -------------------------------------------
 // Manejo de errores simples

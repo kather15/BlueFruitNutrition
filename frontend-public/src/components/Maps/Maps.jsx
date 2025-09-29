@@ -5,7 +5,7 @@ import {
   Marker,
   InfoWindow
 } from "@react-google-maps/api";
-import { FiMapPin, FiClock, FiPhone, FiRefreshCw} from "react-icons/fi";
+import { FiMapPin, FiClock, FiPhone, FiRefreshCw } from "react-icons/fi";
 import toast from 'react-hot-toast';
 import './Maps.css';
 
@@ -20,11 +20,12 @@ const StoresMap = () => {
   const [mapSelectedStore, setMapSelectedStore] = useState(null);
   const [mapCenter, setMapCenter] = useState({ lat: 13.7028, lng: -89.2073 }); // San Salvador
 
-  // URL del API - debe coincidir con GoogleMapAdmin
-  const apiURL = "http://localhost:4000/api/location";
+  // URL del API - dinámico según entorno
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+  const apiURL = `${API_BASE_URL}/location`;
 
   // Configuración de Google Maps
-  const googleMapsApiKey = import.meta.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey,
@@ -42,17 +43,17 @@ const StoresMap = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await fetch(apiURL, {
         credentials: 'include'
       });
-      
+
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
-      
+
       const data = await response.json();
-      
+
       // Transformar los datos del backend al formato que espera el componente
       const transformedStores = data.map((location, index) => ({
         id: index + 1,
@@ -63,19 +64,19 @@ const StoresMap = () => {
         hours: location.openingHours,
         _id: location._id
       }));
-      
+
       setStores(transformedStores);
-      
-      // Si hay tiendas pero no hay una seleccionada, seleccionar la primera
+
+      // Seleccionar primera tienda si no hay selección
       if (transformedStores.length > 0 && selectedStore >= transformedStores.length) {
         setSelectedStore(0);
       }
 
-      // Centrar el mapa en la primera tienda si hay tiendas disponibles
+      // Centrar el mapa en la primera tienda
       if (transformedStores.length > 0) {
         setMapCenter(transformedStores[0].coordinates);
       }
-      
+
     } catch (error) {
       console.error('Error fetching stores:', error);
       setError(error.message);
@@ -110,7 +111,6 @@ const StoresMap = () => {
   // Manejar clic en marcador
   const handleMarkerClick = useCallback((store) => {
     setMapSelectedStore(store);
-    // También actualizar la tienda seleccionada en la lista
     const storeIndex = stores.findIndex(s => s._id === store._id);
     if (storeIndex !== -1) {
       setSelectedStore(storeIndex);
@@ -124,14 +124,14 @@ const StoresMap = () => {
     setMapCenter(stores[index].coordinates);
   };
 
-  // Componente de carga para Maps
+  // Carga de Google Maps o tiendas
   if (loadError) {
     return (
       <section className="stores-map-section">
         <div className="stores-map-container">
           <h2>Encuentra una tienda</h2>
           <div className="error-container">
-            <p> Error al cargar Google Maps</p>
+            <p>Error al cargar Google Maps</p>
             <p>Verifica la configuración del API Key</p>
           </div>
         </div>
@@ -139,7 +139,6 @@ const StoresMap = () => {
     );
   }
 
-  // Componente de carga
   if (loading || !isLoaded) {
     return (
       <section className="stores-map-section">
@@ -154,14 +153,13 @@ const StoresMap = () => {
     );
   }
 
-  // Componente de error
   if (error) {
     return (
       <section className="stores-map-section">
         <div className="stores-map-container">
           <h2>Encuentra una tienda</h2>
           <div className="error-container">
-            <p> Error al cargar las tiendas</p>
+            <p>Error al cargar las tiendas</p>
             <button onClick={fetchStores} className="retry-btn">
               Intentar nuevamente
             </button>
@@ -171,14 +169,13 @@ const StoresMap = () => {
     );
   }
 
-  // Si no hay tiendas
   if (stores.length === 0) {
     return (
       <section className="stores-map-section">
         <div className="stores-map-container">
           <h2>Encuentra una tienda</h2>
           <div className="empty-state">
-            <p> No hay tiendas disponibles en este momento</p>
+            <p>No hay tiendas disponibles en este momento</p>
             <button onClick={fetchStores} className="retry-btn">
               Actualizar
             </button>
@@ -197,17 +194,15 @@ const StoresMap = () => {
             {stores.length} {stores.length === 1 ? 'tienda disponible' : 'tiendas disponibles'}
           </div>
           <button 
-  onClick={fetchStores} 
-  className="refresh-btn" 
-  title="Actualizar tiendas"
->
-  <FiRefreshCw />
-</button>
-
+            onClick={fetchStores} 
+            className="refresh-btn" 
+            title="Actualizar tiendas"
+          >
+            <FiRefreshCw />
+          </button>
         </div>
         
         <div className="stores-map-content">
-          {/* Lista de tiendas */}
           <div className="stores-list">
             {stores.map((store, index) => (
               <div
@@ -218,27 +213,21 @@ const StoresMap = () => {
                 <div className="store-number">{store.id}</div>
                 <div className="store-details">
                   <h3>{store.name}</h3>
-                <p className="store-address"><span className="icon"><FiMapPin /></span> {store.address}</p>
-<p className="store-contact"><span className="icon"><FiPhone /></span> {store.phone}</p>
-<p className="store-hours"><span className="icon"><FiClock /></span> {store.hours}</p>
+                  <p className="store-address"><span className="icon"><FiMapPin /></span> {store.address}</p>
+                  <p className="store-contact"><span className="icon"><FiPhone /></span> {store.phone}</p>
+                  <p className="store-hours"><span className="icon"><FiClock /></span> {store.hours}</p>
 
                   <div className="store-buttons">
                     <button 
                       className="directions-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openInGoogleMaps(store);
-                      }}
+                      onClick={(e) => { e.stopPropagation(); openInGoogleMaps(store); }}
                       title="Ver ubicación en el mapa"
                     >
                       Ver en mapa
                     </button>
                     <button 
                       className="directions-btn primary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        getDirections(store);
-                      }}
+                      onClick={(e) => { e.stopPropagation(); getDirections(store); }}
                       title="Obtener direcciones"
                     >
                       Cómo llegar
@@ -249,7 +238,6 @@ const StoresMap = () => {
             ))}
           </div>
 
-          {/* Mapa interactivo de Google Maps */}
           <div className="map-container">
             <GoogleMap
               mapContainerStyle={containerStyle}
@@ -260,15 +248,9 @@ const StoresMap = () => {
                 mapTypeControl: true,
                 fullscreenControl: true,
                 zoomControl: true,
-                styles: [
-                  {
-                    featureType: "poi.business",
-                    stylers: [{ visibility: "off" }]
-                  }
-                ]
+                styles: [{ featureType: "poi.business", stylers: [{ visibility: "off" }] }]
               }}
             >
-              {/* Marcadores para todas las tiendas */}
               {stores.map((store) => (
                 <Marker
                   key={store._id}
@@ -286,7 +268,6 @@ const StoresMap = () => {
                 />
               ))}
 
-              {/* InfoWindow para tienda seleccionada en el mapa */}
               {mapSelectedStore && (
                 <InfoWindow
                   position={mapSelectedStore.coordinates}
@@ -295,30 +276,21 @@ const StoresMap = () => {
                   <div className="map-info-window">
                     <h3 className="info-title">{mapSelectedStore.name}</h3>
                     <div className="info-details">
-  <p><span className="icon"><FiMapPin /></span> {mapSelectedStore.address}</p>
-  <p><span className="icon"><FiClock /></span> {mapSelectedStore.hours}</p>
-  <p><span className="icon"><FiPhone /></span> {mapSelectedStore.phone}</p>
-</div>
+                      <p><span className="icon"><FiMapPin /></span> {mapSelectedStore.address}</p>
+                      <p><span className="icon"><FiClock /></span> {mapSelectedStore.hours}</p>
+                      <p><span className="icon"><FiPhone /></span> {mapSelectedStore.phone}</p>
+                    </div>
 
                     <div className="info-actions">
-                      <button 
-                        onClick={() => getDirections(mapSelectedStore)}
-                        className="btn btn-primary"
-                      >
-                         Cómo llegar
+                      <button onClick={() => getDirections(mapSelectedStore)} className="btn btn-primary">
+                        Cómo llegar
                       </button>
-                      <button 
-                        onClick={() => openInGoogleMaps(mapSelectedStore)}
-                        className="btn btn-secondary"
-                      >
-                         Ver en Google Maps
+                      <button onClick={() => openInGoogleMaps(mapSelectedStore)} className="btn btn-secondary">
+                        Ver en Google Maps
                       </button>
                       {mapSelectedStore.phone && mapSelectedStore.phone !== "Contactar tienda" && (
-                        <a 
-                          href={`tel:${mapSelectedStore.phone}`}
-                          className="btn btn-phone"
-                        >
-                           Llamar
+                        <a href={`tel:${mapSelectedStore.phone}`} className="btn btn-phone">
+                          Llamar
                         </a>
                       )}
                     </div>
