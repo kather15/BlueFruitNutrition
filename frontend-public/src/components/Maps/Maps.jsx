@@ -1,164 +1,331 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  GoogleMap,
+  useJsApiLoader,
+  Marker,
+  InfoWindow
+} from "@react-google-maps/api";
+import { FiMapPin, FiClock, FiPhone, FiRefreshCw} from "react-icons/fi";
+import toast from 'react-hot-toast';
 import './Maps.css';
+
+// Definir libraries fuera del componente
+const libraries = ['places'];
 
 const StoresMap = () => {
   const [selectedStore, setSelectedStore] = useState(0);
+  const [stores, setStores] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [mapSelectedStore, setMapSelectedStore] = useState(null);
+  const [mapCenter, setMapCenter] = useState({ lat: 13.7028, lng: -89.2073 }); // San Salvador
 
-  const stores = [
-    {
-      id: 1,
-      name: "PROBIKES El Salvador",
-      address: "Avenida La Capilla #212, San Salvador.",
-      coordinates: { lat: 13.6929, lng: -89.2182 },
-      phone: "+503 2222-3333",
-      hours: "Lun-Vie: 8:00-18:00, Sáb: 8:00-17:00"
-    },
-    {
-      id: 2,
-      name: "Bike Center El Salvador",
-      address: "79 Avenida Nte. 521, San Salvador.",
-      coordinates: { lat: 13.7123, lng: -89.2075 },
-      phone: "+503 2333-4444",
-      hours: "Lun-Vie: 9:00-18:00, Sáb: 9:00-16:00"
-    },
-    {
-      id: 3,
-      name: "Flybikes Merliot",
-      address: "Urb. Jardines de la Hacienda, calle El Pedregal, #7, Polig. A-6, Edif. Callari, 1a.Planta ( Locales 1 y 2. CD. Merliot. Ant. Cuscatlán, Depto. De, C. El Pedregal, Ciudad Merliot.",
-      coordinates: { lat: 13.6789, lng: -89.2634 },
-      phone: "+503 2444-5555",
-      hours: "Lun-Vie: 8:30-18:30, Sáb: 8:30-17:00"
-    },
-    {
-      id: 4,
-      name: "Running World Center",
-      address: "C. la Mascota y Av. Azaleas, col. Maquilishuat, Plaza Comercial Azaleas #10",
-      coordinates: { lat: 13.7089, lng: -89.2456 },
-      phone: "+503 2555-6666",
-      hours: "Lun-Vie: 9:00-19:00, Sáb: 9:00-18:00"
-    },
-    {
-      id: 5,
-      name: "Carlitos Biker Sonsonate",
-      address: "Frente a triángulo de la cruz, 10a Avenida Norte y, 4A Calle Oriente, Sonsonate 2301.",
-      coordinates: { lat: 13.7167, lng: -89.7244 },
-      phone: "+503 2666-7777",
-      hours: "Lun-Vie: 8:00-17:00, Sáb: 8:00-16:00"
-    },
-    {
-      id: 6,
-      name: "Centro Profesional Buenos Aires. Nutrición Deportiva",
-      address: "Calle Maquilishuat y Av. 4 de Mayo, Avenida 4 de Mayo, San Salvador.",
-      coordinates: { lat: 13.7045, lng: -89.2167 },
-      phone: "+503 2777-8888",
-      hours: "Lun-Vie: 7:00-18:00, Sáb: 8:00-15:00"
-    },
-    {
-      id: 7,
-      name: "Cayaguanca Outdoor Equipment. Cascadas",
-      address: "Centro Comercial Las Cascadas, Local 117, Antiguo Cuscatlán, La Libertad",
-      coordinates: { lat: 13.6741, lng: -89.2540 },
-      phone: "+503 6047 5056",
-      hours: "Lun-Vie: 10:00-18:30, Sáb: 10:00-17:00, Dom: 11:00-15:00"
-     },
-    {
-       id: 8,
-      name: "Tienda Maca Colonia Escalón",
-      address: "11 Calle Poniente, Colonia Escalón, San Salvador",
-      coordinates: { lat: 13.6992, lng: -89.2226 },
-      phone: "N/D",
-      hours: "N/D"
-     }
+  // URL del API - debe coincidir con GoogleMapAdmin
+  const apiURL = "http://localhost:4000/api/location";
 
+  // Configuración de Google Maps
+  const googleMapsApiKey = import.meta.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-  ];
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey,
+    libraries
+  });
 
-  // Coordenadas del centro de El Salvador para el mapa
-  const centerCoordinates = { lat: 13.7942, lng: -88.8965 };
-
-  const generateMapUrl = () => {
-    const markersQuery = stores.map(store => 
-      `markers=color:orange%7Clabel:${store.id}%7C${store.coordinates.lat},${store.coordinates.lng}`
-    ).join('&');
-    
-    return `https://www.google.com/maps/embed/v1/view?key=YOUR_API_KEY&center=${centerCoordinates.lat},${centerCoordinates.lng}&zoom=10&${markersQuery}`;
+  const containerStyle = {
+    width: "100%",
+    height: "100%",
+    borderRadius: "12px"
   };
+
+  // Función para obtener las ubicaciones del backend
+  const fetchStores = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch(apiURL, {
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      // Transformar los datos del backend al formato que espera el componente
+      const transformedStores = data.map((location, index) => ({
+        id: index + 1,
+        name: location.name,
+        address: location.address,
+        coordinates: { lat: location.lat, lng: location.lng },
+        phone: location.phone || "Contactar tienda",
+        hours: location.openingHours,
+        _id: location._id
+      }));
+      
+      setStores(transformedStores);
+      
+      // Si hay tiendas pero no hay una seleccionada, seleccionar la primera
+      if (transformedStores.length > 0 && selectedStore >= transformedStores.length) {
+        setSelectedStore(0);
+      }
+
+      // Centrar el mapa en la primera tienda si hay tiendas disponibles
+      if (transformedStores.length > 0) {
+        setMapCenter(transformedStores[0].coordinates);
+      }
+      
+    } catch (error) {
+      console.error('Error fetching stores:', error);
+      setError(error.message);
+      toast.error(`Error al cargar las tiendas: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cargar las tiendas al montar el componente
+  useEffect(() => {
+    fetchStores();
+  }, []);
+
+  // Actualizar centro del mapa cuando se selecciona una tienda
+  useEffect(() => {
+    if (stores.length > 0 && stores[selectedStore]) {
+      setMapCenter(stores[selectedStore].coordinates);
+    }
+  }, [selectedStore, stores]);
 
   const openInGoogleMaps = (store) => {
     const url = `https://www.google.com/maps/search/?api=1&query=${store.coordinates.lat},${store.coordinates.lng}`;
     window.open(url, '_blank');
   };
 
+  const getDirections = (store) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${store.coordinates.lat},${store.coordinates.lng}`;
+    window.open(url, '_blank');
+  };
+
+  // Manejar clic en marcador
+  const handleMarkerClick = useCallback((store) => {
+    setMapSelectedStore(store);
+    // También actualizar la tienda seleccionada en la lista
+    const storeIndex = stores.findIndex(s => s._id === store._id);
+    if (storeIndex !== -1) {
+      setSelectedStore(storeIndex);
+    }
+  }, [stores]);
+
+  // Manejar clic en tienda de la lista
+  const handleStoreSelect = (index) => {
+    setSelectedStore(index);
+    setMapSelectedStore(stores[index]);
+    setMapCenter(stores[index].coordinates);
+  };
+
+  // Componente de carga para Maps
+  if (loadError) {
+    return (
+      <section className="stores-map-section">
+        <div className="stores-map-container">
+          <h2>Encuentra una tienda</h2>
+          <div className="error-container">
+            <p> Error al cargar Google Maps</p>
+            <p>Verifica la configuración del API Key</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Componente de carga
+  if (loading || !isLoaded) {
+    return (
+      <section className="stores-map-section">
+        <div className="stores-map-container">
+          <h2>Encuentra una tienda</h2>
+          <div className="loading-container">
+            <div className="spinner"></div>
+            <p>Cargando {loading ? 'tiendas' : 'mapa'}...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Componente de error
+  if (error) {
+    return (
+      <section className="stores-map-section">
+        <div className="stores-map-container">
+          <h2>Encuentra una tienda</h2>
+          <div className="error-container">
+            <p> Error al cargar las tiendas</p>
+            <button onClick={fetchStores} className="retry-btn">
+              Intentar nuevamente
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Si no hay tiendas
+  if (stores.length === 0) {
+    return (
+      <section className="stores-map-section">
+        <div className="stores-map-container">
+          <h2>Encuentra una tienda</h2>
+          <div className="empty-state">
+            <p> No hay tiendas disponibles en este momento</p>
+            <button onClick={fetchStores} className="retry-btn">
+              Actualizar
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="stores-map-section">
       <div className="stores-map-container">
-        <h2>Encuentra una tienda</h2>
+        <div className="stores-header">
+          <h2>Encuentra una tienda</h2>
+          <div className="stores-count">
+            {stores.length} {stores.length === 1 ? 'tienda disponible' : 'tiendas disponibles'}
+          </div>
+          <button 
+  onClick={fetchStores} 
+  className="refresh-btn" 
+  title="Actualizar tiendas"
+>
+  <FiRefreshCw />
+</button>
+
+        </div>
         
         <div className="stores-map-content">
           {/* Lista de tiendas */}
           <div className="stores-list">
             {stores.map((store, index) => (
               <div
-                key={store.id}
+                key={store._id || store.id}
                 className={`store-item ${selectedStore === index ? 'active' : ''}`}
-                onClick={() => setSelectedStore(index)}
+                onClick={() => handleStoreSelect(index)}
               >
                 <div className="store-number">{store.id}</div>
                 <div className="store-details">
                   <h3>{store.name}</h3>
-                  <p className="store-address">{store.address}</p>
-                  <p className="store-contact">{store.phone}</p>
-                  <p className="store-hours">{store.hours}</p>
-                  <button 
-                    className="directions-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openInGoogleMaps(store);
-                    }}
-                  >
-                    Ver en mapa
-                  </button>
+                <p className="store-address"><span className="icon"><FiMapPin /></span> {store.address}</p>
+<p className="store-contact"><span className="icon"><FiPhone /></span> {store.phone}</p>
+<p className="store-hours"><span className="icon"><FiClock /></span> {store.hours}</p>
+
+                  <div className="store-buttons">
+                    <button 
+                      className="directions-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openInGoogleMaps(store);
+                      }}
+                      title="Ver ubicación en el mapa"
+                    >
+                      Ver en mapa
+                    </button>
+                    <button 
+                      className="directions-btn primary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        getDirections(store);
+                      }}
+                      title="Obtener direcciones"
+                    >
+                      Cómo llegar
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Mapa */}
+          {/* Mapa interactivo de Google Maps */}
           <div className="map-container">
-            <div className="map-placeholder">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d497698.77320394655!2d-89.46340827109378!3d13.794185718671588!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f633176e6023ba3%3A0x2a7dd00dc8b8f855!2sEl%20Salvador!5e0!3m2!1ses!2ssv!4v1692895234567!5m2!1ses!2ssv"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Mapa de tiendas Blue Fruit"
-              ></iframe>
-              
-              {/* Overlay con información de tienda seleccionada */}
-              <div className="map-overlay">
-                <div className="selected-store-info">
-                  <h4>{stores[selectedStore].name}</h4>
-                  <p>{stores[selectedStore].address}</p>
-                  <div className="store-actions">
-                    <button 
-                      onClick={() => openInGoogleMaps(stores[selectedStore])}
-                      className="map-action-btn"
-                    >
-                      Cómo llegar
-                    </button>
-                    <a 
-                      href={`tel:${stores[selectedStore].phone}`}
-                      className="map-action-btn phone-btn"
-                    >
-                      Llamar
-                    </a>
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={mapCenter}
+              zoom={12}
+              options={{
+                streetViewControl: true,
+                mapTypeControl: true,
+                fullscreenControl: true,
+                zoomControl: true,
+                styles: [
+                  {
+                    featureType: "poi.business",
+                    stylers: [{ visibility: "off" }]
+                  }
+                ]
+              }}
+            >
+              {/* Marcadores para todas las tiendas */}
+              {stores.map((store) => (
+                <Marker
+                  key={store._id}
+                  position={store.coordinates}
+                  onClick={() => handleMarkerClick(store)}
+                  title={store.name}
+                  icon={{
+                    url: selectedStore === stores.findIndex(s => s._id === store._id) 
+                      ? 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                      : 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                    scaledSize: new window.google.maps.Size(32, 32)
+                  }}
+                  animation={mapSelectedStore && mapSelectedStore._id === store._id ? 
+                    window.google.maps.Animation.BOUNCE : null}
+                />
+              ))}
+
+              {/* InfoWindow para tienda seleccionada en el mapa */}
+              {mapSelectedStore && (
+                <InfoWindow
+                  position={mapSelectedStore.coordinates}
+                  onCloseClick={() => setMapSelectedStore(null)}
+                >
+                  <div className="map-info-window">
+                    <h3 className="info-title">{mapSelectedStore.name}</h3>
+                    <div className="info-details">
+  <p><span className="icon"><FiMapPin /></span> {mapSelectedStore.address}</p>
+  <p><span className="icon"><FiClock /></span> {mapSelectedStore.hours}</p>
+  <p><span className="icon"><FiPhone /></span> {mapSelectedStore.phone}</p>
+</div>
+
+                    <div className="info-actions">
+                      <button 
+                        onClick={() => getDirections(mapSelectedStore)}
+                        className="btn btn-primary"
+                      >
+                         Cómo llegar
+                      </button>
+                      <button 
+                        onClick={() => openInGoogleMaps(mapSelectedStore)}
+                        className="btn btn-secondary"
+                      >
+                         Ver en Google Maps
+                      </button>
+                      {mapSelectedStore.phone && mapSelectedStore.phone !== "Contactar tienda" && (
+                        <a 
+                          href={`tel:${mapSelectedStore.phone}`}
+                          className="btn btn-phone"
+                        >
+                           Llamar
+                        </a>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
+                </InfoWindow>
+              )}
+            </GoogleMap>
           </div>
         </div>
       </div>

@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
           const data = await response.json();
           setUser(data.user || data); // soporta ambos formatos
           setIsAuthenticated(true);
-          console.log('✅ Sesión verificada con backend:', data);
+          console.log(' Sesión verificada con backend:', data);
         } else {
           setUser(null);
           setIsAuthenticated(false);
@@ -64,11 +64,11 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();
         setUser(data.user || data);
         setIsAuthenticated(true);
-        console.log('🔍 Sesión confirmada:', data);
+        console.log(' Sesión confirmada:', data);
       } else {
         setUser(null);
         setIsAuthenticated(false);
-        console.log('❌ No hay sesión activa');
+        console.log('No hay sesión activa');
       }
     } catch (error) {
       console.error('Error en checkSession:', error);
@@ -95,7 +95,6 @@ export const AuthProvider = ({ children }) => {
         if (data.user && data.user.id) {
           setUser(data.user);
           setIsAuthenticated(true);
-          console.log("nombre del usuario:", data.user.name);
           console.log('✅ Login exitoso:', data.user);
           return { success: true, data };
         } else {
@@ -117,7 +116,7 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         credentials: 'include',
       });
-      console.log('✅ Logout exitoso');
+      console.log(' Logout exitoso');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     } finally {

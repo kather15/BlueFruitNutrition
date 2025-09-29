@@ -13,68 +13,50 @@ cloudinary.config({
 
 const productsController = {};
 
-// GET all products
-productsController.getProducts = async (req, res) => {
-  try {
-    console.log("📥 Solicitud GET productos");
-    const products = await productsModel.find().populate("idNutritionalValues");
-    console.log(`✅ ${products.length} productos encontrados`);
-    res.status(200).json(products);
-  } catch (error) {
-    console.error("🔴 Error en getProducts:", error.message);
-    res.status(500).json({ message: "Error interno del servidor", error: error.message });
-  }
-};
-
-// GET product by ID
-productsController.getProductById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    console.log(`📥 Solicitud GET producto ID: ${id}`);
-
-    const product = await productsModel.findById(id).populate("idNutritionalValues");
-
-    if (!product) {
-      console.log("⚠️ Producto no encontrado");
-      return res.status(404).json({ message: "Producto no encontrado" });
-    }
-
-    console.log("✅ Producto encontrado:", product.name);
-    res.status(200).json(product);
-  } catch (error) {
-    console.error("🔴 Error en getProductById:", error.message);
-    res.status(500).json({ message: "Error interno del servidor", error: error.message });
-  }
-};
-
-// POST new product with Cloudinary upload
+// POST - crear producto (tu función actual, sin cambios)
 productsController.postProducts = async (req, res) => {
   try {
     console.log("📥 Datos recibidos en postProducts:", req.body);
 
     if (!req.file) {
-      console.log("⚠️ No se recibió archivo en req.file");
       return res.status(400).json({ message: "Imagen es requerida" });
     }
 
-    console.log("📁 Archivo recibido en req.file:", req.file.path);
-
-    // Subida sin allowed_formats para evitar error firma
+    // Subir imagen a Cloudinary
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "products",
     });
 
-    console.log("☁️ Upload a Cloudinary exitoso:", result.secure_url);
-
     fs.unlinkSync(req.file.path);
-    console.log("🗑️ Archivo local eliminado:", req.file.path);
 
-    const { name, description, flavor, price, idNutritionalValues } = req.body;
+    let { name, description, flavor, price, idNutritionalValues } = req.body;
+
+    // Procesar flavor como array
+    let processedFlavor;
+
+    if (typeof flavor === "string") {
+      try {
+        const parsed = JSON.parse(flavor);
+        if (Array.isArray(parsed)) {
+          processedFlavor = parsed;
+        } else {
+          processedFlavor = [flavor];
+        }
+      } catch {
+        processedFlavor = [flavor];
+      }
+    } else if (Array.isArray(flavor)) {
+      processedFlavor = flavor;
+    } else {
+      processedFlavor = [String(flavor)];
+    }
+
+    processedFlavor = processedFlavor.map(f => String(f).trim()).filter(f => f.length > 0);
 
     const newProduct = new productsModel({
       name,
       description,
-      flavor,
+      flavor: processedFlavor,
       price,
       image: result.secure_url,
       idNutritionalValues,
@@ -82,73 +64,93 @@ productsController.postProducts = async (req, res) => {
 
     const savedProduct = await newProduct.save();
 
-    console.log("🟢 Producto guardado en DB, ID:", savedProduct._id);
-    res.status(201).json({ message: "Producto guardado", id: savedProduct._id });
+    res.status(201).json({ 
+      message: "Producto guardado", 
+      id: savedProduct._id,
+      product: savedProduct
+    });
   } catch (error) {
-    console.error("🔴 Error en postProducts:", error.message);
+    console.error("Error en postProducts:", error.message);
     res.status(500).json({ message: "Error al guardar el producto", error: error.message });
   }
 };
 
-// DELETE product by ID
-productsController.deleteProducts = async (req, res) => {
+// GET - obtener todos los productos
+productsController.getProducts = async (req, res) => {
   try {
-    const { id } = req.params;
-    console.log(`📥 Solicitud DELETE producto ID: ${id}`);
-
-    const deletedProduct = await productsModel.findByIdAndDelete(id);
-
-    if (!deletedProduct) {
-      console.log("⚠️ Producto a eliminar no encontrado");
-      return res.status(404).json({ message: "Producto no encontrado" });
-    }
-
-    console.log("🟢 Producto eliminado:", id);
-    res.status(200).json({ message: "Producto eliminado correctamente" });
+    const products = await productsModel.find();
+    res.status(200).json(products);
   } catch (error) {
-    console.error("🔴 Error en deleteProducts:", error.message);
-    res.status(500).json({ message: "Error al eliminar el producto", error: error.message });
+    console.error("Error en getProducts:", error.message);
+    res.status(500).json({ message: "Error al obtener productos", error: error.message });
   }
 };
 
-// PUT update product by ID (optional image)
+// GET - obtener producto por ID
+productsController.getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productsModel.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    console.error("Error en getProductById:", error.message);
+    res.status(500).json({ message: "Error al obtener el producto", error: error.message });
+  }
+};
+
+// PUT - actualizar producto (con opción de nueva imagen)
 productsController.putProducts = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(`📥 Solicitud PUT producto ID: ${id}`);
-    console.log("Datos recibidos en putProducts:", req.body);
+    let updateData = { ...req.body };
 
-    const { name, description, flavor, price, idNutritionalValues } = req.body;
-
-    let updatedData = {
-      name,
-      description,
-      flavor,
-      price,
-      idNutritionalValues,
-    };
-
+    // Si subieron imagen, subir a Cloudinary y actualizar URL
     if (req.file) {
-      console.log("📁 Archivo recibido en req.file para update:", req.file.path);
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "products",
       });
-      updatedData.image = result.secure_url;
       fs.unlinkSync(req.file.path);
-      console.log("🗑️ Archivo local eliminado tras update:", req.file.path);
+      updateData.image = result.secure_url;
     }
 
-    const updatedProduct = await productsModel.findByIdAndUpdate(id, updatedData, { new: true });
+    // Procesar flavor si viene en body
+    if (updateData.flavor) {
+      let flavor = updateData.flavor;
+      let processedFlavor;
+
+      if (typeof flavor === "string") {
+        try {
+          const parsed = JSON.parse(flavor);
+          if (Array.isArray(parsed)) {
+            processedFlavor = parsed;
+          } else {
+            processedFlavor = [flavor];
+          }
+        } catch {
+          processedFlavor = [flavor];
+        }
+      } else if (Array.isArray(flavor)) {
+        processedFlavor = flavor;
+      } else {
+        processedFlavor = [String(flavor)];
+      }
+
+      processedFlavor = processedFlavor.map(f => String(f).trim()).filter(f => f.length > 0);
+      updateData.flavor = processedFlavor;
+    }
+
+    const updatedProduct = await productsModel.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!updatedProduct) {
-      console.log("⚠️ Producto a actualizar no encontrado");
-      return res.status(404).json({ message: "Producto no encontrado" });
+      return res.status(404).json({ message: "Producto no encontrado para actualizar" });
     }
 
-    console.log("🟢 Producto actualizado:", updatedProduct._id);
-    res.status(200).json({ message: "Producto actualizado correctamente", updatedProduct });
+    res.status(200).json({ message: "Producto actualizado", product: updatedProduct });
   } catch (error) {
-    console.error("🔴 Error en putProducts:", error.message);
+    console.error("Error en putProducts:", error.message);
     res.status(500).json({ message: "Error al actualizar el producto", error: error.message });
   }
 };
