@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch(`${API_URL}/check-session`, {
+        const res = await fetch(`${API_URL}/session/auth/session`, {
           method: "GET",
           credentials: "include", // <- cookies httpOnly
         });
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
         toast.success("Redirigiendo al panel de admin...");
         // Aquí puedes manejar modal de código si quieres
         setTimeout(() => {
-          window.location.href = "https://blue-fruit-nutrition-private.vercel.app"; // o producción
+          window.location.href = "http://localhost:5174"; // o producción
         }, 1000);
         return;
       }
@@ -115,7 +115,7 @@ export const AuthProvider = ({ children }) => {
   const checkSession = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_URL}/check-session`, {
+      const res = await fetch(`${API_URL}/session/auth/session`, {
         method: "GET",
         credentials: "include",
       });

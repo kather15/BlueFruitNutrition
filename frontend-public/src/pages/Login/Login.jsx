@@ -16,17 +16,18 @@ const AdminCodeModal = ({ onClose, email }) => {
     setLoading(true);
     try {
       const res = await fetch("https://bluefruitnutrition-production.up.railway.app/api/admin/verify-code", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
+  method: "POST",
+  credentials: "include", // <- MUY importante
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ code }),
+});
 
       const data = await res.json();
+
       if (!res.ok) throw new Error(data.message || "Código inválido");
 
       toast.success("Código verificado correctamente");
-      window.location.href = "https://blue-fruit-nutrition-private.vercel.app";
+      window.location.href = "http://localhost:5174";
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -69,10 +70,11 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   
   const navigate = useNavigate();
-  const { login, checkSession } = useAuthContext();
+  const { login, checkSession } = useAuthContext(); //  Usar el contexto
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     if (loadingLogin) return;
 
     if (email.trim() === "" || password.trim() === "") {
@@ -82,11 +84,16 @@ const Login = () => {
 
     setLoadingLogin(true);
     try {
+      //  Usar la función login del contexto
       const result = await login(email, password);
-      if (!result.success) throw new Error(result.error);
+
+      if (!result.success) {
+        throw new Error(result.error);
+      }
 
       toast.success("Credenciales correctas");
 
+      //  Si es admin, manejar código de verificación
       if (result.data.role === "admin") {
         if (showAdminModal) return;
 
@@ -98,6 +105,7 @@ const Login = () => {
         });
 
         const sendCodeData = await sendCodeRes.json();
+
         if (!sendCodeRes.ok) throw new Error(sendCodeData.message || "Error enviando código");
 
         toast.success("Código enviado al correo. Por favor verifica.");
@@ -106,12 +114,16 @@ const Login = () => {
         return;
       }
 
+      //  Usuario normal: redirigir
       toast.success("Inicio de sesión exitoso");
+      
+      //  Refrescar la sesión para actualizar el contexto
       await checkSession();
-
+      
       setTimeout(() => {
         navigate("/");
       }, 1000);
+      
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -120,25 +132,21 @@ const Login = () => {
   };
 
   return (
-    <div className="login-wrapper">
+    <div className="login-container">
       <Toaster position="top-center" reverseOrder={false} />
 
-      {/* Tarjeta principal */}
-      <div className="login-card">
-
-        {/* Lado izquierdo - Imagen */}
-        <div className="login-left">
-          <img
-            src={"/imgregister.png"}
-            alt="Triathlon promotional"
-            className="login-img"
-          />
+      {/* Lado izquierdo - Imagen */}
+      <div className="left-side">
+        <div className="image-container">
+          <img src={"/imgregister.png"} alt="Triathlon promotional" className="promo-image" />
         </div>
+      </div>
 
-        {/* Lado derecho - Formulario */}
-        <div className="login-right">
-          <h2 className="login-title">Inicie sesión en BlueFruit</h2>
-          <p className="login-subtitle">Ingresa tus datos a continuación</p>
+      {/* Lado derecho - Formulario */}
+      <div className="right-side">
+        <div className="form-wrapper">
+          <h2 className="form-title">Inicie sesión in BlueFruit</h2>
+          <p className="form-subtitle">Ingresa tus datos a continuación</p>
 
           <form onSubmit={handleLogin} className="login-form">
             <div className="input-group">
@@ -172,7 +180,7 @@ const Login = () => {
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  padding: 0,
+                  padding: 0
                 }}
                 tabIndex={-1}
                 aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}

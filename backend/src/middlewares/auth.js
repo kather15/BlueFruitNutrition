@@ -12,8 +12,6 @@ export const authenticate = (req, res, next) => {
     return res.status(401).json({ message: "No autenticado" });
   }
 
-
-  
   try {
     const decoded = jwt.verify(token, config.JWT.secret);
     console.log('✅ Token válido:', decoded);
