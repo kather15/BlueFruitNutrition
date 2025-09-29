@@ -246,6 +246,60 @@
     grid-template-columns: 1fr;
   }
 }
+/* ========================================
+   MODAL DE VERIFICACIÓN DE CORREO
+   ======================================== */
+
+/* Overlay del modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Contenido del modal */
+.modal-content {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  animation: modalFade 0.3s ease-in-out;
+}
+
+.modal-content h2 {
+  font-size: 24px;
+  color: #1E40AF; /* Azul principal */
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.modal-content .btn-primary {
+  padding: 12px 25px;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Animación del modal */
+@keyframes modalFade {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 @media (max-width: 500px) {
   .welcome-title {
