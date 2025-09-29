@@ -29,8 +29,6 @@ import locationRoutes from "./src/routes/location.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
 
-
-
 const app = express();
 
 // -------------------------------------------
@@ -109,7 +107,7 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
 
 // 🔹 Ruta de sesión protegida para frontend
-app.get("/api/session/auth/session", authenticate, sessionRouter);
+app.use("/api/session/auth/session", sessionRouter);
 
 // -------------------------------------------
 // Manejo de errores simples
