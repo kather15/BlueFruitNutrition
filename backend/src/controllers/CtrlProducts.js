@@ -1,6 +1,6 @@
+// src/controllers/CtrlProducts.js
 import productsModel from "../models/Products.js";
 import "../models/NutritionalValues.js";
-
 import { config } from "../config.js";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
@@ -13,7 +13,7 @@ cloudinary.config({
 
 const productsController = {};
 
-// POST - crear producto (tu función actual, sin cambios)
+// POST - crear producto
 productsController.postProducts = async (req, res) => {
   try {
     console.log("📥 Datos recibidos en postProducts:", req.body);
@@ -22,26 +22,17 @@ productsController.postProducts = async (req, res) => {
       return res.status(400).json({ message: "Imagen es requerida" });
     }
 
-    // Subir imagen a Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "products",
-    });
-
+    const result = await cloudinary.uploader.upload(req.file.path, { folder: "products" });
     fs.unlinkSync(req.file.path);
 
     let { name, description, flavor, price, idNutritionalValues } = req.body;
 
     // Procesar flavor como array
     let processedFlavor;
-
     if (typeof flavor === "string") {
       try {
         const parsed = JSON.parse(flavor);
-        if (Array.isArray(parsed)) {
-          processedFlavor = parsed;
-        } else {
-          processedFlavor = [flavor];
-        }
+        processedFlavor = Array.isArray(parsed) ? parsed : [flavor];
       } catch {
         processedFlavor = [flavor];
       }
@@ -50,7 +41,6 @@ productsController.postProducts = async (req, res) => {
     } else {
       processedFlavor = [String(flavor)];
     }
-
     processedFlavor = processedFlavor.map(f => String(f).trim()).filter(f => f.length > 0);
 
     const newProduct = new productsModel({
@@ -63,12 +53,7 @@ productsController.postProducts = async (req, res) => {
     });
 
     const savedProduct = await newProduct.save();
-
-    res.status(201).json({ 
-      message: "Producto guardado", 
-      id: savedProduct._id,
-      product: savedProduct
-    });
+    res.status(201).json({ message: "Producto guardado", id: savedProduct._id, product: savedProduct });
   } catch (error) {
     console.error("Error en postProducts:", error.message);
     res.status(500).json({ message: "Error al guardar el producto", error: error.message });
@@ -91,9 +76,7 @@ productsController.getProductById = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await productsModel.findById(id);
-    if (!product) {
-      return res.status(404).json({ message: "Producto no encontrado" });
-    }
+    if (!product) return res.status(404).json({ message: "Producto no encontrado" });
     res.status(200).json(product);
   } catch (error) {
     console.error("Error en getProductById:", error.message);
@@ -101,22 +84,18 @@ productsController.getProductById = async (req, res) => {
   }
 };
 
-// PUT - actualizar producto (con opción de nueva imagen)
+// PUT - actualizar producto
 productsController.putProducts = async (req, res) => {
   try {
     const { id } = req.params;
     let updateData = { ...req.body };
 
-    // Si subieron imagen, subir a Cloudinary y actualizar URL
     if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "products",
-      });
+      const result = await cloudinary.uploader.upload(req.file.path, { folder: "products" });
       fs.unlinkSync(req.file.path);
       updateData.image = result.secure_url;
     }
 
-    // Procesar flavor si viene en body
     if (updateData.flavor) {
       let flavor = updateData.flavor;
       let processedFlavor;
@@ -124,11 +103,7 @@ productsController.putProducts = async (req, res) => {
       if (typeof flavor === "string") {
         try {
           const parsed = JSON.parse(flavor);
-          if (Array.isArray(parsed)) {
-            processedFlavor = parsed;
-          } else {
-            processedFlavor = [flavor];
-          }
+          processedFlavor = Array.isArray(parsed) ? parsed : [flavor];
         } catch {
           processedFlavor = [flavor];
         }
@@ -143,10 +118,7 @@ productsController.putProducts = async (req, res) => {
     }
 
     const updatedProduct = await productsModel.findByIdAndUpdate(id, updateData, { new: true });
-
-    if (!updatedProduct) {
-      return res.status(404).json({ message: "Producto no encontrado para actualizar" });
-    }
+    if (!updatedProduct) return res.status(404).json({ message: "Producto no encontrado para actualizar" });
 
     res.status(200).json({ message: "Producto actualizado", product: updatedProduct });
   } catch (error) {
@@ -155,6 +127,22 @@ productsController.putProducts = async (req, res) => {
   }
 };
 
+// DELETE - eliminar producto
+productsController.deleteProducts = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedProduct = await productsModel.findByIdAndDelete(id);
+
+    if (!deletedProduct) return res.status(404).json({ message: "Producto no encontrado para eliminar" });
+
+    res.status(200).json({ message: "Producto eliminado", product: deletedProduct });
+  } catch (error) {
+    console.error("Error en deleteProducts:", error.message);
+    res.status(500).json({ message: "Error al eliminar el producto", error: error.message });
+  }
+};
+
+// GET - producto aleatorio
 productsController.getRandom = async (req, res) => {
   try {
     const count = await productsModel.countDocuments();
@@ -166,9 +154,8 @@ productsController.getRandom = async (req, res) => {
     res.json(randomProduct);
   } catch (error) {
     console.error("Error obteniendo producto aleatorio:", error);
-    res.status(500).json({ message: "internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export default productsController;
-
