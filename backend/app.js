@@ -90,7 +90,7 @@ app.use("/api/registerCustomers", registerCustomersRoutes);
 app.use("/api/registerDistributors", registerDistributorsRoutes);
 app.use("/api/passwordRecovery", passwordRecoveryRoutes);
 app.use("/api/login", loginRoutes);
-app.use("/api/logout", logoutRoutes);
+app.use("/api/logout", logoutR/api/check-sessionoutes);
 app.use("/api/shoppingCart", shoppingCartRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/ordenes", ordenesRoutes);
@@ -108,6 +108,7 @@ app.use("/api/recommendation", recommendationRoutes);
 
 // 🔹 Ruta de sesión protegida para frontend
 app.use("/api/session", sessionRouter);
+
 
 // -------------------------------------------
 // Manejo de errores simples
