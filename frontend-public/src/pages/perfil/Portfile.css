@@ -7,7 +7,9 @@
   font-family: 'Inter', sans-serif;
 }
 
-.profile-container, .orders-container, .extra-container {
+.profile-container,
+.orders-container,
+.extra-container {
   background: #fff;
   padding: 20px;
   border-radius: 16px;
@@ -42,7 +44,9 @@
   cursor: pointer;
 }
 
-.logout-small:hover { background: #dc2626; }
+.logout-small:hover {
+  background: #dc2626;
+}
 
 .order-item {
   background: #f0f4ff;
@@ -54,6 +58,23 @@
   align-items: center;
 }
 
-.order-status.completed { background: #22c55e; color: #fff; padding: 2px 8px; border-radius: 6px; }
-.order-status.pending { background: #facc15; color: #fff; padding: 2px 8px; border-radius: 6px; }
-.order-status.cancelled { background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 6px; }
+.order-status.completed {
+  background: #22c55e;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.order-status.pending {
+  background: #facc15;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.order-status.cancelled {
+  background: #ef4444;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 6px;
+}

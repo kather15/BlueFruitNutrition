@@ -17,7 +17,7 @@ const Contacto = () => {
   const onSubmit = async (data) => {
     try {
       // Envía los datos del formulario al backend usando fetch
-      const response = await fetch('https://bluefruitnutrition1.onrender.com/api/contact', {
+      const response = await fetch('https://bluefruitnutrition-production.up.railway.app/api/contact', {
         method: 'POST', // Método HTTP
         headers: {
           'Content-Type': 'application/json', // Indica que el cuerpo es JSON

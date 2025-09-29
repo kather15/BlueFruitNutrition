@@ -11,37 +11,54 @@ const Perfil = () => {
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
 
-  const API_URL = "https://bluefruitnutrition1.onrender.com/api";
+  const API_URL = "https://bluefruitnutrition-production.up.railway.app/api";
 
+  // Verificar sesión en el servidor
   const checkSession = async () => {
     try {
-      const res = await fetch(`${API_URL}/check-session`, { method: "GET", credentials: "include" });
+      const res = await fetch(`${API_URL}/session/auth/session`, {
+        method: "GET",
+        credentials: "include",
+      });
+
       if (!res.ok) throw new Error("Sesión inválida");
       const data = await res.json();
       setUserData(data);
-      setFormData({ name: data.name, email: data.email, phone: data.phone || "", address: data.address || "" });
+      setFormData({
+        name: data.name,
+        email: data.email,
+        phone: data.phone || "",
+        address: data.address || "",
+      });
       fetchOrders(data.id);
-    } catch {
+    } catch (error) {
       navigate("/login");
     } finally {
       setLoading(false);
     }
   };
 
+  // Cargar historial de órdenes del usuario
   const fetchOrders = async (userId) => {
     try {
-      const res = await fetch(`${API_URL}/ordenes/user/${userId}`, { credentials: "include" });
+      const res = await fetch(`${API_URL}/ordenes/user/${userId}`, {
+        credentials: "include",
+      });
       if (!res.ok) throw new Error("No se pudo cargar historial");
       const data = await res.json();
       setOrders(data);
     } catch (error) {
-      console.error(error);
+      console.error("Error cargando órdenes:", error);
     }
   };
 
+  // Cerrar sesión
   const handleLogout = async () => {
     try {
-      const res = await fetch(`${API_URL}/logout`, { method: "POST", credentials: "include" });
+      const res = await fetch(`${API_URL}/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
       if (res.ok) {
         setUserData(null);
         setOrders([]);
@@ -53,10 +70,12 @@ const Perfil = () => {
     }
   };
 
+  // Manejar cambios en el formulario
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Guardar cambios de perfil
   const handleSaveProfile = async () => {
     try {
       const res = await fetch(`${API_URL}/users/${userData.id}`, {
@@ -75,7 +94,15 @@ const Perfil = () => {
     }
   };
 
-  useEffect(() => { checkSession(); }, []);
+  useEffect(() => {
+    checkSession();
+  }, []);
+
+  useEffect(() => {
+    if (userData?.id) {
+      fetchOrders(userData.id);
+    }
+  }, [userData]);
 
   if (loading) return <p>Cargando perfil...</p>;
   if (!userData) return null;
@@ -87,16 +114,36 @@ const Perfil = () => {
         <h2>Mi Perfil</h2>
         <div className="profile-fields">
           <label>Nombre:</label>
-          <input name="name" value={formData.name} onChange={handleInputChange} disabled={!editing} />
-          
+          <input
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            disabled={!editing}
+          />
+
           <label>Email:</label>
-          <input name="email" value={formData.email} onChange={handleInputChange} disabled={!editing} />
-          
+          <input
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            disabled={!editing}
+          />
+
           <label>Teléfono:</label>
-          <input name="phone" value={formData.phone} onChange={handleInputChange} disabled={!editing} />
-          
+          <input
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            disabled={!editing}
+          />
+
           <label>Dirección:</label>
-          <input name="address" value={formData.address} onChange={handleInputChange} disabled={!editing} />
+          <input
+            name="address"
+            value={formData.address}
+            onChange={handleInputChange}
+            disabled={!editing}
+          />
         </div>
         <div className="profile-actions">
           {editing ? (
@@ -104,23 +151,33 @@ const Perfil = () => {
           ) : (
             <button onClick={() => setEditing(true)}>Editar</button>
           )}
-          <button className="logout-small" onClick={handleLogout}>Cerrar sesión</button>
+          <button className="logout-small" onClick={handleLogout}>
+            Cerrar sesión
+          </button>
         </div>
       </div>
 
       {/* Contenedor 2: Historial de órdenes */}
       <div className="orders-container">
         <h2>Historial de Órdenes</h2>
-        {orders.length === 0 ? <p>No hay órdenes aún</p> :
-          orders.map(order => (
+        {orders.length === 0 ? (
+          <p>No hay órdenes aún</p>
+        ) : (
+          orders.map((order) => (
             <div key={order._id} className="order-item">
-              <p><strong>Orden #{order._id.slice(-6)}</strong></p>
+              <p>
+                <strong>Orden #{order._id.slice(-6)}</strong>
+              </p>
               <p>{new Date(order.createdAt).toLocaleDateString()}</p>
               <p>Total: ${order.total.toFixed(2)}</p>
-              <span className={`order-status ${order.status.toLowerCase()}`}>{order.status}</span>
+              <span
+                className={`order-status ${order.status.toLowerCase()}`}
+              >
+                {order.status}
+              </span>
             </div>
           ))
-        }
+        )}
       </div>
 
       {/* Contenedor 3: Placeholder */}
@@ -133,3 +190,4 @@ const Perfil = () => {
 };
 
 export default Perfil;
+

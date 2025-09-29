@@ -8,8 +8,10 @@ import { AuthProvider } from "./context/useAuth";
 // Components
 import Nav from './components/Nav/Nav';
 
+
 import ProtectedRoute from './components/PrivateRoute/ProtectedRoute';
 import Error404Private from './components/NotFound/NotFoundPrivate.jsx';
+import Location from "./components/Maps/Maps.jsx"; 
 
 
 // Pages - Login (público)
@@ -29,6 +31,7 @@ import UserForm from "./pages/Users/UserForm";
 import PerfilAdmin from "./pages/AdminPorfile/PerfilAdmin";
 import AddProducts from "./pages/AddProducts/AddProduct.jsx";
 import ProductsReviews from "./pages/Products/ProductsReview.jsx";
+
 
 // Context para temas
 export const ThemeContext = React.createContext(null);
@@ -82,6 +85,8 @@ function AppContent() {
           <Route path="/perfil" element={<ProtectedRoute><PerfilAdmin /></ProtectedRoute>} />
           <Route path="/addProduct" element={<ProtectedRoute><AddProducts /></ProtectedRoute>} />
           <Route path="/product/:id" element={<ProtectedRoute><ProductsReviews /></ProtectedRoute>} />
+          <Route path="/location" element={<ProtectedRoute><Location /></ProtectedRoute>} />
+
 
           {/* 404 admin */}
           <Route path="*" element={<Error404Private />} />

@@ -319,3 +319,450 @@
     width: 100%;
   }
 }
+
+/* Estilos adicionales para StoresMap */
+
+.stores-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.stores-count {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.refresh-btn {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background: #e0e0e0;
+  transform: rotate(180deg);
+}
+
+/* Estados de carga y error */
+.loading-container,
+.error-container,
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.retry-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+.retry-btn:hover {
+  background: #0056b3;
+}
+
+/* Mejoras en los botones de tienda */
+.store-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.directions-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #007bff;
+  background: white;
+  color: #007bff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.directions-btn:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+}
+
+.directions-btn.primary {
+  background: #007bff;
+  color: white;
+}
+
+.directions-btn.primary:hover {
+  background: #0056b3;
+}
+
+/* Mejoras en el overlay del mapa */
+.map-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.selected-store-info {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  pointer-events: all;
+  border-left: 4px solid #007bff;
+}
+
+.selected-store-info h4 {
+  margin: 0 0 0.75rem 0;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.selected-store-info p {
+  margin: 0.5rem 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.store-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.map-action-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: 0.6rem 1rem;
+  border: 1px solid #007bff;
+  background: white;
+  color: #007bff;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.map-action-btn:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+}
+
+.map-action-btn.primary {
+  background: #007bff;
+  color: white;
+}
+
+.map-action-btn.primary:hover {
+  background: #0056b3;
+}
+
+.map-action-btn.phone-btn {
+  background: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+.map-action-btn.phone-btn:hover {
+  background: #218838;
+  border-color: #218838;
+}
+
+/* Estilos para InfoWindow del mapa */
+.map-info-window {
+  max-width: 300px;
+  padding: 0.5rem;
+}
+
+.map-info-window .info-title {
+  margin: 0 0 0.75rem 0;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 0.5rem;
+}
+
+.map-info-window .info-details {
+  margin-bottom: 1rem;
+}
+
+.map-info-window .info-details p {
+  margin: 0.5rem 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.map-info-window .icon {
+  font-size: 0.9rem;
+  min-width: 16px;
+}
+
+.map-info-window .info-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.map-info-window .btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.map-info-window .btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.map-info-window .btn-primary:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+}
+
+.map-info-window .btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.map-info-window .btn-secondary:hover {
+  background: #545b62;
+  transform: translateY(-1px);
+}
+
+.map-info-window .btn-phone {
+  background: #28a745;
+  color: white;
+}
+
+.map-info-window .btn-phone:hover {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+/* Mejoras en el contenedor del mapa */
+.map-container {
+  position: relative;
+  background: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Indicador de tienda activa en la lista */
+.store-item.active {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0,123,255,0.15);
+  border-left: 4px solid #007bff;
+}
+
+.store-item.active .store-number {
+  background: #007bff;
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0,123,255,0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0,123,255,0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0,123,255,0);
+  }
+}
+
+/* Responsividad mejorada */
+@media (max-width: 768px) {
+  .stores-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .stores-count {
+    order: -1;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .store-buttons {
+    flex-direction: column;
+  }
+  
+  .directions-btn {
+    min-width: auto;
+  }
+  
+  .store-actions {
+    flex-direction: column;
+  }
+  
+  .map-action-btn {
+    min-width: auto;
+  }
+  
+  .map-overlay {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+  }
+  
+  .selected-store-info {
+    padding: 1rem;
+  }
+
+  .map-info-window {
+    max-width: 250px;
+  }
+  
+  .map-info-window .info-actions {
+    gap: 0.4rem;
+  }
+  
+  .map-info-window .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+/* Estilos para los íconos dentro de info-details */
+.info-details {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.info-details p {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+}
+
+/* Clase para el span que contiene el icono */
+.info-details .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  color: #007bff; /* Azul moderno */
+  font-size: 18px; /* Tamaño del ícono */
+  min-width: 20px; /* Para que no cambie el layout */
+}
+
+/* Eliminar borde de la X del InfoWindow */
+.gm-ui-hover-effect {
+  background: black!important;
+  border: none !important;
+  box-shadow: none !important;
+  right: 8px !important;
+  top: 8px !important;
+}
+
+.gm-ui-hover-effect span {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.refresh-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Esquinas ligeramente redondeadas (puedes usar 0 para cuadrado puro) */
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.refresh-btn:hover {
+  background-color: #e0e0e0;
+  transform: rotate(180deg);
+}
+
+
+.gm-ui-hover-effect {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 4px !important;
+  right: 8px !important;
+  top: 8px !important;
+}
+
+.gm-ui-hover-effect > span {
+  background: none !important;
+  box-shadow: none !important;
+  width: 20px !important;
+  height: 20px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}

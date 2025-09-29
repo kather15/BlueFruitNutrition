@@ -10,8 +10,8 @@ function UserForm() {
   useEffect(() => {
     const endpoint =
       type === "clientes"
-        ? `https://bluefruitnutrition1.onrender.com/api/customers`
-        : `https://bluefruitnutrition1.onrender.com/api/distributors`;
+        ? `https://bluefruitnutrition-production.up.railway.app/api/customers`
+        : `https://bluefruitnutrition-production.up.railway.app/api/distributors`;
 
     fetch(endpoint)
       .then((res) => res.json())
@@ -28,8 +28,8 @@ function UserForm() {
     e.preventDefault();
     const endpoint =
       type === "clientes"
-        ? `https://bluefruitnutrition1.onrender.com/api/customers/${id}`
-        : `https://bluefruitnutrition1.onrender.com/api/distributors/${id}`;
+        ? `https://bluefruitnutrition-production.up.railway.app/api/customers/${id}`
+        : `https://bluefruitnutrition-production.up.railway.app/api/distributors/${id}`;
 
     await fetch(endpoint, {
       method: "PUT",

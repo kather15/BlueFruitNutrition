@@ -43,7 +43,7 @@ const AddressForm = () => {
           // Determinar si es cliente o distribuidor
           const tipoUsuario = user.role === 'customer' ? 'customers' : 'distributors';
           
-          const response = await fetch(`https://bluefruitnutrition1.onrender.com/api/${tipoUsuario}/${user.id}`, {
+          const response = await fetch(`https://bluefruitnutrition-production.up.railway.app/api/${tipoUsuario}/${user.id}`, {
             credentials: 'include'
           });
 

@@ -50,7 +50,7 @@ const Carrito = () => {
     };
 
     try {
-      const response = await fetch("https://bluefruitnutrition1.onrender.com/api/ordenes", {
+      const response = await fetch("https://bluefruitnutrition-production.up.railway.app/api/ordenes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orden),

@@ -114,6 +114,8 @@ const Home = () => {
         </div>
       </section>
 
+        <hr className="blue-fruit-linea-separadora" />
+
       {/* EQUIPO */}
       <section className="blue-fruit-equipo">
         <h2>Nuestro Equipo</h2>
@@ -141,10 +143,14 @@ const Home = () => {
         </div>
       </section>
 
+        <hr className="blue-fruit-linea-separadora" />
+
       {/* CONTACTO */}
       <main>
         <Contacto />
       </main>
+
+        <hr className="blue-fruit-linea-separadora" />
       <Maps/>
 
       {/* BOTÓN FLOTANTE DEL CHATBOT */}

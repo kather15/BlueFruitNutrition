@@ -1,23 +1,19 @@
-import jsonwebtoken from "jsonwebtoken";
-import { config } from "../config.js";
-
-const sessionController = {};
-
-//  Verifica sesión usando el middleware authenticate
-sessionController.checkSession = (req, res) => {
+// src/controllers/CtrlSession.js
+export const checkSession = (req, res) => {
   try {
-    // Si llegamos aquí, el middleware authenticate ya validó el token
-    // y puso los datos del usuario en req.user
+    if (!req.user) {
+      return res.status(401).json({ message: "No autenticado", isAuthenticated: false });
+    }
+
     res.status(200).json({
       id: req.user.id,
+      name: req.user.name,
       email: req.user.email,
-      role: req.user.userType || req.user.role, 
+      role: req.user.userType || req.user.role,
       isAuthenticated: true
     });
   } catch (error) {
-    console.error('Error en checkSession:', error);
+    console.error("Error en checkSession:", error);
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
-
-export default sessionController;
