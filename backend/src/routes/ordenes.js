@@ -12,7 +12,9 @@ router.route("/")
 
 router.route("/:id")
   .get(ordenesController.getOrdenPorId)
-  .put(ordenesController.actualizarOrden)  // <-- Aquí
+  .put(ordenesController.actualizarOrden)
   .delete(ordenesController.eliminarOrden);
+
+router.get("/user/:userId", ordenesController.getOrdenesPorUsuario);
 
 export default router;

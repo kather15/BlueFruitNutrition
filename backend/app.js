@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
 import fs from "fs";
@@ -13,10 +12,10 @@ import registerCustomersRoutes from "./src/routes/registerCustomer.js";
 import registerDistributorsRoutes from "./src/routes/registerDistributor.js";
 import passwordRecoveryRoutes from "./src/routes/passwordRecovery.js";
 import loginRoutes from "./src/routes/login.js";
-import logoutRoutes from './src/routes/logout.js';
-import subscriptionRoutes from './src/routes/subscriptions.js';
-import shoppingCartRoutes from './src/routes/shoppingCart.js';
-import ordenesRoutes from './src/routes/ordenes.js';
+import logoutRoutes from "./src/routes/logout.js";
+import subscriptionRoutes from "./src/routes/subscriptions.js";
+import shoppingCartRoutes from "./src/routes/shoppingCart.js";
+import ordenesRoutes from "./src/routes/ordenes.js";
 import ReviewRouters from "./src/routes/reviews.js";
 import ContactRoutes from "./src/routes/contact.js";
 import PayRoutes from "./src/routes/pay.js";
@@ -29,35 +28,38 @@ import BillRoutes from "./src/routes/bill.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
 
-// Inicialización
+import { checkSession } from "./src/controllers/CtrlSession.js";
+import { authenticate } from "./src/middleware/authenticate.js";
+
 const app = express();
 
 // -------------------------------------------
-// CORS
+// CORS seguro con preflight
 // -------------------------------------------
-const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(",")
-  : [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app",
-      "https://blue-fruit-nutrition-private.vercel.app",
-      "https://blue-fruit-nutrition-4vhs.vercel.app",
-      "https://bluefruitnutrition-production.up.railway.app",
-    ];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://blue-fruit-nutrition-git-master-bluefruitnutrition.vercel.app",
+  "https://blue-fruit-nutrition-private.vercel.app",
+  "https://blue-fruit-nutrition-4vhs.vercel.app",
+  "https://bluefruitnutrition-production.up.railway.app",
+];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("No permitido por CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  }
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
 
 app.use(express.json());
 app.use(cookieParser());
@@ -94,6 +96,8 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/bill", BillRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
-app.use("/api/check-session", sessionRouter); // Ruta para validar sesión
+
+// 🔹 Ruta de sesión que espera el frontend
+app.get("/api/session/auth/session", authenticate, checkSession);
 
 export default app;

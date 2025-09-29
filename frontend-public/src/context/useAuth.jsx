@@ -1,12 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuthContext debe ser usado dentro de AuthProvider');
-  }
+  if (!context) throw new Error("useAuthContext debe usarse dentro de AuthProvider");
   return context;
 };
 
@@ -15,31 +13,28 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // ✅ URL base de la API
   const API_URL = "https://bluefruitnutrition-production.up.railway.app/api";
 
-  // Verificar sesión al cargar la app
+  // Verifica sesión al cargar
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch(`${API_URL}/session/auth/session`, {
-          method: 'GET',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch(`${API_URL}/session/auth/session`, {
+          method: "GET",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data.user || data); // soporta ambos formatos
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
           setIsAuthenticated(true);
-          console.log('✅ Sesión verificada con backend:', data);
         } else {
           setUser(null);
           setIsAuthenticated(false);
-          console.log('❌ No hay sesión activa');
         }
-      } catch (error) {
-        console.error('Error verificando sesión:', error);
+      } catch (err) {
+        console.error("Error verificando sesión:", err);
         setUser(null);
         setIsAuthenticated(false);
       } finally {
@@ -50,28 +45,24 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  // 🔄 Reutilizable: verificar sesión bajo demanda
+  // Reutilizable: checkSession bajo demanda
   const checkSession = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await fetch(`${API_URL}/session/auth/session`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch(`${API_URL}/session/auth/session`, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user || data);
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
         setIsAuthenticated(true);
-        console.log('🔍 Sesión confirmada:', data);
       } else {
         setUser(null);
         setIsAuthenticated(false);
-        console.log('❌ No hay sesión activa');
       }
-    } catch (error) {
-      console.error('Error en checkSession:', error);
+    } catch (err) {
       setUser(null);
       setIsAuthenticated(false);
     } finally {
@@ -79,66 +70,48 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔑 Login
+  // Login
   const login = async (email, password) => {
     try {
-      const response = await fetch(`${API_URL}/login`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        if (data.user && data.user.id) {
-          setUser(data.user);
-          setIsAuthenticated(true);
-          console.log("nombre del usuario:", data.user.name);
-          console.log('✅ Login exitoso:', data.user);
-          return { success: true, data };
-        } else {
-          throw new Error('Datos de usuario incompletos');
-        }
+      const data = await res.json();
+      if (res.ok && data.user) {
+        setUser(data.user);
+        setIsAuthenticated(true);
+        return { success: true, data };
       } else {
-        throw new Error(data.message || 'Error al iniciar sesión');
+        throw new Error(data.message || "Error en login");
       }
-    } catch (error) {
-      console.error('❌ Error en login:', error);
-      return { success: false, error: error.message };
+    } catch (err) {
+      console.error("Error en login:", err);
+      return { success: false, error: err.message };
     }
   };
 
-  // 🚪 Logout
+  // Logout
   const logout = async () => {
     try {
       await fetch(`${API_URL}/logout`, {
-        method: 'POST',
-        credentials: 'include',
+        method: "POST",
+        credentials: "include",
       });
-      console.log('✅ Logout exitoso');
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+    } catch (err) {
+      console.error("Error logout:", err);
     } finally {
       setUser(null);
       setIsAuthenticated(false);
     }
   };
 
-  const value = {
-    user,
-    loading,
-    isAuthenticated,
-    login,
-    logout,
-    checkSession,
-  };
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, loading, isAuthenticated, login, logout, checkSession }}>
       {children}
     </AuthContext.Provider>
   );
 };
-

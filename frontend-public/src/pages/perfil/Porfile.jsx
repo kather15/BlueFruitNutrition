@@ -6,31 +6,49 @@ import "./Portfile.css";
 const Perfil = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
-  // 🔹 Verificar sesión en el servidor
+  // Verificar sesión en el servidor
   const checkSession = async () => {
     try {
       const res = await fetch(
-        "https://bluefruitnutrition-production.up.railway.app/api/check-session",
-        {
-          method: "GET",
-          credentials: "include", // 🔑 enviar cookies
-        }
-      );
+  "https://bluefruitnutrition-production.up.railway.app/api/check-session",
+  {
+    method: "GET",
+    credentials: "include", // 🔑 manda la cookie
+  }
+);
 
       if (!res.ok) throw new Error("Sesión inválida");
 
       const data = await res.json();
-      setUserData(data); // data debería tener { id, email, name, role... }
+      setUserData(data);
     } catch (error) {
-      navigate("/login"); // si no hay sesión activa
+      navigate("/login");
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔹 Cerrar sesión
+  // Cargar historial de órdenes del usuario
+  const fetchOrders = async (userId) => {
+    try {
+      const res = await fetch(
+        `https://bluefruitnutrition-production.up.railway.app/api/ordenes/user/${userId}`,
+        { credentials: "include" }
+      );
+
+      if (!res.ok) throw new Error("No se pudo cargar historial");
+
+      const data = await res.json();
+      setOrders(data);
+    } catch (error) {
+      console.error("Error cargando órdenes:", error);
+    }
+  };
+
+  // Cerrar sesión
   const handleLogout = async () => {
     try {
       const res = await fetch(
@@ -49,7 +67,6 @@ const Perfil = () => {
         navigate("/");
       }
     } catch (error) {
-      console.error("Error al cerrar sesión:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -62,8 +79,14 @@ const Perfil = () => {
     checkSession();
   }, []);
 
+  useEffect(() => {
+    if (userData?._id) {
+      fetchOrders(userData._id);
+    }
+  }, [userData]);
+
   if (loading) return <p>Cargando perfil...</p>;
-  if (!userData) return null; // si no hay datos, redirigido ya a login
+  if (!userData) return null;
 
   return (
     <div className="perfil-dashboard">
@@ -94,6 +117,25 @@ const Perfil = () => {
               <p><strong>Nacimiento:</strong> {new Date(userData.dateBirth).toLocaleDateString()}</p>
             )}
             <p><strong>Verificado:</strong> {userData.isVerified ? "✅ Sí" : "❌ No"}</p>
+          </div>
+
+          {/* 🔹 Historial de órdenes */}
+          <div className="perfil-orders">
+            <h3>Historial de órdenes</h3>
+            {orders.length === 0 ? (
+              <p>No tienes órdenes registradas.</p>
+            ) : (
+              <ul>
+                {orders.map((order) => (
+                  <li key={order._id} className="order-item">
+                    <strong>Orden:</strong> {order.numeroOrden} |{" "}
+                    <strong>Fecha:</strong> {order.fecha} |{" "}
+                    <strong>Estado:</strong> {order.estado} |{" "}
+                    <strong>Total:</strong> ${order.total}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </section>
       </main>
