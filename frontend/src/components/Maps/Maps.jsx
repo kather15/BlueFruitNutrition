@@ -19,7 +19,7 @@ import './Maps.css';
 const libraries = ['places'];
 
 // URL del API
-const apiURL = "http://localhost:4000/api/location";
+const apiURL = "https://bluefruitnutrition-production.up.railway.app/api/location";
 
 // Estilo del contenedor
 const containerStyle = {

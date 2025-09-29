@@ -8,10 +8,10 @@ import {
 import { FiMapPin, FiClock, FiPhone, FiRefreshCw } from "react-icons/fi";
 import toast from 'react-hot-toast';
 import './Maps.css';
-
+ 
 // Definir libraries fuera del componente
 const libraries = ['places'];
-
+ 
 const StoresMap = () => {
   const [selectedStore, setSelectedStore] = useState(0);
   const [stores, setStores] = useState([]);
@@ -19,95 +19,92 @@ const StoresMap = () => {
   const [error, setError] = useState(null);
   const [mapSelectedStore, setMapSelectedStore] = useState(null);
   const [mapCenter, setMapCenter] = useState({ lat: 13.7028, lng: -89.2073 }); // San Salvador
-
-  // URL del API - dinámico según entorno
-  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiURL = `${API_BASE_URL}/location`;
-
+ 
   // Configuración de Google Maps
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-
+ 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey,
     libraries
   });
-
+ 
   const containerStyle = {
     width: "100%",
     height: "100%",
     borderRadius: "12px"
   };
-
+ 
   // Función para obtener las ubicaciones del backend
-  const fetchStores = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch(apiURL, {
-        credentials: 'include'
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-
-      // Transformar los datos del backend al formato que espera el componente
-      const transformedStores = data.map((location, index) => ({
-        id: index + 1,
-        name: location.name,
-        address: location.address,
-        coordinates: { lat: location.lat, lng: location.lng },
-        phone: location.phone || "Contactar tienda",
-        hours: location.openingHours,
-        _id: location._id
-      }));
-
-      setStores(transformedStores);
-
-      // Seleccionar primera tienda si no hay selección
-      if (transformedStores.length > 0 && selectedStore >= transformedStores.length) {
-        setSelectedStore(0);
-      }
-
-      // Centrar el mapa en la primera tienda
-      if (transformedStores.length > 0) {
-        setMapCenter(transformedStores[0].coordinates);
-      }
-
-    } catch (error) {
-      console.error('Error fetching stores:', error);
-      setError(error.message);
-      toast.error(`Error al cargar las tiendas: ${error.message}`);
-    } finally {
-      setLoading(false);
+const fetchStores = async () => {
+  try {
+    setLoading(true);
+    setError(null);
+ 
+    const response = await fetch("https://bluefruitnutrition-production.up.railway.app/api/location", {
+      credentials: 'include'
+    });
+ 
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
-  };
-
+ 
+    const data = await response.json();
+ 
+    // Transformar los datos del backend al formato que espera el componente
+    const transformedStores = data.map((location, index) => ({
+      id: index + 1,
+      name: location.name,
+      address: location.address,
+      coordinates: { lat: location.lat, lng: location.lng },
+      phone: location.phone || "Contactar tienda",
+      hours: location.openingHours,
+      _id: location._id
+    }));
+ 
+    setStores(transformedStores);
+ 
+    // Seleccionar primera tienda si no hay selección
+    if (transformedStores.length > 0 && selectedStore >= transformedStores.length) {
+      setSelectedStore(0);
+    }
+ 
+    // Centrar el mapa en la primera tienda
+    if (transformedStores.length > 0) {
+      setMapCenter(transformedStores[0].coordinates);
+    }
+ 
+  } catch (error) {
+    console.error('Error fetching stores:', error);
+    setError(error.message);
+    toast.error(`Error al cargar las tiendas: ${error.message}`);
+  } finally {
+    setLoading(false);
+  }
+};
+ 
+ 
   // Cargar las tiendas al montar el componente
   useEffect(() => {
     fetchStores();
   }, []);
-
+ 
   // Actualizar centro del mapa cuando se selecciona una tienda
   useEffect(() => {
     if (stores.length > 0 && stores[selectedStore]) {
       setMapCenter(stores[selectedStore].coordinates);
     }
   }, [selectedStore, stores]);
-
+ 
   const openInGoogleMaps = (store) => {
     const url = `https://www.google.com/maps/search/?api=1&query=${store.coordinates.lat},${store.coordinates.lng}`;
     window.open(url, '_blank');
   };
-
+ 
   const getDirections = (store) => {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${store.coordinates.lat},${store.coordinates.lng}`;
     window.open(url, '_blank');
   };
-
+ 
   // Manejar clic en marcador
   const handleMarkerClick = useCallback((store) => {
     setMapSelectedStore(store);
@@ -116,14 +113,14 @@ const StoresMap = () => {
       setSelectedStore(storeIndex);
     }
   }, [stores]);
-
+ 
   // Manejar clic en tienda de la lista
   const handleStoreSelect = (index) => {
     setSelectedStore(index);
     setMapSelectedStore(stores[index]);
     setMapCenter(stores[index].coordinates);
   };
-
+ 
   // Carga de Google Maps o tiendas
   if (loadError) {
     return (
@@ -138,7 +135,7 @@ const StoresMap = () => {
       </section>
     );
   }
-
+ 
   if (loading || !isLoaded) {
     return (
       <section className="stores-map-section">
@@ -152,7 +149,7 @@ const StoresMap = () => {
       </section>
     );
   }
-
+ 
   if (error) {
     return (
       <section className="stores-map-section">
@@ -168,7 +165,7 @@ const StoresMap = () => {
       </section>
     );
   }
-
+ 
   if (stores.length === 0) {
     return (
       <section className="stores-map-section">
@@ -184,7 +181,7 @@ const StoresMap = () => {
       </section>
     );
   }
-
+ 
   return (
     <section className="stores-map-section">
       <div className="stores-map-container">
@@ -193,15 +190,15 @@ const StoresMap = () => {
           <div className="stores-count">
             {stores.length} {stores.length === 1 ? 'tienda disponible' : 'tiendas disponibles'}
           </div>
-          <button 
-            onClick={fetchStores} 
-            className="refresh-btn" 
+          <button
+            onClick={fetchStores}
+            className="refresh-btn"
             title="Actualizar tiendas"
           >
             <FiRefreshCw />
           </button>
         </div>
-        
+       
         <div className="stores-map-content">
           <div className="stores-list">
             {stores.map((store, index) => (
@@ -216,16 +213,16 @@ const StoresMap = () => {
                   <p className="store-address"><span className="icon"><FiMapPin /></span> {store.address}</p>
                   <p className="store-contact"><span className="icon"><FiPhone /></span> {store.phone}</p>
                   <p className="store-hours"><span className="icon"><FiClock /></span> {store.hours}</p>
-
+ 
                   <div className="store-buttons">
-                    <button 
+                    <button
                       className="directions-btn"
                       onClick={(e) => { e.stopPropagation(); openInGoogleMaps(store); }}
                       title="Ver ubicación en el mapa"
                     >
                       Ver en mapa
                     </button>
-                    <button 
+                    <button
                       className="directions-btn primary"
                       onClick={(e) => { e.stopPropagation(); getDirections(store); }}
                       title="Obtener direcciones"
@@ -237,7 +234,7 @@ const StoresMap = () => {
               </div>
             ))}
           </div>
-
+ 
           <div className="map-container">
             <GoogleMap
               mapContainerStyle={containerStyle}
@@ -258,16 +255,16 @@ const StoresMap = () => {
                   onClick={() => handleMarkerClick(store)}
                   title={store.name}
                   icon={{
-                    url: selectedStore === stores.findIndex(s => s._id === store._id) 
+                    url: selectedStore === stores.findIndex(s => s._id === store._id)
                       ? 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
                       : 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
                     scaledSize: new window.google.maps.Size(32, 32)
                   }}
-                  animation={mapSelectedStore && mapSelectedStore._id === store._id ? 
+                  animation={mapSelectedStore && mapSelectedStore._id === store._id ?
                     window.google.maps.Animation.BOUNCE : null}
                 />
               ))}
-
+ 
               {mapSelectedStore && (
                 <InfoWindow
                   position={mapSelectedStore.coordinates}
@@ -280,7 +277,7 @@ const StoresMap = () => {
                       <p><span className="icon"><FiClock /></span> {mapSelectedStore.hours}</p>
                       <p><span className="icon"><FiPhone /></span> {mapSelectedStore.phone}</p>
                     </div>
-
+ 
                     <div className="info-actions">
                       <button onClick={() => getDirections(mapSelectedStore)} className="btn btn-primary">
                         Cómo llegar
@@ -304,5 +301,5 @@ const StoresMap = () => {
     </section>
   );
 };
-
+ 
 export default StoresMap;
