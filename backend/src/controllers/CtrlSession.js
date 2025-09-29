@@ -1,4 +1,3 @@
-// src/controllers/CtrlSession.js
 export const checkSession = (req, res) => {
   try {
     if (!req.user) {
