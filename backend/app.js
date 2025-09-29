@@ -28,6 +28,8 @@ import BillRoutes from "./src/routes/bill.js";
 import locationRoutes from "./src/routes/location.js";
 import profileRoutes from "./src/routes/profile.js";
 import recommendationRoutes from "./src/routes/recommendation.js";
+import authRoutes from "./routes/authRoutes.js";
+
 
 const app = express();
 
@@ -102,6 +104,8 @@ app.use("/api/bill", BillRoutes);
 app.use("/api/location", locationRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/recommendation", recommendationRoutes);
+app.use("/api/auth", authRoutes);
+
 
 // 🔹 Ruta de sesión protegida
 app.use("/api/session", sessionRouter); // router define GET /auth/session

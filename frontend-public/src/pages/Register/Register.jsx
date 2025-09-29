@@ -7,13 +7,11 @@ import "./Register.css";
 
 function Registro() {
   const [tipoUsuario, setTipoUsuario] = useState("customer");
+  const [showModal, setShowModal] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm({ mode: "onTouched" });
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({ mode: "onTouched" });
 
   const getMinBirthDate = () => {
     const today = new Date();
@@ -37,7 +35,7 @@ function Registro() {
           phone: data.phone,
           dateBirth: data.dateBirth,
         };
-      } else {
+      } else if (tipoUsuario === "distributor") {
         endpoint = "https://bluefruitnutrition-production.up.railway.app/api/registerDistributors";
         payload = {
           companyName: data.companyName,
@@ -47,9 +45,9 @@ function Registro() {
           phone: data.phone,
           NIT: data.NIT,
         };
-
       }
-      console.log("Datos enviados:", data);
+
+      console.log("Payload enviado:", payload);
 
       const res = await fetch(endpoint, {
         method: "POST",
@@ -58,57 +56,75 @@ function Registro() {
         body: JSON.stringify(payload),
       });
 
-      const result = await res.json();
+      let result;
+      try {
+        result = await res.json();
+      } catch {
+        result = { message: "No se pudo interpretar la respuesta del servidor" };
+      }
 
-      if (
-        result.message === "Distributor already exist" ||
-        result.message === "Ya existe un cliente registrado con este correo" ||
-        result.message === "Ya existe un distribuidor registrado con este correo" ||
-        result.message === "Customer already exist"
-      ) {
+      console.log("Respuesta del servidor:", result);
+
+      if (!res.ok || (result.message && result.message.includes("already exist"))) {
         return Swal.fire({
           icon: "error",
-          title: "Error al registrar",
-          text: result.message,
+          title: "Error en el registro",
+          text: result.message || "Error interno del servidor",
         });
       }
 
-      if (!res.ok) {
-        return Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: result.message || "Error en el registro",
-        });
-      }
-
-      Swal.fire({
-        icon: "success",
-        title: "¡Registro exitoso!",
-        text: "Revisa tu correo 📩",
-        timer: 2500,
-        showConfirmButton: false,
-        toast: true,
-        position: "top-end",
-      });
-
+      // Registro exitoso → mostrar modal de verificación
+      setRegisteredEmail(payload.email);
+      setShowModal(true);
       reset();
     } catch (error) {
       console.error("Error en onSubmit:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Error de red o del servidor",
+        text: error.message || "Error de red o del servidor",
       });
     }
+  };
+
+  // Simulación temporal de verificación
+  const handleVerifyCode = () => {
+    if (!verificationCode) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Ingresa el código",
+        text: "Introduce el código de verificación enviado a tu correo",
+      });
+    }
+
+    // Simulación: cualquier código "123456" pasa
+    if (verificationCode === "123456") {
+      Swal.fire({
+        icon: "success",
+        title: "Cuenta verificada",
+        text: "Tu cuenta ha sido activada correctamente.",
+      });
+      setShowModal(false);
+      setVerificationCode("");
+      return;
+    }
+
+    Swal.fire({
+      icon: "error",
+      title: "Código incorrecto",
+      text: "El código ingresado no es válido. Prueba con 123456",
+    });
   };
 
   return (
     <div className="registro-wrapper">
       <div className="registro-card" role="region" aria-label="Registro de usuario">
+        {/* Lado izquierdo */}
         <div className="registro-left" aria-hidden="true">
           <img src="/imgregister.png" alt="Ilustración de seguridad" className="registro-img" />
         </div>
 
+        {/* Lado derecho */}
         <div className="registro-right">
           <h1 className="welcome-title">Welcome!</h1>
           <h2 className="tipo-cuenta-titulo">Selecciona tu tipo de cuenta</h2>
@@ -118,10 +134,7 @@ function Registro() {
               type="button"
               aria-pressed={tipoUsuario === "customer"}
               className={`btn-switch ${tipoUsuario === "customer" ? "active" : ""}`}
-              onClick={() => {
-                setTipoUsuario("customer");
-                reset();
-              }}
+              onClick={() => { setTipoUsuario("customer"); reset(); }}
             >
               Cliente
               <span className="btn-switch-icon" aria-hidden="true">
@@ -133,10 +146,7 @@ function Registro() {
               type="button"
               aria-pressed={tipoUsuario === "distributor"}
               className={`btn-switch ${tipoUsuario === "distributor" ? "active" : ""}`}
-              onClick={() => {
-                setTipoUsuario("distributor");
-                reset();
-              }}
+              onClick={() => { setTipoUsuario("distributor"); reset(); }}
             >
               Distribuidor
               <span className="btn-switch-icon" aria-hidden="true">
@@ -204,6 +214,34 @@ function Registro() {
           </p>
         </div>
       </div>
+
+      {/* Modal de verificación */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>¡Registro exitoso!</h2>
+            <p>
+              Hemos enviado un correo de verificación a: <strong>{registeredEmail}</strong>
+            </p>
+            <p>Introduce el código de verificación que recibiste:</p>
+            <input
+              type="text"
+              placeholder="Código de verificación"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
+              className="input-modern"
+            />
+            <div className="actions">
+              <button className="btn-primary" onClick={handleVerifyCode}>
+                Verificar
+              </button>
+              <button className="btn-secondary" onClick={() => setShowModal(false)}>
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
